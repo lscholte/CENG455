@@ -51,10 +51,10 @@ void printDeleteWord(unsigned char buffer[]) {
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
 		if(buffer[i] == ' ') {
-			echoBackspace(buffer);
+			printBackspace(buffer);
 			break;
 		}
-		echoBackspace(buffer);
+		printBackspace(buffer);
 	}
 }
 
@@ -62,7 +62,7 @@ void printDeleteLine(unsigned char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
-		echoBackspace(buffer);
+		printBackspace(buffer);
 	}
 }
 
