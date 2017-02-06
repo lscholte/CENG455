@@ -46,6 +46,7 @@ void printBackspace(unsigned char buffer[]) {
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 }
 
+//TODO: If there are multiple spaces in a row, this will not work properly
 void printDeleteWord(unsigned char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
@@ -68,6 +69,10 @@ void printDeleteLine(unsigned char buffer[]) {
 
 void printCharacter(unsigned char c, unsigned char buffer[]) {
 	int newCharPosition = strlen(buffer);
+	if(newCharPosition >= BUFFER_LENGTH) {
+		printf("Maximum line length reached. Cannot print character %c", c);
+		return;
+	}
 	buffer[newCharPosition] = c;
 	UART_DRV_SendDataBlocking(myUART_IDX, &c, sizeof(char), 1000);
 }
@@ -84,7 +89,9 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 			printDeleteLine(buffer);
 			break;
 		default: //printable character (this probably is probably a bad assumption to make)
-			printCharacter(c, buffer);
+			if(isprint(c)) {
+				printCharacter(c, buffer);
+			}
 			break;
 	}
 }
@@ -107,7 +114,6 @@ void serial_task(os_task_param_t task_init_data)
 	printf("serialTask Created!\n\r");
 
 	CHAR_MESSAGE_PTR msg_ptr;
-	bool            result;
 
 
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
@@ -129,11 +135,17 @@ void serial_task(os_task_param_t task_init_data)
 	//type a line of characters into the terminal that is longer
 	//than BUFFER_LENGTH.
 	unsigned char buffer[BUFFER_LENGTH] = { 0 };
-    
+    sprintf(buffer, "\n\rType here: ");
+
     //TODO: Create a data structure to store the user tasks that have read privileges.
     //The Handler task (ie this task) will maintain this structure. When a user task calls
     //OpenR, the Handler task will add the user task to the data structure. The structure
     //will contain the task ids and queue ids for the tasks that have read privileges.
+
+	//OR
+
+	//Make it a global data structure and just prevent concurrent accesses to it by using
+	//mutexes
 
 #ifdef PEX_USE_RTOS
 	while (1) {
