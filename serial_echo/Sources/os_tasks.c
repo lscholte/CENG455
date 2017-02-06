@@ -112,7 +112,7 @@ void serial_task(os_task_param_t task_init_data)
 
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
 
-	if (server_qid == 0) {
+	if (handler_qid == 0) {
 		printf("\nCould not open the server message queue\n");
 		_task_block();
 	}
