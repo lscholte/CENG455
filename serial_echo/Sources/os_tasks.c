@@ -129,6 +129,11 @@ void serial_task(os_task_param_t task_init_data)
 	//type a line of characters into the terminal that is longer
 	//than BUFFER_LENGTH.
 	unsigned char buffer[BUFFER_LENGTH] = { 0 };
+    
+    //TODO: Create a data structure to store the user tasks that have read privileges.
+    //The Handler task (ie this task) will maintain this structure. When a user task calls
+    //OpenR, the Handler task will add the user task to the data structure. The structure
+    //will contain the task ids and queue ids for the tasks that have read privileges.
 
 #ifdef PEX_USE_RTOS
 	while (1) {
