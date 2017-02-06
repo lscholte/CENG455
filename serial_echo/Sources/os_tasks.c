@@ -39,14 +39,14 @@ extern "C" {
 
 _pool_id message_pool;
 
-void echoBackspace(unsigned char buffer[]) {
+void printBackspace(unsigned char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	buffer[lastCharPosition] = 0;
 	char sequence[3] = { '\b', ' ', '\b' };
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 }
 
-void echoDeleteWord(unsigned char buffer[]) {
+void printDeleteWord(unsigned char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
@@ -58,7 +58,7 @@ void echoDeleteWord(unsigned char buffer[]) {
 	}
 }
 
-void echoDeleteLine(unsigned char buffer[]) {
+void printDeleteLine(unsigned char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
@@ -66,25 +66,25 @@ void echoDeleteLine(unsigned char buffer[]) {
 	}
 }
 
-void echoCharacter(unsigned char c, unsigned char buffer[]) {
+void printCharacter(unsigned char c, unsigned char buffer[]) {
 	int newCharPosition = strlen(buffer);
 	buffer[newCharPosition] = c;
 	UART_DRV_SendDataBlocking(myUART_IDX, &c, sizeof(char), 1000);
 }
 
-void printCharacter(unsigned char c, unsigned char *buffer) {
+void handleCharacter(unsigned char c, unsigned char *buffer) {
 	switch(c) {
 		case 0x08: //backspace
-			echoBackspace(buffer);
+			printBackspace(buffer);
 			break;
 		case 0x17: //delete word
-			echoDeleteWord(buffer);
+			printDeleteWord(buffer);
 			break;
 		case 0x15: //delete line
-			echoDeleteLine(buffer);
+			printDeleteLine(buffer);
 			break;
 		default: //printable character (this probably is probably a bad assumption to make)
-			echoCharacter(c, buffer);
+			printCharacter(c, buffer);
 			break;
 	}
 }
@@ -151,7 +151,7 @@ void serial_task(os_task_param_t task_init_data)
         //TODO: Wrap following line inside an if statement that checks if there
         //are any User tasks that have read privileges. If no such tasks exist,
         //then we don't care about handling the received character, so we will discard it
-		printCharacter(msg_ptr->DATA, buffer);
+		handleCharacter(msg_ptr->DATA, buffer);
 
 		/* free the message */
 		_msg_free(msg_ptr);

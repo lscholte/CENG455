@@ -61,6 +61,11 @@ typedef struct char_message
 
 extern _pool_id message_pool;
 
+void handleCharacter(unsigned char c, unsigned char *buffer);
+void printCharacter(unsigned char c, unsigned char buffer[]);
+void printBackspace(unsigned char buffer[]);
+void printDeleteLine(unsigned char buffer[]);
+void printDeleteWord(unsigned char buffer[]);
 
 /*
 ** ===================================================================
