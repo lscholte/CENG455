@@ -110,7 +110,7 @@ void serial_task(os_task_param_t task_init_data)
 	bool            result;
 
 
-	_queue_id server_qid = _msgq_open(HANDLER_QUEUE, 0);
+	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
 
 	if (server_qid == 0) {
 		printf("\nCould not open the server message queue\n");
@@ -141,7 +141,7 @@ void serial_task(os_task_param_t task_init_data)
 		/* Write your code here ... */
 
 		//Wait for message from ISR
-		msg_ptr = _msgq_receive(server_qid, 0);
+		msg_ptr = _msgq_receive(handler_qid, 0);
 		if (msg_ptr == NULL) {
 			printf("\nCould not receive a message\n");
 			_task_block();
