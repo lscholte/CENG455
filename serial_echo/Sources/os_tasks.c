@@ -148,6 +148,9 @@ void serial_task(os_task_param_t task_init_data)
 		}
 
 
+        //TODO: Wrap following line inside an if statement that checks if there
+        //are any User tasks that have read privileges. If no such tasks exist,
+        //then we don't care about handling the received character, so we will discard it
 		printCharacter(msg_ptr->DATA, buffer);
 
 		/* free the message */
