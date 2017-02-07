@@ -75,7 +75,10 @@ Generated_Code/SerialTask.o: ../Generated_Code/SerialTask.c \
  C:/ceng455/serial_echo/Generated_Code/SerialTask.h \
  C:/ceng455/serial_echo/Generated_Code/myUART.h \
  C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h \
- ../Generated_Code/SerialTask.h
+ C:/ceng455/serial_echo/Sources/access_functions.h \
+ C:/ceng455/serial_echo/Sources/Events.h \
+ C:/ceng455/serial_echo/Sources/rtos_main_task.h \
+ C:/ceng455/serial_echo/Sources/os_tasks.h ../Generated_Code/SerialTask.h
 
 C:/ceng455/serial_echo/Sources/os_tasks.h:
 
@@ -228,5 +231,13 @@ C:/ceng455/serial_echo/Generated_Code/SerialTask.h:
 C:/ceng455/serial_echo/Generated_Code/myUART.h:
 
 C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h:
+
+C:/ceng455/serial_echo/Sources/access_functions.h:
+
+C:/ceng455/serial_echo/Sources/Events.h:
+
+C:/ceng455/serial_echo/Sources/rtos_main_task.h:
+
+C:/ceng455/serial_echo/Sources/os_tasks.h:
 
 ../Generated_Code/SerialTask.h:

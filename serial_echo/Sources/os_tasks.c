@@ -31,13 +31,14 @@
 #include "Events.h"
 #include "rtos_main_task.h"
 #include "os_tasks.h"
-#include <ctype.h>
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
 _pool_id message_pool;
+WRITE_PRIVILEGE_PTR write_ptr;
 
 void printBackspace(unsigned char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
@@ -70,7 +71,7 @@ void printDeleteLine(unsigned char buffer[]) {
 void printCharacter(unsigned char c, unsigned char buffer[]) {
 	int newCharPosition = strlen(buffer);
 	if(newCharPosition >= BUFFER_LENGTH) {
-		printf("Maximum line length reached. Cannot print character %c", c);
+		printf("Maximum line length reached. Cannot print character %c\n", c);
 		return;
 	}
 	buffer[newCharPosition] = c;
@@ -88,12 +89,15 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 		case 0x15: //delete line
 			printDeleteLine(buffer);
 			break;
+		//TODO: case for \n
 		default: //printable character (this probably is probably a bad assumption to make)
-			if(isprint(c)) {
-				printCharacter(c, buffer);
-			}
+			printCharacter(c, buffer);
 			break;
 	}
+}
+
+void handleString(char * string) {
+	UART_DRV_SendDataBlocking(myUART_IDX, string, sizeof(string), 1000);
 }
 
 
@@ -113,10 +117,20 @@ void serial_task(os_task_param_t task_init_data)
 	/* Write your local variable definition here */
 	printf("serialTask Created!\n\r");
 
-	CHAR_MESSAGE_PTR msg_ptr;
+	WRITE_PRIVILEGE write;
+	write_ptr = &write;
+
+	CHAR_MESSAGE_PTR char_msg_ptr;
+	STRING_MESSAGE_PTR string_msg_ptr;
 
 
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
+	_queue_id putline_qid = _msgq_open(PUTLINE_QUEUE, 0);
+
+	//TODO: Maybe need a mutex here?
+
+	write_ptr->qid = putline_qid;
+	write_ptr->task_id = 0;
 
 	if (handler_qid == 0) {
 		printf("\nCould not open the server message queue\n");
@@ -135,7 +149,6 @@ void serial_task(os_task_param_t task_init_data)
 	//type a line of characters into the terminal that is longer
 	//than BUFFER_LENGTH.
 	unsigned char buffer[BUFFER_LENGTH] = { 0 };
-    sprintf(buffer, "\n\rType here: ");
 
     //TODO: Create a data structure to store the user tasks that have read privileges.
     //The Handler task (ie this task) will maintain this structure. When a user task calls
@@ -152,24 +165,51 @@ void serial_task(os_task_param_t task_init_data)
 #endif
 		/* Write your code here ... */
 
-		//Wait for message from ISR
-		msg_ptr = _msgq_receive(handler_qid, 0);
-		if (msg_ptr == NULL) {
-			printf("\nCould not receive a message\n");
-			_task_block();
+		//poll ISR queue
+		//if message exists
+		//	handle character
+		//	break
+		//poll putline queue
+		//if message exists
+		//	handle string
+		//	break
+
+		char_msg_ptr = _msgq_poll(handler_qid);
+		if(char_msg_ptr != NULL) {
+	        //TODO: Wrap following line inside an if statement that checks if there
+	        //are any User tasks that have read privileges. If no such tasks exist,
+	        //then we don't care about handling the received character, so we will discard it
+			handleCharacter(char_msg_ptr->DATA, buffer);
+
+			/* free the message */
+			_msg_free(char_msg_ptr);
+		}
+		string_msg_ptr = _msgq_poll(putline_qid);
+		if(string_msg_ptr != NULL) {
+			//TODO: handle string
+			handleString(string_msg_ptr->DATA);
+
+			_msg_free(string_msg_ptr);
 		}
 
+//		//Wait for message from ISR
+//		char_msg_ptr = _msgq_receive(handler_qid, 0);
+//		if (char_msg_ptr == NULL) {
+//			printf("\nCould not receive a message\n");
+//			_task_block();
+//		}
+//
+//
+//        //TODO: Wrap following line inside an if statement that checks if there
+//        //are any User tasks that have read privileges. If no such tasks exist,
+//        //then we don't care about handling the received character, so we will discard it
+//		handleCharacter(char_msg_ptr->DATA, buffer);
+//
+//		/* free the message */
+//		_msg_free(char_msg_ptr);
 
-        //TODO: Wrap following line inside an if statement that checks if there
-        //are any User tasks that have read privileges. If no such tasks exist,
-        //then we don't care about handling the received character, so we will discard it
-		handleCharacter(msg_ptr->DATA, buffer);
-
-		/* free the message */
-		_msg_free(msg_ptr);
-
-		OSA_TimeDelay(10);
-		/* Example code (for task release) */
+//		OSA_TimeDelay(10);
+//		/* Example code (for task release) */
 
 
 

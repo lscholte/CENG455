@@ -42,14 +42,17 @@
 #include "SerialTask.h"
 #include "myUART.h"
 #include <message.h>
+#include "access_functions.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
 #define HANDLER_QUEUE 8
+#define PUTLINE_QUEUE 9
+#define GETLINE_QUEUE 10
 #define NUM_CLIENTS 1
-#define CLIENT_QUEUE_BASE 9
+#define CLIENT_QUEUE_BASE 11
 
 #define BUFFER_LENGTH 32
 
@@ -59,7 +62,19 @@ typedef struct char_message
    unsigned char           DATA;
 } CHAR_MESSAGE, * CHAR_MESSAGE_PTR;
 
+typedef struct string_message
+{
+   MESSAGE_HEADER_STRUCT   HEADER;
+   unsigned char           *DATA;
+} STRING_MESSAGE, * STRING_MESSAGE_PTR;
+
+typedef struct write_privilege {
+	uint32_t task_id; //if this has a value of 0, then no task has write privileges
+	_queue_id qid; //this will be initially set by the handler task and then never modified again
+} WRITE_PRIVILEGE, * WRITE_PRIVILEGE_PTR;
+
 extern _pool_id message_pool;
+extern WRITE_PRIVILEGE_PTR write_ptr;
 
 void handleCharacter(unsigned char c, unsigned char *buffer);
 void printCharacter(unsigned char c, unsigned char buffer[]);

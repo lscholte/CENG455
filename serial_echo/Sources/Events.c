@@ -55,7 +55,7 @@ void myUART_RxCallback(uint32_t instance, void * uartState)
 	/* Write your code here ... */
 
 	CHAR_MESSAGE_PTR msg_ptr;
-	_queue_id          client_qid;
+//	_queue_id          client_qid;
 	bool            result = FALSE;
 
 
@@ -68,6 +68,7 @@ void myUART_RxCallback(uint32_t instance, void * uartState)
 
 	//	msg_ptr->HEADER.SOURCE_QID = client_qid;
 	msg_ptr->HEADER.TARGET_QID = _msgq_get_id( 0, HANDLER_QUEUE );
+	//TODO: why are we doing strlen?
 	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + strlen((char *)msg_ptr->DATA) + 1;
 
 	//Set the message content as the character that was entered on the keyboard
@@ -76,7 +77,7 @@ void myUART_RxCallback(uint32_t instance, void * uartState)
 	//Send character to the handler
 	result = _msgq_send(msg_ptr);
 	if (result != TRUE) {
-		printf("\nCould not send a message\n");
+//		printf("\nCould not send a message\n");
 		_task_block();
 	}
 
