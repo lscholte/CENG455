@@ -33,6 +33,7 @@
 #include "os_tasks.h"
 #include <stdio.h>
 #include "message_structs.h"
+#include "access_functions.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,7 +41,7 @@ extern "C" {
 
 _pool_id message_pool;
 WRITE_PRIVILEGE writePrivilege;
-READ_PRIVILEGE readPrivileges;
+READ_PRIVILEGE readPrivilege;
 
 
 void printBackspace(unsigned char buffer[]) {
@@ -82,6 +83,7 @@ void printCharacter(unsigned char c, unsigned char buffer[]) {
 }
 
 void handleCharacter(unsigned char c, unsigned char *buffer) {
+	STRING_MESSAGE_PTR msg_ptr;
 	switch(c) {
 		case 0x08: //backspace
 			printBackspace(buffer);
@@ -93,8 +95,30 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 			printDeleteLine(buffer);
 			break;
 		case '\n':
+		case '\r':
 			//TODO: move to beginning of next line
 			//TODO: send buffer to all user tasks that have read privileges
+			//Allocate a string message
+			msg_ptr = (STRING_MESSAGE_PTR) _msg_alloc(message_pool);
+			if (msg_ptr == NULL){
+				printf("\nCould not allocate a message\n");
+				_task_block();
+			}
+
+			//Construct the message
+			strcpy(msg_ptr->DATA, buffer);
+			msg_ptr->HEADER.TARGET_QID = readPrivilege.stream_no;
+			msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + strlen((char *)msg_ptr->DATA) + 1;
+
+			//Send line to the handler
+			bool result = _msgq_send(msg_ptr);
+			if (result != TRUE) {
+				printf("\nCould not send a message\n");
+				_task_block();
+			}
+			printDeleteLine(buffer);
+			break;
+
 		default: //printable character (this probably is probably a bad assumption to make)
 			printCharacter(c, buffer);
 			break;
@@ -168,33 +192,25 @@ void serial_task(os_task_param_t task_init_data)
 #ifdef PEX_USE_RTOS
 	while (1) {
 #endif
-		/* Write your code here ... */
-
-		//poll ISR queue
-		//if message exists
-		//	handle character
-		//	break
-		//poll putline queue
-		//if message exists
-		//	handle string
-		//	break
-
 		//Check if there is a message from ISR (ie a keyboard character was pressed)
 		char_msg_ptr = _msgq_poll(handler_qid);
 		if(char_msg_ptr != NULL) {
 	        //TODO: Wrap following line inside an if statement that checks if there
 	        //are any User tasks that have read privileges. If no such tasks exist,
 	        //then we don't care about handling the received character, so we will discard it
-			handleCharacter(char_msg_ptr->DATA, buffer);
+			unsigned char c = char_msg_ptr->DATA;
+			_msg_free(char_msg_ptr);
+			handleCharacter(c, buffer);
 
 			/* free the message */
-			_msg_free(char_msg_ptr);
 		}
 
 		//Check if a user task is sending a line of characters to the handler
 		string_msg_ptr = _msgq_poll(putline_qid);
 		if(string_msg_ptr != NULL) {
-			handleString(string_msg_ptr->DATA);
+			unsigned char *line = string_msg_ptr->DATA;
+			_msg_free(string_msg_ptr);
+			handleString(line);
 
 			//TODO: send response message
 //			QUEUE_ID_MESSAGE_PTR qid_msg_ptr = (QUEUE_ID_MESSAGE_PTR) msg_alloc(message_pool);
@@ -205,14 +221,56 @@ void serial_task(os_task_param_t task_init_data)
 //
 //			  qid_msg_ptr->DATA =
 
-			_msg_free(string_msg_ptr);
 		}
 
+	    OSA_TimeDelay(10);                 /* Example code (for task release) */
 
 
 
 #ifdef PEX_USE_RTOS   
 	}
+#endif    
+}
+
+/*
+** ===================================================================
+**     Callback    : user_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void user_task(os_task_param_t task_init_data)
+{
+  /* Write your local variable definition here */
+	printf("userTask Created!\n\r");
+
+	//Creates a message queue with some available ID
+	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+
+
+	OpenR(user_task_qid);
+
+	unsigned char line[BUFFER_LENGTH];
+
+
+  
+#ifdef PEX_USE_RTOS
+  while (1) {
+#endif
+    
+	_getline(line);
+
+	printf("Line Received: %s\n", line);
+    
+    OSA_TimeDelay(10);                 /* Example code (for task release) */
+   
+    
+    
+    
+#ifdef PEX_USE_RTOS   
+  }
 #endif    
 }
 

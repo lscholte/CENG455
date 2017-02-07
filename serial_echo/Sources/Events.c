@@ -53,16 +53,12 @@ extern "C" {
 */
 void myUART_RxCallback(uint32_t instance, void * uartState)
 {
-	/* Write your code here ... */
 
-	CHAR_MESSAGE_PTR msg_ptr;
 //	_queue_id          client_qid;
-	bool            result = FALSE;
-
 
 	//Allocate a message
-	msg_ptr = (CHAR_MESSAGE_PTR)_msg_alloc(message_pool);
-	if ( msg_ptr == NULL ){
+	CHAR_MESSAGE_PTR msg_ptr = (CHAR_MESSAGE_PTR)_msg_alloc(message_pool);
+	if (msg_ptr == NULL){
 		printf( "\nCould not allocate a message\n" );
 		_task_block();
 	}
@@ -76,9 +72,9 @@ void myUART_RxCallback(uint32_t instance, void * uartState)
 	msg_ptr->DATA = myRxBuff[0];
 
 	//Send character to the handler
-	result = _msgq_send(msg_ptr);
+	bool result = _msgq_send(msg_ptr);
 	if (result != TRUE) {
-//		printf("\nCould not send a message\n");
+		printf("\nCould not send a message\n");
 		_task_block();
 	}
 

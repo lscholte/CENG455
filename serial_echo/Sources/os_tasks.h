@@ -41,6 +41,7 @@
 #include "MainTask.h"
 #include "SerialTask.h"
 #include "myUART.h"
+#include "UserTask.h"
 #include <message.h>
 #include "access_functions.h"
 
@@ -68,7 +69,7 @@ typedef struct read_privilege {
 
 extern _pool_id message_pool;
 extern WRITE_PRIVILEGE writePrivilege;
-extern READ_PRIVILEGE readPrivilege[100];
+extern READ_PRIVILEGE readPrivilege;
 
 void handleCharacter(unsigned char c, unsigned char *buffer);
 void printCharacter(unsigned char c, unsigned char buffer[]);
@@ -87,6 +88,17 @@ void printDeleteWord(unsigned char buffer[]);
 */
 void serial_task(os_task_param_t task_init_data);
 
+
+/*
+** ===================================================================
+**     Callback    : user_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void user_task(os_task_param_t task_init_data);
 
 /* END os_tasks */
 

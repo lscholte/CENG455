@@ -1,5 +1,5 @@
-Sources/access_functions.o: ../Sources/access_functions.c \
- ../Sources/access_functions.h ../Sources/Events.h \
+Generated_Code/UserTask.o: ../Generated_Code/UserTask.c \
+ C:/ceng455/serial_echo/Sources/os_tasks.h \
  C:/ceng455/serial_echo/SDK/platform/devices/fsl_device_registers.h \
  C:/ceng455/serial_echo/SDK/platform/devices/MK64F12/include/MK64F12.h \
  C:/ceng455/serial_echo/SDK/platform/CMSIS/Include/core_cm4.h \
@@ -75,13 +75,13 @@ Sources/access_functions.o: ../Sources/access_functions.c \
  C:/ceng455/serial_echo/Generated_Code/SerialTask.h \
  C:/ceng455/serial_echo/Generated_Code/myUART.h \
  C:/ceng455/serial_echo/Generated_Code/UserTask.h \
- ../Sources/rtos_main_task.h ../Sources/os_tasks.h \
  C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h \
- ../Sources/message_structs.h
+ C:/ceng455/serial_echo/Sources/access_functions.h \
+ C:/ceng455/serial_echo/Sources/Events.h \
+ C:/ceng455/serial_echo/Sources/rtos_main_task.h \
+ C:/ceng455/serial_echo/Sources/os_tasks.h ../Generated_Code/UserTask.h
 
-../Sources/access_functions.h:
-
-../Sources/Events.h:
+C:/ceng455/serial_echo/Sources/os_tasks.h:
 
 C:/ceng455/serial_echo/SDK/platform/devices/fsl_device_registers.h:
 
@@ -233,10 +233,14 @@ C:/ceng455/serial_echo/Generated_Code/myUART.h:
 
 C:/ceng455/serial_echo/Generated_Code/UserTask.h:
 
-../Sources/rtos_main_task.h:
-
-../Sources/os_tasks.h:
-
 C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h:
 
-../Sources/message_structs.h:
+C:/ceng455/serial_echo/Sources/access_functions.h:
+
+C:/ceng455/serial_echo/Sources/Events.h:
+
+C:/ceng455/serial_echo/Sources/rtos_main_task.h:
+
+C:/ceng455/serial_echo/Sources/os_tasks.h:
+
+../Generated_Code/UserTask.h:

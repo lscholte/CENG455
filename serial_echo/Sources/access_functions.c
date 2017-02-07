@@ -14,6 +14,15 @@ bool OpenR(uint16_t stream_no) {
 
 	//Lock read privilege structure
 
+
+	if(readPrivilege.task_id == _task_get_id()) {
+		//User task already has read permission
+		return false;
+	}
+
+	readPrivilege.stream_no = stream_no;
+	readPrivilege.task_id = _task_get_id();
+
 	//for each item in read privileges
 	//	if item.task_id == current task id
 	//		return false
@@ -22,7 +31,18 @@ bool OpenR(uint16_t stream_no) {
 }
 
 bool _getline(unsigned char * line) {
+	//TODO: Check if task has read permission
+	//	return false if not
 
+	STRING_MESSAGE_PTR msg_ptr = _msgq_receive(readPrivilege.stream_no, 0);
+	if(msg_ptr != NULL) {
+		sprintf(line, msg_ptr->DATA);
+
+		/* free the message */
+		_msg_free(msg_ptr);
+		return true;
+	}
+	return false;
 }
 
 _queue_id OpenW(void) {
