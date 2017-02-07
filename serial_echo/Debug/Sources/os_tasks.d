@@ -80,7 +80,8 @@ Sources/os_tasks.o: ../Sources/os_tasks.c \
  C:/ceng455/serial_echo/SDK/rtos/mqx/mqx_stdlib/source/include/stdio.h \
  C:/ceng455/serial_echo/SDK/rtos/mqx/mqx_stdlib/source/include/std_prv.h \
  C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/nio/fcntl.h \
- C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/nio/nio.h
+ C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/nio/nio.h \
+ ../Sources/message_structs.h
 
 C:/ceng455/serial_echo/Generated_Code/Cpu.h:
 
@@ -249,3 +250,5 @@ C:/ceng455/serial_echo/SDK/rtos/mqx/mqx_stdlib/source/include/std_prv.h:
 C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/nio/fcntl.h:
 
 C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/nio/nio.h:
+
+../Sources/message_structs.h:

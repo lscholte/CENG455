@@ -56,25 +56,19 @@ extern "C" {
 
 #define BUFFER_LENGTH 32
 
-typedef struct char_message
-{
-   MESSAGE_HEADER_STRUCT   HEADER;
-   unsigned char           DATA;
-} CHAR_MESSAGE, * CHAR_MESSAGE_PTR;
-
-typedef struct string_message
-{
-   MESSAGE_HEADER_STRUCT   HEADER;
-   unsigned char           *DATA;
-} STRING_MESSAGE, * STRING_MESSAGE_PTR;
-
 typedef struct write_privilege {
 	uint32_t task_id; //if this has a value of 0, then no task has write privileges
 	_queue_id qid; //this will be initially set by the handler task and then never modified again
 } WRITE_PRIVILEGE, * WRITE_PRIVILEGE_PTR;
 
+typedef struct read_privilege {
+	uint32_t task_id;
+	_queue_number stream_no;
+} READ_PRIVILEGE, * READ_PRIVILEGE_PTR;
+
 extern _pool_id message_pool;
-extern WRITE_PRIVILEGE_PTR write_ptr;
+extern WRITE_PRIVILEGE writePrivilege;
+extern READ_PRIVILEGE readPrivilege[100];
 
 void handleCharacter(unsigned char c, unsigned char *buffer);
 void printCharacter(unsigned char c, unsigned char buffer[]);

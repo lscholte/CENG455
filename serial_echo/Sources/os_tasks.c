@@ -32,13 +32,16 @@
 #include "rtos_main_task.h"
 #include "os_tasks.h"
 #include <stdio.h>
+#include "message_structs.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
 _pool_id message_pool;
-WRITE_PRIVILEGE_PTR write_ptr;
+WRITE_PRIVILEGE writePrivilege;
+READ_PRIVILEGE readPrivileges;
+
 
 void printBackspace(unsigned char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
@@ -89,14 +92,16 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 		case 0x15: //delete line
 			printDeleteLine(buffer);
 			break;
-		//TODO: case for \n
+		case '\n':
+			//TODO: move to beginning of next line
+			//TODO: send buffer to all user tasks that have read privileges
 		default: //printable character (this probably is probably a bad assumption to make)
 			printCharacter(c, buffer);
 			break;
 	}
 }
 
-void handleString(char * string) {
+void handleString(unsigned char *string) {
 	UART_DRV_SendDataBlocking(myUART_IDX, string, sizeof(string), 1000);
 }
 
@@ -117,8 +122,8 @@ void serial_task(os_task_param_t task_init_data)
 	/* Write your local variable definition here */
 	printf("serialTask Created!\n\r");
 
-	WRITE_PRIVILEGE write;
-	write_ptr = &write;
+//	WRITE_PRIVILEGE write;
+//	write_ptr = &write;
 
 	CHAR_MESSAGE_PTR char_msg_ptr;
 	STRING_MESSAGE_PTR string_msg_ptr;
@@ -129,8 +134,8 @@ void serial_task(os_task_param_t task_init_data)
 
 	//TODO: Maybe need a mutex here?
 
-	write_ptr->qid = putline_qid;
-	write_ptr->task_id = 0;
+	writePrivilege.qid = putline_qid;
+	writePrivilege.task_id = MQX_NULL_TASK_ID;
 
 	if (handler_qid == 0) {
 		printf("\nCould not open the server message queue\n");
@@ -174,6 +179,7 @@ void serial_task(os_task_param_t task_init_data)
 		//	handle string
 		//	break
 
+		//Check if there is a message from ISR (ie a keyboard character was pressed)
 		char_msg_ptr = _msgq_poll(handler_qid);
 		if(char_msg_ptr != NULL) {
 	        //TODO: Wrap following line inside an if statement that checks if there
@@ -184,32 +190,23 @@ void serial_task(os_task_param_t task_init_data)
 			/* free the message */
 			_msg_free(char_msg_ptr);
 		}
+
+		//Check if a user task is sending a line of characters to the handler
 		string_msg_ptr = _msgq_poll(putline_qid);
 		if(string_msg_ptr != NULL) {
-			//TODO: handle string
 			handleString(string_msg_ptr->DATA);
+
+			//TODO: send response message
+//			QUEUE_ID_MESSAGE_PTR qid_msg_ptr = (QUEUE_ID_MESSAGE_PTR) msg_alloc(message_pool);
+//			  if (msg_ptr == NULL) {
+//				 printf("\nCould not allocate a message\n");
+//				 _task_block();
+//			  }
+//
+//			  qid_msg_ptr->DATA =
 
 			_msg_free(string_msg_ptr);
 		}
-
-//		//Wait for message from ISR
-//		char_msg_ptr = _msgq_receive(handler_qid, 0);
-//		if (char_msg_ptr == NULL) {
-//			printf("\nCould not receive a message\n");
-//			_task_block();
-//		}
-//
-//
-//        //TODO: Wrap following line inside an if statement that checks if there
-//        //are any User tasks that have read privileges. If no such tasks exist,
-//        //then we don't care about handling the received character, so we will discard it
-//		handleCharacter(char_msg_ptr->DATA, buffer);
-//
-//		/* free the message */
-//		_msg_free(char_msg_ptr);
-
-//		OSA_TimeDelay(10);
-//		/* Example code (for task release) */
 
 
 

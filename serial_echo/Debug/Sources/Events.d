@@ -76,7 +76,7 @@ Sources/Events.o: ../Sources/Events.c \
  C:/ceng455/serial_echo/Generated_Code/myUART.h \
  ../Sources/rtos_main_task.h ../Sources/os_tasks.h \
  C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h \
- ../Sources/access_functions.h
+ ../Sources/access_functions.h ../Sources/message_structs.h
 
 C:/ceng455/serial_echo/Generated_Code/Cpu.h:
 
@@ -237,3 +237,5 @@ C:/ceng455/serial_echo/Generated_Code/myUART.h:
 C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h:
 
 ../Sources/access_functions.h:
+
+../Sources/message_structs.h:
