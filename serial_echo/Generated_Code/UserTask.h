@@ -7,7 +7,7 @@
 **     Version     : Component 1.3.0, Driver 01.00, CPU db: 3.00.000
 **     Repository  : KSDK 1.3.0
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2017-02-07, 11:30, # CodeGen: 5
+**     Date/Time   : 2017-02-07, 14:06, # CodeGen: 6
 **     Contents    :
 **         Init - osa_status_t UserTask_Init(void);
 **
@@ -66,7 +66,7 @@
 /* UserTask task stack size */  
 #define USERTASK_TASK_STACK_SIZE       1024U
 /* UserTask task priority value */  
-#define USERTASK_TASK_PRIORITY         16U
+#define USERTASK_TASK_PRIORITY         17U
 /*
 ** ===================================================================
 **     Method      :  Init (component OS_Task)

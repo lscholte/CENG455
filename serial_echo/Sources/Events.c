@@ -57,7 +57,7 @@ void myUART_RxCallback(uint32_t instance, void * uartState)
 //	_queue_id          client_qid;
 
 	//Allocate a message
-	CHAR_MESSAGE_PTR msg_ptr = (CHAR_MESSAGE_PTR)_msg_alloc(message_pool);
+	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR)_msg_alloc(message_pool);
 	if (msg_ptr == NULL){
 		printf( "\nCould not allocate a message\n" );
 		_task_block();
@@ -66,10 +66,11 @@ void myUART_RxCallback(uint32_t instance, void * uartState)
 	//	msg_ptr->HEADER.SOURCE_QID = client_qid;
 	msg_ptr->HEADER.TARGET_QID = _msgq_get_id( 0, HANDLER_QUEUE );
 	//TODO: why are we doing strlen?
-	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + strlen((char *)msg_ptr->DATA) + 1;
+	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY_PTR);
 
 	//Set the message content as the character that was entered on the keyboard
-	msg_ptr->DATA = myRxBuff[0];
+	msg_ptr->BODY_PTR->TYPE = CHAR_MESSAGE_TYPE;
+	msg_ptr->BODY_PTR->DATA = &myRxBuff[0];
 
 	//Send character to the handler
 	bool result = _msgq_send(msg_ptr);

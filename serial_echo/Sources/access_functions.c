@@ -50,7 +50,8 @@ _queue_id OpenW(void) {
 	//TODO: We want a mutex here so that only 1 task
 	//can access write_ptr at a time
 	//if the task id is 0
-	if(writePrivilege.task_id == 0) {
+	if(writePrivilege.task_id != 0) {
+		printf("Only 1 user task at a time can have write permission\n");
 		return 0;
 	}
 	writePrivilege.task_id = _task_get_id();
@@ -66,28 +67,29 @@ bool _putline(_queue_id qid, unsigned char * line) {
 
 	//If current task does not have write permission
 	if(writePrivilege.task_id != _task_get_id()) {
+		printf("Cannot write line because user task does not have write permission\n");
 		return false;
 	}
 
 
 	//Allocate a string message
-	STRING_MESSAGE_PTR msg_ptr;
-	msg_ptr = (STRING_MESSAGE_PTR) _msg_alloc(message_pool);
+	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR) _msg_alloc(message_pool);
 	if (msg_ptr == NULL){
 		printf("\nCould not allocate a message\n");
-		_task_block();
+		return false;
 	}
 
 	//Construct the message
-	msg_ptr->DATA = line;
-	msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, PUTLINE_QUEUE);
-	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + strlen((char *)msg_ptr->DATA) + 1;
+	msg_ptr->BODY_PTR->TYPE = STRING_MESSAGE_TYPE;
+	msg_ptr->BODY_PTR->DATA = line;
+	msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, HANDLER_QUEUE);
+	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY_PTR);
 
 	//Send line to the handler
 	bool result = _msgq_send(msg_ptr);
 	if (result != TRUE) {
 		printf("\nCould not send a message\n");
-		_task_block();
+		return false;
 	}
 
 	//Wait for a response message from handler

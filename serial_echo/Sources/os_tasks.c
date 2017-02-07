@@ -146,19 +146,13 @@ void serial_task(os_task_param_t task_init_data)
 	/* Write your local variable definition here */
 	printf("serialTask Created!\n\r");
 
-//	WRITE_PRIVILEGE write;
-//	write_ptr = &write;
-
-	CHAR_MESSAGE_PTR char_msg_ptr;
-	STRING_MESSAGE_PTR string_msg_ptr;
-
+	GENERIC_MESSAGE_PTR msg_ptr;
 
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
-	_queue_id putline_qid = _msgq_open(PUTLINE_QUEUE, 0);
 
 	//TODO: Maybe need a mutex here?
 
-	writePrivilege.qid = putline_qid;
+	writePrivilege.qid = handler_qid;
 	writePrivilege.task_id = MQX_NULL_TASK_ID;
 
 	if (handler_qid == 0) {
@@ -173,10 +167,6 @@ void serial_task(os_task_param_t task_init_data)
 		_task_block();
 	}
 
-	//The buffer holding the line of text that is displayed
-	//TODO: We should gracefully handle the situation where we
-	//type a line of characters into the terminal that is longer
-	//than BUFFER_LENGTH.
 	unsigned char buffer[BUFFER_LENGTH] = { 0 };
 
     //TODO: Create a data structure to store the user tasks that have read privileges.
@@ -193,33 +183,28 @@ void serial_task(os_task_param_t task_init_data)
 	while (1) {
 #endif
 		//Check if there is a message from ISR (ie a keyboard character was pressed)
-		char_msg_ptr = _msgq_poll(handler_qid);
-		if(char_msg_ptr != NULL) {
-	        //TODO: Wrap following line inside an if statement that checks if there
-	        //are any User tasks that have read privileges. If no such tasks exist,
-	        //then we don't care about handling the received character, so we will discard it
-			unsigned char c = char_msg_ptr->DATA;
-			_msg_free(char_msg_ptr);
-			handleCharacter(c, buffer);
+		msg_ptr = _msgq_receive(handler_qid, 0);
+		if(msg_ptr != NULL) {
+			MESSAGE_BODY_PTR msg_body_ptr = msg_ptr->BODY_PTR;
+			//If this is a character message, then it is from ISR
+			if(msg_body_ptr->TYPE == CHAR_MESSAGE_TYPE ) {
+	//	        TODO: Wrap following line inside an if statement that checks if there
+	//	        are any User tasks that have read privileges. If no such tasks exist,
+	//	        then we don't care about handling the received character, so we will discard it
+				unsigned char *ptr = (unsigned char *) msg_body_ptr->DATA;
+				unsigned char c = *ptr;
+				_msg_free(msg_ptr);
+				handleCharacter(c, buffer);
+			}
 
-			/* free the message */
-		}
+			//If this is a string message, it is from putline
+			else if(msg_body_ptr->TYPE == STRING_MESSAGE_TYPE ) {
+				unsigned char **ptr = (unsigned char **) msg_body_ptr->DATA;
+				unsigned char *line = *ptr;
+				_msg_free(msg_ptr);
+				handleString(line);
+			}
 
-		//Check if a user task is sending a line of characters to the handler
-		string_msg_ptr = _msgq_poll(putline_qid);
-		if(string_msg_ptr != NULL) {
-			unsigned char *line = string_msg_ptr->DATA;
-			_msg_free(string_msg_ptr);
-			handleString(line);
-
-			//TODO: send response message
-//			QUEUE_ID_MESSAGE_PTR qid_msg_ptr = (QUEUE_ID_MESSAGE_PTR) msg_alloc(message_pool);
-//			  if (msg_ptr == NULL) {
-//				 printf("\nCould not allocate a message\n");
-//				 _task_block();
-//			  }
-//
-//			  qid_msg_ptr->DATA =
 
 		}
 
@@ -251,6 +236,7 @@ void user_task(os_task_param_t task_init_data)
 
 
 	OpenR(user_task_qid);
+	OpenW();
 
 	unsigned char line[BUFFER_LENGTH];
 
@@ -260,6 +246,7 @@ void user_task(os_task_param_t task_init_data)
   while (1) {
 #endif
     
+	_putline(user_task_qid, "test");
 	_getline(line);
 
 	printf("Line Received: %s\n", line);
