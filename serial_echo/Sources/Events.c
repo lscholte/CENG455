@@ -54,8 +54,6 @@ extern "C" {
 void myUART_RxCallback(uint32_t instance, void * uartState)
 {
 
-//	_queue_id          client_qid;
-
 	//Allocate a message
 	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR)_msg_alloc(message_pool);
 	if (msg_ptr == NULL){
@@ -63,9 +61,7 @@ void myUART_RxCallback(uint32_t instance, void * uartState)
 		_task_block();
 	}
 
-	//	msg_ptr->HEADER.SOURCE_QID = client_qid;
-	msg_ptr->HEADER.TARGET_QID = _msgq_get_id( 0, HANDLER_QUEUE );
-	//TODO: why are we doing strlen?
+	msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, HANDLER_QUEUE);
 	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY_PTR);
 
 	//Set the message content as the character that was entered on the keyboard

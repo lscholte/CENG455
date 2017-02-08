@@ -72,6 +72,12 @@ void printDeleteLine(unsigned char buffer[]) {
 	}
 }
 
+void printNewline(unsigned char buffer[]) {
+	memset(buffer, 0, BUFFER_LENGTH);
+	char sequence[2] = { '\n', '\r' };
+	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
+}
+
 void printCharacter(unsigned char c, unsigned char buffer[]) {
 	int newCharPosition = strlen(buffer);
 	if(newCharPosition >= BUFFER_LENGTH) {
@@ -83,7 +89,7 @@ void printCharacter(unsigned char c, unsigned char buffer[]) {
 }
 
 void handleCharacter(unsigned char c, unsigned char *buffer) {
-	STRING_MESSAGE_PTR msg_ptr;
+	GENERIC_MESSAGE_PTR msg_ptr;
 	switch(c) {
 		case 0x08: //backspace
 			printBackspace(buffer);
@@ -98,17 +104,24 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 		case '\r':
 			//TODO: move to beginning of next line
 			//TODO: send buffer to all user tasks that have read privileges
+
 			//Allocate a string message
-			msg_ptr = (STRING_MESSAGE_PTR) _msg_alloc(message_pool);
+			msg_ptr = (GENERIC_MESSAGE_PTR) _msg_alloc(message_pool);
 			if (msg_ptr == NULL){
 				printf("\nCould not allocate a message\n");
 				_task_block();
 			}
 
 			//Construct the message
-			strcpy(msg_ptr->DATA, buffer);
+			//NOTE: We must use malloc here because if we don't, then this memory
+			//will be deallocated when this function terminates, and then when
+			//the bufferCopy is received in _getline(), the pointer will no longer be valid
+			char *bufferCopy = malloc(sizeof(char) * BUFFER_LENGTH);
+			strcpy(bufferCopy, buffer);
+			msg_ptr->BODY_PTR->TYPE = STRING_MESSAGE_TYPE;
+			msg_ptr->BODY_PTR->DATA = &bufferCopy;
 			msg_ptr->HEADER.TARGET_QID = readPrivilege.stream_no;
-			msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + strlen((char *)msg_ptr->DATA) + 1;
+			msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY);
 
 			//Send line to the handler
 			bool result = _msgq_send(msg_ptr);
@@ -116,7 +129,7 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 				printf("\nCould not send a message\n");
 				_task_block();
 			}
-			printDeleteLine(buffer);
+			printNewline(buffer);
 			break;
 
 		default: //printable character (this probably is probably a bad assumption to make)
@@ -127,6 +140,8 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 
 void handleString(unsigned char *string) {
 	UART_DRV_SendDataBlocking(myUART_IDX, string, sizeof(string), 1000);
+	char sequence[2] = { '\n', '\r' };
+	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 }
 
 
@@ -146,8 +161,6 @@ void serial_task(os_task_param_t task_init_data)
 	/* Write your local variable definition here */
 	printf("serialTask Created!\n\r");
 
-	GENERIC_MESSAGE_PTR msg_ptr;
-
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
 
 	//TODO: Maybe need a mutex here?
@@ -160,7 +173,7 @@ void serial_task(os_task_param_t task_init_data)
 		_task_block();
 	}
 
-	message_pool = _msgpool_create(sizeof(CHAR_MESSAGE), NUM_CLIENTS, 0, 0);
+	message_pool = _msgpool_create(sizeof(GENERIC_MESSAGE), NUM_CLIENTS, 1, 0);
 
 	if (message_pool == MSGPOOL_NULL_POOL_ID) {
 		printf("\nCount not create a message pool\n");
@@ -183,7 +196,7 @@ void serial_task(os_task_param_t task_init_data)
 	while (1) {
 #endif
 		//Check if there is a message from ISR (ie a keyboard character was pressed)
-		msg_ptr = _msgq_receive(handler_qid, 0);
+		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(handler_qid, 0);
 		if(msg_ptr != NULL) {
 			MESSAGE_BODY_PTR msg_body_ptr = msg_ptr->BODY_PTR;
 			//If this is a character message, then it is from ISR
@@ -198,7 +211,7 @@ void serial_task(os_task_param_t task_init_data)
 			}
 
 			//If this is a string message, it is from putline
-			else if(msg_body_ptr->TYPE == STRING_MESSAGE_TYPE ) {
+			else if(msg_body_ptr->TYPE == STRING_MESSAGE_TYPE) {
 				unsigned char **ptr = (unsigned char **) msg_body_ptr->DATA;
 				unsigned char *line = *ptr;
 				_msg_free(msg_ptr);
@@ -208,7 +221,7 @@ void serial_task(os_task_param_t task_init_data)
 
 		}
 
-	    OSA_TimeDelay(10);                 /* Example code (for task release) */
+//	    OSA_TimeDelay(10);                 /* Example code (for task release) */
 
 
 
@@ -246,7 +259,7 @@ void user_task(os_task_param_t task_init_data)
   while (1) {
 #endif
     
-	_putline(user_task_qid, "test");
+	_putline(_msgq_get_id(0, HANDLER_QUEUE), "test");
 	_getline(line);
 
 	printf("Line Received: %s\n", line);

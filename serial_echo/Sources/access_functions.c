@@ -30,13 +30,15 @@ bool OpenR(uint16_t stream_no) {
 	return true;
 }
 
-bool _getline(unsigned char * line) {
+bool _getline(unsigned char *line) {
 	//TODO: Check if task has read permission
 	//	return false if not
 
-	STRING_MESSAGE_PTR msg_ptr = _msgq_receive(readPrivilege.stream_no, 0);
-	if(msg_ptr != NULL) {
-		sprintf(line, msg_ptr->DATA);
+	GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(readPrivilege.stream_no, 0);
+	if(msg_ptr != NULL && msg_ptr->BODY_PTR->TYPE == STRING_MESSAGE_TYPE) {
+		unsigned char **ptr = (unsigned char **) msg_ptr->BODY_PTR->DATA;
+		strcpy(line, *ptr);
+		free(ptr);
 
 		/* free the message */
 		_msg_free(msg_ptr);
@@ -61,7 +63,7 @@ _queue_id OpenW(void) {
 }
 
 
-bool _putline(_queue_id qid, unsigned char * line) {
+bool _putline(_queue_id qid, unsigned char *line) {
 	//TODO: We want a mutex here so that only 1 task
 	//can access write_ptr at a time
 
@@ -79,10 +81,13 @@ bool _putline(_queue_id qid, unsigned char * line) {
 		return false;
 	}
 
+//	unsigned char *str = malloc(sizeof(char) * (BUFFER_LENGTH+2));
+//	sprintf(str, "%s\n", line);
+
 	//Construct the message
 	msg_ptr->BODY_PTR->TYPE = STRING_MESSAGE_TYPE;
-	msg_ptr->BODY_PTR->DATA = line;
-	msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, HANDLER_QUEUE);
+	msg_ptr->BODY_PTR->DATA = &line;
+	msg_ptr->HEADER.TARGET_QID = qid;
 	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY_PTR);
 
 	//Send line to the handler
