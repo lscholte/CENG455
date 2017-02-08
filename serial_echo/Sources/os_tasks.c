@@ -43,62 +43,130 @@ _pool_id message_pool;
 WRITE_PRIVILEGE writePrivilege;
 READ_PRIVILEGE readPrivilege;
 
-
-void printBackspace(unsigned char buffer[]) {
-	int lastCharPosition = strlen(buffer) - 1;
-	buffer[lastCharPosition] = 0;
+void printBackspaceToTerminal() {
 	char sequence[3] = { '\b', ' ', '\b' };
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 }
 
-//TODO: If there are multiple spaces in a row, this will not work properly
-void printDeleteWord(unsigned char buffer[]) {
+void printBackspaceToBuffer(unsigned char buffer[]) {
+	int lastCharPosition = strlen(buffer) - 1;
+	buffer[lastCharPosition] = 0;
+}
+
+
+//void printBackspace(unsigned char buffer[]) {
+//	int lastCharPosition = strlen(buffer) - 1;
+//	buffer[lastCharPosition] = 0;
+//	char sequence[3] = { '\b', ' ', '\b' };
+//	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
+//}
+
+void printDeleteWordToTerminal(unsigned char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
 		if(buffer[i] == ' ') {
-			printBackspace(buffer);
+			printBackspaceToTerminal();
 			break;
 		}
-		printBackspace(buffer);
+		printBackspaceToTerminal();
 	}
 }
 
-void printDeleteLine(unsigned char buffer[]) {
+void printDeleteWordToBuffer(unsigned char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
-		printBackspace(buffer);
+		if(buffer[i] == ' ') {
+			printBackspaceToBuffer(buffer);
+			break;
+		}
+		printBackspaceToBuffer(buffer);
 	}
 }
 
-void printNewline(unsigned char buffer[]) {
+////TODO: If there are multiple spaces in a row, this will not work properly
+//void printDeleteWord(unsigned char buffer[]) {
+//	int lastCharPosition = strlen(buffer) - 1;
+//	int i;
+//	for(i = lastCharPosition; i >= 0; --i) {
+//		if(buffer[i] == ' ') {
+//			printBackspace(buffer);
+//			break;
+//		}
+//		printBackspace(buffer);
+//	}
+//}
+
+void printDeleteLineToTerminal(unsigned char buffer[]) {
+	int lastCharPosition = strlen(buffer) - 1;
+	int i;
+	for(i = lastCharPosition; i >= 0; --i) {
+		printBackspaceToTerminal();
+	}
+}
+
+void printDeleteLineToBuffer(unsigned char buffer[]) {
 	memset(buffer, 0, BUFFER_LENGTH);
+}
+
+//void printDeleteLine(unsigned char buffer[]) {
+//	int lastCharPosition = strlen(buffer) - 1;
+//	int i;
+//	for(i = lastCharPosition; i >= 0; --i) {
+//		printBackspace(buffer);
+//	}
+//}
+
+void printNewlineToTerminal() {
 	char sequence[2] = { '\n', '\r' };
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 }
 
-void printCharacter(unsigned char c, unsigned char buffer[]) {
+//void printNewline(unsigned char buffer[]) {
+//	memset(buffer, 0, BUFFER_LENGTH);
+//	char sequence[2] = { '\n', '\r' };
+//	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
+//}
+
+void printCharacterToTerminal(unsigned char c) {
+	UART_DRV_SendDataBlocking(myUART_IDX, &c, sizeof(char), 1000);
+}
+
+bool printCharacterToBuffer(unsigned char c, unsigned char buffer[]) {
 	int newCharPosition = strlen(buffer);
 	if(newCharPosition >= BUFFER_LENGTH) {
 		printf("Maximum line length reached. Cannot print character %c\n", c);
-		return;
+		return false;
 	}
 	buffer[newCharPosition] = c;
-	UART_DRV_SendDataBlocking(myUART_IDX, &c, sizeof(char), 1000);
+	return true;
 }
+
+//void printCharacter(unsigned char c, unsigned char buffer[]) {
+//	int newCharPosition = strlen(buffer);
+//	if(newCharPosition >= BUFFER_LENGTH) {
+//		printf("Maximum line length reached. Cannot print character %c\n", c);
+//		return;
+//	}
+//	buffer[newCharPosition] = c;
+//	UART_DRV_SendDataBlocking(myUART_IDX, &c, sizeof(char), 1000);
+//}
 
 void handleCharacter(unsigned char c, unsigned char *buffer) {
 	GENERIC_MESSAGE_PTR msg_ptr;
 	switch(c) {
 		case 0x08: //backspace
-			printBackspace(buffer);
+			printBackspaceToTerminal();
+			printBackspaceToBuffer(buffer);
 			break;
 		case 0x17: //delete word
-			printDeleteWord(buffer);
+			printDeleteWordToTerminal(buffer);
+			printDeleteWordToBuffer(buffer);
 			break;
 		case 0x15: //delete line
-			printDeleteLine(buffer);
+			printDeleteLineToTerminal(buffer);
+			printDeleteLineToBuffer(buffer);
 			break;
 		case '\n':
 		case '\r':
@@ -129,16 +197,23 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 				printf("\nCould not send a message\n");
 				_task_block();
 			}
-			printNewline(buffer);
+			printNewlineToTerminal();
+			printDeleteLineToBuffer(buffer);
 			break;
 
 		default: //printable character (this probably is probably a bad assumption to make)
-			printCharacter(c, buffer);
+			if(printCharacterToBuffer(c, buffer)) {
+				printCharacterToTerminal(c);
+			}
 			break;
 	}
 }
 
 void handleString(unsigned char *string) {
+	//TODO: printDeleteLineToTerminal(buffer)
+	//Send string to terminal + move to new line
+	//send buffer string
+
 	UART_DRV_SendDataBlocking(myUART_IDX, string, sizeof(string), 1000);
 	char sequence[2] = { '\n', '\r' };
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
