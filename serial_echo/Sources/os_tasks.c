@@ -209,14 +209,15 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 	}
 }
 
-void handleString(unsigned char *string) {
+void handleString(unsigned char *string, unsigned char buffer[]) {
 	//TODO: printDeleteLineToTerminal(buffer)
 	//Send string to terminal + move to new line
 	//send buffer string
-
+	printDeleteLineToTerminal(buffer);
 	UART_DRV_SendDataBlocking(myUART_IDX, string, sizeof(string), 1000);
 	char sequence[2] = { '\n', '\r' };
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
+	UART_DRV_SendDataBlocking(myUART_IDX, buffer, BUFFER_LENGTH, 1000);
 }
 
 
@@ -290,7 +291,7 @@ void serial_task(os_task_param_t task_init_data)
 				unsigned char **ptr = (unsigned char **) msg_body_ptr->DATA;
 				unsigned char *line = *ptr;
 				_msg_free(msg_ptr);
-				handleString(line);
+				handleString(line, buffer);
 			}
 
 
@@ -319,14 +320,9 @@ void user_task(os_task_param_t task_init_data)
   /* Write your local variable definition here */
 	printf("userTask Created!\n\r");
 
-	//Creates a message queue with some available ID
-	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 
 
-	OpenR(user_task_qid);
 	OpenW();
-
-	unsigned char line[BUFFER_LENGTH];
 
 
   
@@ -335,12 +331,43 @@ void user_task(os_task_param_t task_init_data)
 #endif
     
 	_putline(_msgq_get_id(0, HANDLER_QUEUE), "test");
-	_getline(line);
 
-	printf("Line Received: %s\n", line);
     
-    OSA_TimeDelay(10);                 /* Example code (for task release) */
+    OSA_TimeDelay(2000);                 /* Example code (for task release) */
    
+    
+    
+    
+#ifdef PEX_USE_RTOS   
+  }
+#endif    
+}
+
+/*
+** ===================================================================
+**     Callback    : user_task2
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void user_task2(os_task_param_t task_init_data)
+{
+	printf("userTask2 Created!\n\r");
+
+	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+	OpenR(user_task_qid);
+
+	unsigned char line[BUFFER_LENGTH];
+  
+#ifdef PEX_USE_RTOS
+  while (1) {
+#endif
+    /* Write your code here ... */
+    
+		_getline(line);
+		printf("Line Received: %s\n", line);
     
     
     

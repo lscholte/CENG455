@@ -42,6 +42,7 @@
 #include "SerialTask.h"
 #include "myUART.h"
 #include "UserTask.h"
+#include "UserTask2.h"
 #include <message.h>
 #include "access_functions.h"
 
@@ -99,6 +100,17 @@ void serial_task(os_task_param_t task_init_data);
 ** ===================================================================
 */
 void user_task(os_task_param_t task_init_data);
+
+/*
+** ===================================================================
+**     Callback    : user_task2
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void user_task2(os_task_param_t task_init_data);
 
 /* END os_tasks */
 

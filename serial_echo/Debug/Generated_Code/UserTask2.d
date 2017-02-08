@@ -1,7 +1,5 @@
-Static_Code/System/PE_low_level_init.o: \
- ../Static_Code/System/PE_low_level_init.c \
- C:/ceng455/serial_echo/Generated_Code/PE_low_level_init.h \
- C:/ceng455/serial_echo/Generated_Code/Cpu.h \
+Generated_Code/UserTask2.o: ../Generated_Code/UserTask2.c \
+ C:/ceng455/serial_echo/Sources/os_tasks.h \
  C:/ceng455/serial_echo/SDK/platform/devices/fsl_device_registers.h \
  C:/ceng455/serial_echo/SDK/platform/devices/MK64F12/include/MK64F12.h \
  C:/ceng455/serial_echo/SDK/platform/CMSIS/Include/core_cm4.h \
@@ -13,6 +11,10 @@ Static_Code/System/PE_low_level_init.o: \
  C:/ceng455/serial_echo/SDK/platform/devices/MK64F12/include/MK64F12.h \
  C:/ceng455/serial_echo/SDK/platform/devices/MK64F12/include/fsl_bitaccess.h \
  C:/ceng455/serial_echo/SDK/platform/devices/MK64F12/include/MK64F12_features.h \
+ C:/ceng455/serial_echo/Generated_Code/clockMan1.h \
+ C:/ceng455/serial_echo/Generated_Code/osa1.h \
+ C:/ceng455/serial_echo/Generated_Code/mqx_ksdk.h \
+ C:/ceng455/serial_echo/Generated_Code/Cpu.h \
  C:/ceng455/serial_echo/SDK/platform/system/inc/fsl_clock_manager.h \
  C:/ceng455/serial_echo/SDK/platform/hal/inc/fsl_sim_hal.h \
  c:\ceng455\serial_echo\sdk\platform\hal\src\sim\mk64f12\fsl_sim_hal_mk64f12.h \
@@ -60,10 +62,6 @@ Static_Code/System/PE_low_level_init.o: \
  C:/ceng455/serial_echo/SDK/platform/drivers/inc/fsl_mpu_driver.h \
  C:/ceng455/serial_echo/SDK/platform/system/inc/fsl_hwtimer.h \
  C:/ceng455/serial_echo/SDK/platform/system/inc/fsl_clock_manager.h \
- C:/ceng455/serial_echo/Generated_Code/osa1.h \
- C:/ceng455/serial_echo/Generated_Code/mqx_ksdk.h \
- C:/ceng455/serial_echo/Sources/Events.h \
- C:/ceng455/serial_echo/Generated_Code/clockMan1.h \
  C:/ceng455/serial_echo/Generated_Code/pin_init.h \
  C:/ceng455/serial_echo/Generated_Code/osa1.h \
  C:/ceng455/serial_echo/Generated_Code/mqx_ksdk.h \
@@ -78,12 +76,13 @@ Static_Code/System/PE_low_level_init.o: \
  C:/ceng455/serial_echo/Generated_Code/myUART.h \
  C:/ceng455/serial_echo/Generated_Code/UserTask.h \
  C:/ceng455/serial_echo/Generated_Code/UserTask2.h \
- C:/ceng455/serial_echo/Generated_Code/board.h \
- C:/ceng455/serial_echo/Generated_Code/pin_init.h
+ C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h \
+ C:/ceng455/serial_echo/Sources/access_functions.h \
+ C:/ceng455/serial_echo/Sources/Events.h \
+ C:/ceng455/serial_echo/Sources/rtos_main_task.h \
+ C:/ceng455/serial_echo/Sources/os_tasks.h ../Generated_Code/UserTask2.h
 
-C:/ceng455/serial_echo/Generated_Code/PE_low_level_init.h:
-
-C:/ceng455/serial_echo/Generated_Code/Cpu.h:
+C:/ceng455/serial_echo/Sources/os_tasks.h:
 
 C:/ceng455/serial_echo/SDK/platform/devices/fsl_device_registers.h:
 
@@ -106,6 +105,14 @@ C:/ceng455/serial_echo/SDK/platform/devices/MK64F12/include/MK64F12.h:
 C:/ceng455/serial_echo/SDK/platform/devices/MK64F12/include/fsl_bitaccess.h:
 
 C:/ceng455/serial_echo/SDK/platform/devices/MK64F12/include/MK64F12_features.h:
+
+C:/ceng455/serial_echo/Generated_Code/clockMan1.h:
+
+C:/ceng455/serial_echo/Generated_Code/osa1.h:
+
+C:/ceng455/serial_echo/Generated_Code/mqx_ksdk.h:
+
+C:/ceng455/serial_echo/Generated_Code/Cpu.h:
 
 C:/ceng455/serial_echo/SDK/platform/system/inc/fsl_clock_manager.h:
 
@@ -201,14 +208,6 @@ C:/ceng455/serial_echo/SDK/platform/system/inc/fsl_hwtimer.h:
 
 C:/ceng455/serial_echo/SDK/platform/system/inc/fsl_clock_manager.h:
 
-C:/ceng455/serial_echo/Generated_Code/osa1.h:
-
-C:/ceng455/serial_echo/Generated_Code/mqx_ksdk.h:
-
-C:/ceng455/serial_echo/Sources/Events.h:
-
-C:/ceng455/serial_echo/Generated_Code/clockMan1.h:
-
 C:/ceng455/serial_echo/Generated_Code/pin_init.h:
 
 C:/ceng455/serial_echo/Generated_Code/osa1.h:
@@ -237,6 +236,14 @@ C:/ceng455/serial_echo/Generated_Code/UserTask.h:
 
 C:/ceng455/serial_echo/Generated_Code/UserTask2.h:
 
-C:/ceng455/serial_echo/Generated_Code/board.h:
+C:/ceng455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h:
 
-C:/ceng455/serial_echo/Generated_Code/pin_init.h:
+C:/ceng455/serial_echo/Sources/access_functions.h:
+
+C:/ceng455/serial_echo/Sources/Events.h:
+
+C:/ceng455/serial_echo/Sources/rtos_main_task.h:
+
+C:/ceng455/serial_echo/Sources/os_tasks.h:
+
+../Generated_Code/UserTask2.h:
