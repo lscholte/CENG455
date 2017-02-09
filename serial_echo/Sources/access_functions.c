@@ -59,7 +59,37 @@ _queue_id OpenW(void) {
 	writePrivilege.task_id = _task_get_id();
 	return writePrivilege.qid;
 
-
+//		_queue_id qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+//
+//		//Allocate a string message
+//		GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR) _msg_alloc(message_pool);
+//		if (msg_ptr == NULL){
+//			printf("\nCould not allocate a message\n");
+//			return 0;
+//		}
+//
+//		//Construct the message
+//		_task_id id = _task_get_id();
+//		msg_ptr->BODY_PTR->TYPE = REQUEST_WRITE_MESSAGE_TYPE;
+//		msg_ptr->BODY_PTR->DATA = &id;
+//		msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, HANDLER_QUEUE);
+//		msg_ptr->HEADER.SOURCE_QID = qid;
+//		msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY_PTR);
+//
+//		//Send line to the handler
+//		bool result = _msgq_send(msg_ptr);
+//		if (result != TRUE) {
+//			printf("\nCould not send a message\n");
+//			return 0;
+//		}
+//
+//		msg_ptr = _msgq_receive(qid, 0);
+//		if (msg_ptr == NULL){
+//			printf("\nCould not receive a message\n");
+//			return 0;
+//		}
+//
+//		return *((_queue_id *) msg_ptr->BODY_PTR->DATA);
 }
 
 

@@ -294,6 +294,19 @@ void serial_task(os_task_param_t task_init_data)
 				handleString(line, buffer);
 			}
 
+            //If this is a string message, it is from OpenW
+            else if(msg_body_ptr->TYPE == REQUEST_WRITE_MESSAGE_TYPE) {
+                _task_id *ptr = (_task_id *) msg_body_ptr->DATA;
+                _task_id id = *ptr;
+
+                //Construct the response message
+                msg_ptr->HEADER.TARGET_QID = msg_ptr->SOURCE_QID;
+                msg_ptr->BODY_PTR->TYPE = REQUEST_WRITE_RESPONSE_MESSAGE_TYPE;
+                msg_ptr->BODY_PTR->DATA = writePrivilege.task_id == MQX_NULL_TASK_ID ? handler_qid : 0; //TODO: need to pass addresses
+
+                //Send response back to the task that called OpenW
+                bool result = _msgq_send(msg_ptr);
+            }
 
 		}
 
