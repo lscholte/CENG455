@@ -44,6 +44,7 @@
 #include "UserTask.h"
 #include "UserTask2.h"
 #include <message.h>
+#include <mutex.h>
 #include "access_functions.h"
 
 #ifdef __cplusplus
@@ -71,6 +72,8 @@ typedef struct read_privilege {
 extern _pool_id message_pool;
 extern WRITE_PRIVILEGE writePrivilege;
 extern READ_PRIVILEGE readPrivilege;
+extern MUTEX_STRUCT readPrivilegeMutex;
+extern MUTEX_STRUCT writePrivilegeMutex;
 
 void handleCharacter(unsigned char c, unsigned char *buffer);
 void printCharacter(unsigned char c, unsigned char buffer[]);

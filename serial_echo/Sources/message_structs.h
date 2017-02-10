@@ -8,10 +8,27 @@
 #ifndef SOURCES_MESSAGE_STRUCTS_H_
 #define SOURCES_MESSAGE_STRUCTS_H_
 
-#define CHAR_MESSAGE_TYPE 0 //Data should be a pointer to an unsigned char
-#define STRING_MESSAGE_TYPE 1 //Data should be a pointer to an unsigned char *
-#define REQUEST_WRITE_MESSAGE_TYPE //Data should be a pointer to a _task_id
-#define REQUEST_WRITE_RESPONSE_MESSAGE_TYPE //Data should be a pointer to a _queue_id
+#define CHAR_MESSAGE_TYPE 0
+#define STRING_MESSAGE_TYPE 1
+
+//typedef struct char_message
+//{
+//   MESSAGE_HEADER_STRUCT   HEADER;
+//   unsigned char           DATA;
+//} CHAR_MESSAGE, * CHAR_MESSAGE_PTR;
+//
+//typedef struct string_message
+//{
+//   MESSAGE_HEADER_STRUCT   HEADER;
+//   unsigned char           *DATA;
+//} STRING_MESSAGE, * STRING_MESSAGE_PTR;
+//
+//typedef struct openW_message
+//{
+//   MESSAGE_HEADER_STRUCT   HEADER;
+//   _task_id           		DATA;
+//} OPENW_MESSAGE, * OPENW_MESSAGE_PTR;
+
 
 typedef struct message_body {
 	int TYPE;

@@ -12,27 +12,45 @@
 
 bool OpenR(uint16_t stream_no) {
 
-	//Lock read privilege structure
+	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
+		printf("Failed to lock the read privileges\n");
+		return false;
+	}
 
+	//TODO: We want to be able to store multiple user tasks with read permissions.
+	//Currently we can only store a single task
 
 	if(readPrivilege.task_id == _task_get_id()) {
 		//User task already has read permission
+		printf("User task already has read privileges\n");
+		_mutex_unlock(&readPrivilegeMutex);
 		return false;
 	}
 
 	readPrivilege.stream_no = stream_no;
 	readPrivilege.task_id = _task_get_id();
 
-	//for each item in read privileges
-	//	if item.task_id == current task id
-	//		return false
-	//add current task to end of read privileges
+	_mutex_unlock(&readPrivilegeMutex);
 	return true;
 }
 
 bool _getline(unsigned char *line) {
 	//TODO: Check if task has read permission
 	//	return false if not
+
+	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
+		printf("Failed to lock the read privileges\n");
+		return false;
+	}
+
+	if(readPrivilege.task_id != _task_get_id()) {
+		//User task already has read permission
+		printf("User task does not have read privileges\n");
+		_mutex_unlock(&readPrivilegeMutex);
+		return false;
+	}
+
+	_mutex_unlock(&readPrivilegeMutex);
 
 	GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(readPrivilege.stream_no, 0);
 	if(msg_ptr != NULL && msg_ptr->BODY_PTR->TYPE == STRING_MESSAGE_TYPE) {
@@ -49,47 +67,21 @@ bool _getline(unsigned char *line) {
 
 _queue_id OpenW(void) {
 
-	//TODO: We want a mutex here so that only 1 task
-	//can access write_ptr at a time
-	//if the task id is 0
+	if(_mutex_lock(&writePrivilegeMutex) != MQX_EOK) {
+		printf("Failed to lock the write privileges\n");
+		return 0;
+	}
+
 	if(writePrivilege.task_id != 0) {
 		printf("Only 1 user task at a time can have write permission\n");
+		_mutex_unlock(&writePrivilegeMutex);
 		return 0;
 	}
 	writePrivilege.task_id = _task_get_id();
-	return writePrivilege.qid;
+	_queue_id qid = writePrivilege.qid;
 
-//		_queue_id qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
-//
-//		//Allocate a string message
-//		GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR) _msg_alloc(message_pool);
-//		if (msg_ptr == NULL){
-//			printf("\nCould not allocate a message\n");
-//			return 0;
-//		}
-//
-//		//Construct the message
-//		_task_id id = _task_get_id();
-//		msg_ptr->BODY_PTR->TYPE = REQUEST_WRITE_MESSAGE_TYPE;
-//		msg_ptr->BODY_PTR->DATA = &id;
-//		msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, HANDLER_QUEUE);
-//		msg_ptr->HEADER.SOURCE_QID = qid;
-//		msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY_PTR);
-//
-//		//Send line to the handler
-//		bool result = _msgq_send(msg_ptr);
-//		if (result != TRUE) {
-//			printf("\nCould not send a message\n");
-//			return 0;
-//		}
-//
-//		msg_ptr = _msgq_receive(qid, 0);
-//		if (msg_ptr == NULL){
-//			printf("\nCould not receive a message\n");
-//			return 0;
-//		}
-//
-//		return *((_queue_id *) msg_ptr->BODY_PTR->DATA);
+	_mutex_unlock(&writePrivilegeMutex);
+	return qid;
 }
 
 
@@ -97,12 +89,19 @@ bool _putline(_queue_id qid, unsigned char *line) {
 	//TODO: We want a mutex here so that only 1 task
 	//can access write_ptr at a time
 
-	//If current task does not have write permission
-	if(writePrivilege.task_id != _task_get_id()) {
-		printf("Cannot write line because user task does not have write permission\n");
+	if(_mutex_lock(&writePrivilegeMutex) != MQX_EOK) {
+		printf("Failed to lock the write privileges\n");
 		return false;
 	}
 
+	//If current task does not have write permission
+	if(writePrivilege.task_id != _task_get_id()) {
+		printf("Cannot write line because user task does not have write permission\n");
+		_mutex_unlock(&writePrivilegeMutex);
+		return false;
+	}
+
+	_mutex_unlock(&writePrivilegeMutex);
 
 	//Allocate a string message
 	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR) _msg_alloc(message_pool);
@@ -110,9 +109,6 @@ bool _putline(_queue_id qid, unsigned char *line) {
 		printf("\nCould not allocate a message\n");
 		return false;
 	}
-
-//	unsigned char *str = malloc(sizeof(char) * (BUFFER_LENGTH+2));
-//	sprintf(str, "%s\n", line);
 
 	//Construct the message
 	msg_ptr->BODY_PTR->TYPE = STRING_MESSAGE_TYPE;

@@ -42,6 +42,8 @@ extern "C" {
 _pool_id message_pool;
 WRITE_PRIVILEGE writePrivilege;
 READ_PRIVILEGE readPrivilege;
+MUTEX_STRUCT readPrivilegeMutex;
+MUTEX_STRUCT writePrivilegeMutex;
 
 void printBackspaceToTerminal() {
 	char sequence[3] = { '\b', ' ', '\b' };
@@ -190,10 +192,15 @@ void serial_task(os_task_param_t task_init_data)
 
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
 
-	//TODO: Maybe need a mutex here?
-    //TODO: Declare struct in local scope as opposed to global scope
+	if(_mutex_lock(&writePrivilegeMutex) != MQX_EOK) {
+		printf("Failed to lock the write privileges\n");
+		return 0;
+	}
+
 	writePrivilege.qid = handler_qid;
 	writePrivilege.task_id = MQX_NULL_TASK_ID;
+
+	_mutex_unlock(&writePrivilegeMutex);
 
 	if (handler_qid == 0) {
 		printf("\nCould not open the server message queue\n");
@@ -208,16 +215,6 @@ void serial_task(os_task_param_t task_init_data)
 	}
 
 	unsigned char buffer[BUFFER_LENGTH] = { 0 };
-
-    //TODO: Create a data structure to store the user tasks that have read privileges.
-    //The Handler task (ie this task) will maintain this structure. When a user task calls
-    //OpenR, the Handler task will add the user task to the data structure. The structure
-    //will contain the task ids and queue ids for the tasks that have read privileges.
-
-	//OR
-
-	//Make it a global data structure and just prevent concurrent accesses to it by using
-	//mutexes
 
 #ifdef PEX_USE_RTOS
 	while (1) {
@@ -245,19 +242,6 @@ void serial_task(os_task_param_t task_init_data)
 				handleString(line, buffer);
 			}
 
-            //If this is a string message, it is from OpenW
-            else if(msg_body_ptr->TYPE == REQUEST_WRITE_MESSAGE_TYPE) {
-                _task_id *ptr = (_task_id *) msg_body_ptr->DATA;
-                _task_id id = *ptr;
-
-                //Construct the response message
-                msg_ptr->HEADER.TARGET_QID = msg_ptr->SOURCE_QID;
-                msg_ptr->BODY_PTR->TYPE = REQUEST_WRITE_RESPONSE_MESSAGE_TYPE;
-                msg_ptr->BODY_PTR->DATA = writePrivilege.task_id == MQX_NULL_TASK_ID ? handler_qid : 0; //TODO: need to pass addresses
-
-                //Send response back to the task that called OpenW
-                bool result = _msgq_send(msg_ptr);
-            }
 
 		}
 
