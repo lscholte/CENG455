@@ -339,20 +339,62 @@ void user_task2(os_task_param_t task_init_data)
 
 	char line[BUFFER_LENGTH_WITH_NULL];
   
+	int i = 0;
+
+#ifdef PEX_USE_RTOS
+  while (1) {
+#endif
+    /* Write your code here ... */
+
+	  if(i > 5) {
+		  Close();
+	  }
+    
+		if(_getline(line)) {
+			printf("Task2 Line Received: %s\n", line);
+		} else {
+			_task_block();
+		}
+    
+    ++i;
+    
+#ifdef PEX_USE_RTOS   
+  }
+#endif    
+}
+
+/*
+** ===================================================================
+**     Callback    : user_task3
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void user_task3(os_task_param_t task_init_data)
+{
+	printf("userTask3 Created!\n\r");
+
+	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+	OpenR(user_task_qid);
+	OpenW();
+
+	char line[BUFFER_LENGTH_WITH_NULL];
+
 #ifdef PEX_USE_RTOS
   while (1) {
 #endif
     /* Write your code here ... */
     
 		if(_getline(line)) {
-			printf("Line Received: %s\n", line);
+			printf("Task3 Line Received: %s\n", line);
 		}
-    
     
     
 #ifdef PEX_USE_RTOS   
   }
-#endif    
+#endif
 }
 
 /* END os_tasks */

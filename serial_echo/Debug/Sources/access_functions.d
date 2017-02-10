@@ -76,6 +76,7 @@ Sources/access_functions.o: ../Sources/access_functions.c \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/myUART.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask2.h \
+ C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask3.h \
  ../Sources/rtos_main_task.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/mutex.h \
  ../Sources/os_tasks.h \
@@ -237,6 +238,8 @@ C:/Users/lscholte/CENG455/serial_echo/Generated_Code/myUART.h:
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask2.h:
+
+C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask3.h:
 
 ../Sources/rtos_main_task.h:
 

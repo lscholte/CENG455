@@ -1,4 +1,4 @@
-Generated_Code/UserTask2.o: ../Generated_Code/UserTask2.c \
+Generated_Code/UserTask3.o: ../Generated_Code/UserTask3.c \
  C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/platform/devices/fsl_device_registers.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/platform/devices/MK64F12/include/MK64F12.h \
@@ -84,7 +84,7 @@ Generated_Code/UserTask2.o: ../Generated_Code/UserTask2.c \
  C:/Users/lscholte/CENG455/serial_echo/Sources/rtos_main_task.h \
  C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h \
  C:/Users/lscholte/CENG455/serial_echo/Sources/permission_structs.h \
- ../Generated_Code/UserTask2.h
+ ../Generated_Code/UserTask3.h
 
 C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h:
 
@@ -256,4 +256,4 @@ C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Sources/permission_structs.h:
 
-../Generated_Code/UserTask2.h:
+../Generated_Code/UserTask3.h:

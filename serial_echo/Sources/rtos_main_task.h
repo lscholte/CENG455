@@ -43,6 +43,7 @@
 #include "myUART.h"
 #include "UserTask.h"
 #include "UserTask2.h"
+#include "UserTask3.h"
 #include <mutex.h>
 
 #ifdef __cplusplus

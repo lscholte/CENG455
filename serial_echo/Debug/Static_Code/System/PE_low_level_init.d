@@ -78,6 +78,7 @@ Static_Code/System/PE_low_level_init.o: \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/myUART.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask2.h \
+ C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask3.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/board.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/pin_init.h
 
@@ -236,6 +237,8 @@ C:/Users/lscholte/CENG455/serial_echo/Generated_Code/myUART.h:
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask2.h:
+
+C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask3.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/board.h:
 
