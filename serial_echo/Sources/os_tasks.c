@@ -41,7 +41,7 @@ extern "C" {
 
 _pool_id message_pool;
 WRITE_PRIVILEGE writePrivilege;
-READ_PRIVILEGE readPrivilege;
+READ_PRIVILEGE readPrivilege[MAX_TASKS_WITH_READ_PERM];
 
 void printBackspaceToTerminal() {
 	char sequence[3] = { '\b', ' ', '\b' };
@@ -116,15 +116,23 @@ void handleCharacter(char c, char *buffer) {
 		return 0;
 	}
 
-	if(readPrivilege.task_id == 0) {
+	bool taskWithReadPermission = false;
+	int i;
+	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
+		if(readPrivilege[i].task_id != MQX_NULL_TASK_ID) {
+			taskWithReadPermission = true;
+			break;
+		}
+
+	}
+
+	if(!taskWithReadPermission) {
 		printf("No user tasks with read privileges. Discarding character\n");
 		_mutex_unlock(&readPrivilegeMutex);
 		return;
 	}
 
-	_mutex_unlock(&readPrivilegeMutex);
-
-	GENERIC_MESSAGE_PTR msg_ptr;
+	STRING_MESSAGE_PTR msg_ptr;
 	switch(c) {
 		case 0x08: //backspace
 			printBackspaceToTerminal();
@@ -141,29 +149,29 @@ void handleCharacter(char c, char *buffer) {
 		case '\n':
 		case '\r':
 			//Allocate a string message
-			msg_ptr = (GENERIC_MESSAGE_PTR) _msg_alloc(message_pool);
-			if (msg_ptr == NULL){
-				printf("\nCould not allocate a message\n");
-				_task_block();
+			for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
+				if(readPrivilege[i].task_id != MQX_NULL_TASK_ID) {
+					msg_ptr = (STRING_MESSAGE_PTR) _msg_alloc(message_pool);
+					if (msg_ptr == NULL){
+						printf("\nCould not allocate a message\n");
+						_task_block();
+					}
+
+					//Construct the message
+					msg_ptr->TYPE = STRING_MESSAGE_TYPE;
+					strcpy(msg_ptr->DATA, buffer);
+					msg_ptr->HEADER.TARGET_QID = readPrivilege[i].stream_no;
+					msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(char)*BUFFER_LENGTH_WITH_NULL;
+
+					//Send line to the handler
+					bool result = _msgq_send(msg_ptr);
+					if (result != TRUE) {
+						printf("\nCould not send a message\n");
+						_task_block();
+					}
+				}
 			}
 
-			//Construct the message
-			//NOTE: We must use malloc here because if we don't, then this memory
-			//will be deallocated when this function terminates, and then when
-			//the bufferCopy is received in _getline(), the pointer will no longer be valid
-			char *bufferCopy = malloc(sizeof(char) * BUFFER_LENGTH_WITH_NULL);
-			strcpy(bufferCopy, buffer);
-			msg_ptr->BODY.TYPE = STRING_MESSAGE_TYPE;
-			msg_ptr->BODY.DATA = &bufferCopy;
-			msg_ptr->HEADER.TARGET_QID = readPrivilege.stream_no;
-			msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY);
-
-			//Send line to the handler
-			bool result = _msgq_send(msg_ptr);
-			if (result != TRUE) {
-				printf("\nCould not send a message\n");
-				_task_block();
-			}
 			printNewlineToTerminal();
 			printDeleteLineToBuffer(buffer);
 			break;
@@ -174,6 +182,7 @@ void handleCharacter(char c, char *buffer) {
 			}
 			break;
 	}
+	_mutex_unlock(&readPrivilegeMutex);
 }
 
 void handleString(char *string, char buffer[]) {
@@ -217,8 +226,11 @@ void handler_task(os_task_param_t task_init_data)
 		_task_block();
 	}
 
-	readPrivilege.task_id = 0;
-	readPrivilege.stream_no = 0;
+	int i;
+	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
+		readPrivilege[i].task_id = MQX_NULL_TASK_ID;
+		readPrivilege[i].stream_no = 0;
+	}
 
 	_mutex_unlock(&readPrivilegeMutex);
 
@@ -227,7 +239,7 @@ void handler_task(os_task_param_t task_init_data)
 		_task_block();
 	}
 
-	message_pool = _msgpool_create(sizeof(GENERIC_MESSAGE), NUM_CLIENTS, 1, 0);
+	message_pool = _msgpool_create(sizeof(STRING_MESSAGE), NUM_CLIENTS, 1, 0);
 
 	if (message_pool == MSGPOOL_NULL_POOL_ID) {
 		printf("\nCount not create a message pool\n");
@@ -240,22 +252,19 @@ void handler_task(os_task_param_t task_init_data)
 	while (1) {
 #endif
 		//Wait for a message
-		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(handler_qid, 0);
+		STRING_MESSAGE_PTR msg_ptr = _msgq_receive(handler_qid, 0);
 		if(msg_ptr != NULL) {
-			MESSAGE_BODY msg_body_ptr = msg_ptr->BODY;
 
 			//If this is a character message, then it is from ISR
-			if(msg_body_ptr.TYPE == CHAR_MESSAGE_TYPE) {
-				char *ptr = (char *) msg_body_ptr.DATA;
-				char c = *ptr;
+			if(msg_ptr->TYPE == CHAR_MESSAGE_TYPE) {
+				char c =  msg_ptr->DATA[0];
 				_msg_free(msg_ptr);
 				handleCharacter(c, buffer);
 			}
 
 			//If this is a string message, then it is from putline
-			else if(msg_body_ptr.TYPE == STRING_MESSAGE_TYPE) {
-				char **ptr = (char **) msg_body_ptr.DATA;
-				char *line = *ptr;
+			else if(msg_ptr->TYPE == STRING_MESSAGE_TYPE) {
+				char *line = msg_ptr->DATA;
 				_msg_free(msg_ptr);
 				handleString(line, buffer);
 			}

@@ -46,6 +46,7 @@
 #include <message.h>
 #include <mutex.h>
 #include "access_functions.h"
+#include "permission_structs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,19 +61,11 @@ extern "C" {
 #define BUFFER_LENGTH 32
 #define BUFFER_LENGTH_WITH_NULL (BUFFER_LENGTH+1)
 
-typedef struct write_privilege {
-	uint32_t task_id; //if this has a value of 0, then no task has write privileges
-	_queue_id qid; //this will be initially set by the handler task and then never modified again
-} WRITE_PRIVILEGE, * WRITE_PRIVILEGE_PTR;
-
-typedef struct read_privilege {
-	uint32_t task_id;
-	_queue_number stream_no;
-} READ_PRIVILEGE, * READ_PRIVILEGE_PTR;
+#define MAX_TASKS_WITH_READ_PERM 10
 
 extern _pool_id message_pool;
 extern WRITE_PRIVILEGE writePrivilege;
-extern READ_PRIVILEGE readPrivilege;
+extern READ_PRIVILEGE readPrivilege[MAX_TASKS_WITH_READ_PERM];
 
 /*
 ** ===================================================================

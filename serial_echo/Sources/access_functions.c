@@ -20,18 +20,39 @@ bool OpenR(uint16_t stream_no) {
 	//TODO: We want to be able to store multiple user tasks with read permissions.
 	//Currently we can only store a single task
 
-	if(readPrivilege.task_id == _task_get_id()) {
+
+	_task_id id = _task_get_id();
+	bool hasReadPermission = false;
+	int i;
+	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
+		if(readPrivilege[i].task_id == id) {
+			hasReadPermission = true;
+			stream_no = readPrivilege[i].stream_no;
+			break;
+		}
+	}
+
+	if(hasReadPermission) {
 		//User task already has read permission
 		printf("User task already has read privileges\n");
 		_mutex_unlock(&readPrivilegeMutex);
 		return false;
 	}
 
-	readPrivilege.stream_no = stream_no;
-	readPrivilege.task_id = _task_get_id();
+	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
+		if(readPrivilege[i].task_id == MQX_NULL_TASK_ID) {
+			readPrivilege[i].task_id = id;
+			readPrivilege[i].stream_no = stream_no;
+			hasReadPermission = true;
+			stream_no = readPrivilege[i].stream_no;
+			_mutex_unlock(&readPrivilegeMutex);
+			return true;
+		}
+	}
 
+	printf("Not enough space in the read permissions to add a new user task\n");
 	_mutex_unlock(&readPrivilegeMutex);
-	return true;
+	return false;
 }
 
 bool _getline(char *line) {
@@ -40,8 +61,20 @@ bool _getline(char *line) {
 		return false;
 	}
 
+	_task_id id = _task_get_id();
 	//TODO: Read privilege structure needs to be able to handle multiple tasks
-	if(readPrivilege.task_id != _task_get_id()) {
+	bool hasReadPermission = false;
+	_queue_number stream_no;
+	int i;
+	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
+		if(readPrivilege[i].task_id == id) {
+			hasReadPermission = true;
+			stream_no = readPrivilege[i].stream_no;
+			break;
+		}
+	}
+
+	if(!hasReadPermission) {
 		//User task already has read permission
 		printf("User task does not have read privileges\n");
 		_mutex_unlock(&readPrivilegeMutex);
@@ -50,11 +83,9 @@ bool _getline(char *line) {
 
 	_mutex_unlock(&readPrivilegeMutex);
 
-	GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(readPrivilege.stream_no, 0);
-	if(msg_ptr != NULL && msg_ptr->BODY.TYPE == STRING_MESSAGE_TYPE) {
-		char **ptr = (char **) msg_ptr->BODY.DATA;
-		strcpy(line, *ptr);
-		free(ptr);
+	STRING_MESSAGE_PTR msg_ptr = _msgq_receive(stream_no, 0);
+	if(msg_ptr != NULL && msg_ptr->TYPE == STRING_MESSAGE_TYPE) {
+		strcpy(line, msg_ptr->DATA);
 
 		/* free the message */
 		_msg_free(msg_ptr);
@@ -99,17 +130,17 @@ bool _putline(_queue_id qid, char *line) {
 	_mutex_unlock(&writePrivilegeMutex);
 
 	//Allocate a string message
-	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR) _msg_alloc(message_pool);
+	STRING_MESSAGE_PTR msg_ptr = (STRING_MESSAGE_PTR) _msg_alloc(message_pool);
 	if (msg_ptr == NULL){
 		printf("\nCould not allocate a message\n");
 		return false;
 	}
 
 	//Construct the message
-	msg_ptr->BODY.TYPE = STRING_MESSAGE_TYPE;
-	msg_ptr->BODY.DATA = &line;
+	msg_ptr->TYPE = STRING_MESSAGE_TYPE;
+	strcpy(msg_ptr->DATA, line);
 	msg_ptr->HEADER.TARGET_QID = qid;
-	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY);
+	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(char)*BUFFER_LENGTH_WITH_NULL;
 
 	//Send line to the handler
 	bool result = _msgq_send(msg_ptr);
@@ -144,10 +175,20 @@ bool Close(void) {
 	}
 
 	//TODO: Need to handle case where read privilege has multiple tasks
-	if(readPrivilege.task_id == id) {
-		readPrivilege.task_id = MQX_NULL_TASK_ID;
-		success = true;
+	int i;
+	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
+		if(readPrivilege[i].task_id == id) {
+			readPrivilege[i].task_id = MQX_NULL_TASK_ID;
+			success = true;
+			break;
+		}
+
 	}
+
+//	if(readPrivilege.task_id == id) {
+//		readPrivilege.task_id = MQX_NULL_TASK_ID;
+//		success = true;
+//	}
 
 	_mutex_unlock(&writePrivilegeMutex);
 	_mutex_unlock(&readPrivilegeMutex);

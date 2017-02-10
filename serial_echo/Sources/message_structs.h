@@ -11,14 +11,10 @@
 #define CHAR_MESSAGE_TYPE 0
 #define STRING_MESSAGE_TYPE 1
 
-typedef struct message_body {
-	int TYPE;
-	void *DATA;
-} MESSAGE_BODY, * MESSAGE_BODY_PTR;
-
-typedef struct generic_message {
+typedef struct string_message {
 	MESSAGE_HEADER_STRUCT HEADER;
-	MESSAGE_BODY BODY;
-} GENERIC_MESSAGE, * GENERIC_MESSAGE_PTR;
+	int TYPE;
+	char DATA[BUFFER_LENGTH_WITH_NULL];
+} STRING_MESSAGE, * STRING_MESSAGE_PTR;
 
 #endif /* SOURCES_MESSAGE_STRUCTS_H_ */

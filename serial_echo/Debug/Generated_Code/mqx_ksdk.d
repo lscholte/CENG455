@@ -88,6 +88,7 @@ Generated_Code/mqx_ksdk.o: ../Generated_Code/mqx_ksdk.c \
  C:/Users/lscholte/CENG455/serial_echo/Sources/Events.h \
  C:/Users/lscholte/CENG455/serial_echo/Sources/rtos_main_task.h \
  C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h \
+ C:/Users/lscholte/CENG455/serial_echo/Sources/permission_structs.h \
  ../Generated_Code/MainTask.h ../Generated_Code/Handler.h \
  ../Generated_Code/UserTask.h ../Generated_Code/UserTask2.h
 
@@ -270,6 +271,8 @@ C:/Users/lscholte/CENG455/serial_echo/Sources/Events.h:
 C:/Users/lscholte/CENG455/serial_echo/Sources/rtos_main_task.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h:
+
+C:/Users/lscholte/CENG455/serial_echo/Sources/permission_structs.h:
 
 ../Generated_Code/MainTask.h:
 

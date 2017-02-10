@@ -81,7 +81,7 @@ Sources/main.o: ../Sources/main.c \
  C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/mutex.h \
  ../Sources/os_tasks.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h \
- ../Sources/access_functions.h
+ ../Sources/access_functions.h ../Sources/permission_structs.h
 
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/Cpu.h:
 
@@ -248,3 +248,5 @@ C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/mutex.h:
 C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h:
 
 ../Sources/access_functions.h:
+
+../Sources/permission_structs.h:

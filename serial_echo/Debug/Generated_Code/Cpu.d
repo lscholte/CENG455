@@ -83,7 +83,8 @@ Generated_Code/Cpu.o: ../Generated_Code/Cpu.c ../Generated_Code/Cpu.h \
  C:/Users/lscholte/CENG455/serial_echo/Sources/access_functions.h \
  C:/Users/lscholte/CENG455/serial_echo/Sources/Events.h \
  C:/Users/lscholte/CENG455/serial_echo/Sources/rtos_main_task.h \
- C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h
+ C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h \
+ C:/Users/lscholte/CENG455/serial_echo/Sources/permission_structs.h
 
 ../Generated_Code/Cpu.h:
 
@@ -258,3 +259,5 @@ C:/Users/lscholte/CENG455/serial_echo/Sources/Events.h:
 C:/Users/lscholte/CENG455/serial_echo/Sources/rtos_main_task.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h:
+
+C:/Users/lscholte/CENG455/serial_echo/Sources/permission_structs.h:
