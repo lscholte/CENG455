@@ -44,6 +44,9 @@ extern "C" {
 extern void PEX_components_init(void);
 #endif 
 
+MUTEX_STRUCT readPrivilegeMutex;
+MUTEX_STRUCT writePrivilegeMutex;
+
 /*
 ** ===================================================================
 **     Callback    : main_task
@@ -56,6 +59,23 @@ extern void PEX_components_init(void);
 void main_task(os_task_param_t task_init_data)
 {
   /* Write your local variable definition here */
+	printf("mainTask Created!\n\r");
+
+	MUTEX_ATTR_STRUCT mutexAttribute;
+	if(_mutatr_init(&mutexAttribute) != MQX_EOK) {
+		printf("Failed to initialize mutex attribute\n");
+		_task_block();
+	}
+
+	if(_mutex_init(&writePrivilegeMutex, &mutexAttribute) != MQX_EOK) {
+		printf("Failed to initialize write privileges mutex\n");
+		_task_block();
+	}
+
+	if(_mutex_init(&readPrivilegeMutex, &mutexAttribute) != MQX_EOK) {
+		printf("Failed to initialize read privileges mutex\n");
+		_task_block();
+	}
   
   /* Initialization of Processor Expert components (when some RTOS is active). DON'T REMOVE THIS CODE!!! */
 #ifdef MainTask_PEX_RTOS_COMPONENTS_INIT

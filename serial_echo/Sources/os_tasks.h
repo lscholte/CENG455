@@ -58,6 +58,7 @@ extern "C" {
 #define CLIENT_QUEUE_BASE 11
 
 #define BUFFER_LENGTH 32
+#define BUFFER_LENGTH_WITH_NULL (BUFFER_LENGTH+1)
 
 typedef struct write_privilege {
 	uint32_t task_id; //if this has a value of 0, then no task has write privileges
@@ -72,14 +73,6 @@ typedef struct read_privilege {
 extern _pool_id message_pool;
 extern WRITE_PRIVILEGE writePrivilege;
 extern READ_PRIVILEGE readPrivilege;
-extern MUTEX_STRUCT readPrivilegeMutex;
-extern MUTEX_STRUCT writePrivilegeMutex;
-
-void handleCharacter(unsigned char c, unsigned char *buffer);
-void printCharacter(unsigned char c, unsigned char buffer[]);
-void printBackspace(unsigned char buffer[]);
-void printDeleteLine(unsigned char buffer[]);
-void printDeleteWord(unsigned char buffer[]);
 
 /*
 ** ===================================================================

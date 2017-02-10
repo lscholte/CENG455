@@ -42,8 +42,6 @@ extern "C" {
 _pool_id message_pool;
 WRITE_PRIVILEGE writePrivilege;
 READ_PRIVILEGE readPrivilege;
-MUTEX_STRUCT readPrivilegeMutex;
-MUTEX_STRUCT writePrivilegeMutex;
 
 void printBackspaceToTerminal() {
 	char sequence[3] = { '\b', ' ', '\b' };
@@ -113,6 +111,19 @@ bool printCharacterToBuffer(unsigned char c, unsigned char buffer[]) {
 }
 
 void handleCharacter(unsigned char c, unsigned char *buffer) {
+	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
+		printf("Failed to lock the read privileges\n");
+		return 0;
+	}
+
+	if(readPrivilege.task_id == 0) {
+		printf("No user tasks with read privileges. Discarding character\n");
+		_mutex_unlock(&readPrivilegeMutex);
+		return;
+	}
+
+	_mutex_unlock(&readPrivilegeMutex);
+
 	GENERIC_MESSAGE_PTR msg_ptr;
 	switch(c) {
 		case 0x08: //backspace
@@ -140,10 +151,10 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 			//NOTE: We must use malloc here because if we don't, then this memory
 			//will be deallocated when this function terminates, and then when
 			//the bufferCopy is received in _getline(), the pointer will no longer be valid
-			char *bufferCopy = malloc(sizeof(char) * BUFFER_LENGTH);
+			char *bufferCopy = malloc(sizeof(char) * BUFFER_LENGTH_WITH_NULL);
 			strcpy(bufferCopy, buffer);
-			msg_ptr->BODY_PTR->TYPE = STRING_MESSAGE_TYPE;
-			msg_ptr->BODY_PTR->DATA = &bufferCopy;
+			msg_ptr->BODY.TYPE = STRING_MESSAGE_TYPE;
+			msg_ptr->BODY.DATA = &bufferCopy;
 			msg_ptr->HEADER.TARGET_QID = readPrivilege.stream_no;
 			msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY);
 
@@ -202,6 +213,16 @@ void serial_task(os_task_param_t task_init_data)
 
 	_mutex_unlock(&writePrivilegeMutex);
 
+	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
+		printf("Failed to lock the read privileges\n");
+		return 0;
+	}
+
+	readPrivilege.task_id = 0;
+	readPrivilege.stream_no = 0;
+
+	_mutex_unlock(&readPrivilegeMutex);
+
 	if (handler_qid == 0) {
 		printf("\nCould not open the server message queue\n");
 		_task_block();
@@ -214,7 +235,8 @@ void serial_task(os_task_param_t task_init_data)
 		_task_block();
 	}
 
-	unsigned char buffer[BUFFER_LENGTH] = { 0 };
+	//+1 to reserve space for the final null character
+	unsigned char buffer[BUFFER_LENGTH_WITH_NULL] = { 0 };
 
 #ifdef PEX_USE_RTOS
 	while (1) {
@@ -222,21 +244,21 @@ void serial_task(os_task_param_t task_init_data)
 		//Check if there is a message from ISR (ie a keyboard character was pressed)
 		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(handler_qid, 0);
 		if(msg_ptr != NULL) {
-			MESSAGE_BODY_PTR msg_body_ptr = msg_ptr->BODY_PTR;
+			MESSAGE_BODY msg_body_ptr = msg_ptr->BODY;
 			//If this is a character message, then it is from ISR
-			if(msg_body_ptr->TYPE == CHAR_MESSAGE_TYPE ) {
+			if(msg_body_ptr.TYPE == CHAR_MESSAGE_TYPE) {
 	//	        TODO: Wrap following line inside an if statement that checks if there
 	//	        are any User tasks that have read privileges. If no such tasks exist,
 	//	        then we don't care about handling the received character, so we will discard it
-				unsigned char *ptr = (unsigned char *) msg_body_ptr->DATA;
+				unsigned char *ptr = (unsigned char *) msg_body_ptr.DATA;
 				unsigned char c = *ptr;
 				_msg_free(msg_ptr);
 				handleCharacter(c, buffer);
 			}
 
 			//If this is a string message, it is from putline
-			else if(msg_body_ptr->TYPE == STRING_MESSAGE_TYPE) {
-				unsigned char **ptr = (unsigned char **) msg_body_ptr->DATA;
+			else if(msg_body_ptr.TYPE == STRING_MESSAGE_TYPE) {
+				unsigned char **ptr = (unsigned char **) msg_body_ptr.DATA;
 				unsigned char *line = *ptr;
 				_msg_free(msg_ptr);
 				handleString(line, buffer);
@@ -307,15 +329,16 @@ void user_task2(os_task_param_t task_init_data)
 	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 	OpenR(user_task_qid);
 
-	unsigned char line[BUFFER_LENGTH];
+	unsigned char line[BUFFER_LENGTH_WITH_NULL];
   
 #ifdef PEX_USE_RTOS
   while (1) {
 #endif
     /* Write your code here ... */
     
-		_getline(line);
-		printf("Line Received: %s\n", line);
+		if(_getline(line)) {
+			printf("Line Received: %s\n", line);
+		}
     
     
     

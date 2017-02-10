@@ -77,9 +77,10 @@ Sources/Events.o: ../Sources/Events.c \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/myUART.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask2.h \
- ../Sources/rtos_main_task.h ../Sources/os_tasks.h \
- C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h \
+ ../Sources/rtos_main_task.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/mutex.h \
+ ../Sources/os_tasks.h \
+ C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h \
  ../Sources/access_functions.h ../Sources/message_structs.h
 
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/Cpu.h:
@@ -240,11 +241,11 @@ C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask2.h:
 
 ../Sources/rtos_main_task.h:
 
+C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/mutex.h:
+
 ../Sources/os_tasks.h:
 
 C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h:
-
-C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/mutex.h:
 
 ../Sources/access_functions.h:
 

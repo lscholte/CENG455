@@ -35,14 +35,12 @@ bool OpenR(uint16_t stream_no) {
 }
 
 bool _getline(unsigned char *line) {
-	//TODO: Check if task has read permission
-	//	return false if not
-
 	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the read privileges\n");
 		return false;
 	}
 
+	//TODO: Read privilege structure needs to be able to handle multiple tasks
 	if(readPrivilege.task_id != _task_get_id()) {
 		//User task already has read permission
 		printf("User task does not have read privileges\n");
@@ -53,8 +51,8 @@ bool _getline(unsigned char *line) {
 	_mutex_unlock(&readPrivilegeMutex);
 
 	GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(readPrivilege.stream_no, 0);
-	if(msg_ptr != NULL && msg_ptr->BODY_PTR->TYPE == STRING_MESSAGE_TYPE) {
-		unsigned char **ptr = (unsigned char **) msg_ptr->BODY_PTR->DATA;
+	if(msg_ptr != NULL && msg_ptr->BODY.TYPE == STRING_MESSAGE_TYPE) {
+		unsigned char **ptr = (unsigned char **) msg_ptr->BODY.DATA;
 		strcpy(line, *ptr);
 		free(ptr);
 
@@ -86,9 +84,6 @@ _queue_id OpenW(void) {
 
 
 bool _putline(_queue_id qid, unsigned char *line) {
-	//TODO: We want a mutex here so that only 1 task
-	//can access write_ptr at a time
-
 	if(_mutex_lock(&writePrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the write privileges\n");
 		return false;
@@ -111,10 +106,10 @@ bool _putline(_queue_id qid, unsigned char *line) {
 	}
 
 	//Construct the message
-	msg_ptr->BODY_PTR->TYPE = STRING_MESSAGE_TYPE;
-	msg_ptr->BODY_PTR->DATA = &line;
+	msg_ptr->BODY.TYPE = STRING_MESSAGE_TYPE;
+	msg_ptr->BODY.DATA = &line;
 	msg_ptr->HEADER.TARGET_QID = qid;
-	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY_PTR);
+	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(MESSAGE_BODY);
 
 	//Send line to the handler
 	bool result = _msgq_send(msg_ptr);
@@ -123,18 +118,12 @@ bool _putline(_queue_id qid, unsigned char *line) {
 		return false;
 	}
 
-	//Wait for a response message from handler
-
-	//if response indicates that there was an error
-	//		return false
-
-
 	return true;
 
 
 }
 
 bool Close(void) {
-
+	//TODO
 }
 

@@ -43,10 +43,14 @@
 #include "myUART.h"
 #include "UserTask.h"
 #include "UserTask2.h"
+#include <mutex.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif 
+
+extern MUTEX_STRUCT readPrivilegeMutex;
+extern MUTEX_STRUCT writePrivilegeMutex;
 
 /*
 ** ===================================================================
