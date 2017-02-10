@@ -290,19 +290,22 @@ void user_task(os_task_param_t task_init_data)
 
 
 	OpenW();
-
+	int i = 0;
 
   
 #ifdef PEX_USE_RTOS
   while (1) {
 #endif
+	  if(i > 5) {
+		  Close();
+	  }
     
 	_putline(_msgq_get_id(0, HANDLER_QUEUE), "test");
 
     
     OSA_TimeDelay(2000);                 /* Example code (for task release) */
    
-    
+    ++i;
     
     
 #ifdef PEX_USE_RTOS   

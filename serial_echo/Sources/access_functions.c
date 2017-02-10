@@ -124,6 +124,34 @@ bool _putline(_queue_id qid, char *line) {
 }
 
 bool Close(void) {
-	//TODO
+	_task_id id = _task_get_id();
+	if(_mutex_lock(&writePrivilegeMutex) != MQX_EOK) {
+		printf("Failed to lock the write privileges\n");
+		return false;
+	}
+
+	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
+		printf("Failed to lock the read privileges\n");
+		_mutex_unlock(&writePrivilegeMutex);
+		return false;
+	}
+
+	bool success = false;
+
+	if(writePrivilege.task_id == id) {
+		writePrivilege.task_id = MQX_NULL_TASK_ID;
+		success = true;
+	}
+
+	//TODO: Need to handle case where read privilege has multiple tasks
+	if(readPrivilege.task_id == id) {
+		readPrivilege.task_id = MQX_NULL_TASK_ID;
+		success = true;
+	}
+
+	_mutex_unlock(&writePrivilegeMutex);
+	_mutex_unlock(&readPrivilegeMutex);
+
+	return success;
 }
 
