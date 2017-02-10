@@ -16,9 +16,9 @@
 #include <message.h>
 
 bool OpenR(uint16_t stream_no);
-bool _getline(unsigned char *line);
+bool _getline(char *line);
 _queue_id OpenW(void);
-bool _putline(_queue_id qid, unsigned char *line);
+bool _putline(_queue_id qid, char *line);
 bool Close(void);
 
 #endif /* SOURCES_ACCESS_FUNCTIONS_H_ */

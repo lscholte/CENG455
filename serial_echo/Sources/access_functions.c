@@ -34,7 +34,7 @@ bool OpenR(uint16_t stream_no) {
 	return true;
 }
 
-bool _getline(unsigned char *line) {
+bool _getline(char *line) {
 	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the read privileges\n");
 		return false;
@@ -52,7 +52,7 @@ bool _getline(unsigned char *line) {
 
 	GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(readPrivilege.stream_no, 0);
 	if(msg_ptr != NULL && msg_ptr->BODY.TYPE == STRING_MESSAGE_TYPE) {
-		unsigned char **ptr = (unsigned char **) msg_ptr->BODY.DATA;
+		char **ptr = (char **) msg_ptr->BODY.DATA;
 		strcpy(line, *ptr);
 		free(ptr);
 
@@ -83,7 +83,7 @@ _queue_id OpenW(void) {
 }
 
 
-bool _putline(_queue_id qid, unsigned char *line) {
+bool _putline(_queue_id qid, char *line) {
 	if(_mutex_lock(&writePrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the write privileges\n");
 		return false;

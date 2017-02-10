@@ -48,13 +48,13 @@ void printBackspaceToTerminal() {
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 }
 
-void printBackspaceToBuffer(unsigned char buffer[]) {
+void printBackspaceToBuffer(char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	buffer[lastCharPosition] = 0;
 }
 
 //TODO: If there are multiple spaces in a row, this will not work properly
-void printDeleteWordToTerminal(unsigned char buffer[]) {
+void printDeleteWordToTerminal(char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
@@ -67,7 +67,7 @@ void printDeleteWordToTerminal(unsigned char buffer[]) {
 }
 
 //TODO: If there are multiple spaces in a row, this will not work properly
-void printDeleteWordToBuffer(unsigned char buffer[]) {
+void printDeleteWordToBuffer(char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
@@ -79,7 +79,7 @@ void printDeleteWordToBuffer(unsigned char buffer[]) {
 	}
 }
 
-void printDeleteLineToTerminal(unsigned char buffer[]) {
+void printDeleteLineToTerminal(char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
@@ -87,7 +87,7 @@ void printDeleteLineToTerminal(unsigned char buffer[]) {
 	}
 }
 
-void printDeleteLineToBuffer(unsigned char buffer[]) {
+void printDeleteLineToBuffer(char buffer[]) {
 	memset(buffer, 0, BUFFER_LENGTH);
 }
 
@@ -96,11 +96,11 @@ void printNewlineToTerminal() {
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 }
 
-void printCharacterToTerminal(unsigned char c) {
+void printCharacterToTerminal(char c) {
 	UART_DRV_SendDataBlocking(myUART_IDX, &c, sizeof(char), 1000);
 }
 
-bool printCharacterToBuffer(unsigned char c, unsigned char buffer[]) {
+bool printCharacterToBuffer(char c, char buffer[]) {
 	int newCharPosition = strlen(buffer);
 	if(newCharPosition >= BUFFER_LENGTH) {
 		printf("Maximum line length reached. Cannot print character %c\n", c);
@@ -110,7 +110,7 @@ bool printCharacterToBuffer(unsigned char c, unsigned char buffer[]) {
 	return true;
 }
 
-void handleCharacter(unsigned char c, unsigned char *buffer) {
+void handleCharacter(char c, char *buffer) {
 	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the read privileges\n");
 		return 0;
@@ -176,7 +176,7 @@ void handleCharacter(unsigned char c, unsigned char *buffer) {
 	}
 }
 
-void handleString(unsigned char *string, unsigned char buffer[]) {
+void handleString(char *string, char buffer[]) {
 	printDeleteLineToTerminal(buffer);
 	UART_DRV_SendDataBlocking(myUART_IDX, string, sizeof(string), 1000);
 	char sequence[2] = { '\n', '\r' };
@@ -205,7 +205,7 @@ void serial_task(os_task_param_t task_init_data)
 
 	if(_mutex_lock(&writePrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the write privileges\n");
-		return 0;
+		_task_block();
 	}
 
 	writePrivilege.qid = handler_qid;
@@ -215,7 +215,7 @@ void serial_task(os_task_param_t task_init_data)
 
 	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the read privileges\n");
-		return 0;
+		_task_block();
 	}
 
 	readPrivilege.task_id = 0;
@@ -235,31 +235,28 @@ void serial_task(os_task_param_t task_init_data)
 		_task_block();
 	}
 
-	//+1 to reserve space for the final null character
-	unsigned char buffer[BUFFER_LENGTH_WITH_NULL] = { 0 };
+	char buffer[BUFFER_LENGTH_WITH_NULL] = { 0 };
 
 #ifdef PEX_USE_RTOS
 	while (1) {
 #endif
-		//Check if there is a message from ISR (ie a keyboard character was pressed)
+		//Wait for a message
 		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(handler_qid, 0);
 		if(msg_ptr != NULL) {
 			MESSAGE_BODY msg_body_ptr = msg_ptr->BODY;
+
 			//If this is a character message, then it is from ISR
 			if(msg_body_ptr.TYPE == CHAR_MESSAGE_TYPE) {
-	//	        TODO: Wrap following line inside an if statement that checks if there
-	//	        are any User tasks that have read privileges. If no such tasks exist,
-	//	        then we don't care about handling the received character, so we will discard it
-				unsigned char *ptr = (unsigned char *) msg_body_ptr.DATA;
-				unsigned char c = *ptr;
+				char *ptr = (char *) msg_body_ptr.DATA;
+				char c = *ptr;
 				_msg_free(msg_ptr);
 				handleCharacter(c, buffer);
 			}
 
-			//If this is a string message, it is from putline
+			//If this is a string message, then it is from putline
 			else if(msg_body_ptr.TYPE == STRING_MESSAGE_TYPE) {
-				unsigned char **ptr = (unsigned char **) msg_body_ptr.DATA;
-				unsigned char *line = *ptr;
+				char **ptr = (char **) msg_body_ptr.DATA;
+				char *line = *ptr;
 				_msg_free(msg_ptr);
 				handleString(line, buffer);
 			}
@@ -329,7 +326,7 @@ void user_task2(os_task_param_t task_init_data)
 	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 	OpenR(user_task_qid);
 
-	unsigned char line[BUFFER_LENGTH_WITH_NULL];
+	char line[BUFFER_LENGTH_WITH_NULL];
   
 #ifdef PEX_USE_RTOS
   while (1) {
