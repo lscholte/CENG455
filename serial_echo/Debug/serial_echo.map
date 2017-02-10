@@ -18264,6 +18264,167 @@ Discarded input sections
  .debug_macro   0x00000000       0x40 ./Generated_Code/Cpu.o
  .debug_macro   0x00000000      0x117 ./Generated_Code/Cpu.o
  .debug_macro   0x00000000       0x2e ./Generated_Code/Cpu.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .group         0x00000000        0x8 ./Generated_Code/Handler.o
+ .text          0x00000000        0x0 ./Generated_Code/Handler.o
+ .data          0x00000000        0x0 ./Generated_Code/Handler.o
+ .bss           0x00000000        0x0 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0x862 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x11 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x44 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0x209 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x56 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x3b ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x34 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x26 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0xd1d ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0xd9 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000    0x1773b ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x58 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x35 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0xa3 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0x10e ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x7f ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x52 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x43 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0x180 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x22 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000    0x16273 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000     0x1182 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x22 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x10 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x11 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x1c ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x10 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x34 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x6a ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0xe4 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x2e ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0x19a ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x88 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x34 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x10 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x22 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0xbd ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x70 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x1c ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x40 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x1c ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0xa12 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0xd5 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0x110 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x20 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0x2a6 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x10 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x35 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0x13f ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x1c ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0xb3 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0xfb ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x58 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x43 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x70 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x22 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x35 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x19 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x10 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x22 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x1c ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x16 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x1c ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x1c ./Generated_Code/Handler.o
+ .debug_macro   0x00000000      0x117 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x40 ./Generated_Code/Handler.o
+ .debug_macro   0x00000000       0x2e ./Generated_Code/Handler.o
  .group         0x00000000        0x8 ./Generated_Code/MainTask.o
  .group         0x00000000        0x8 ./Generated_Code/MainTask.o
  .group         0x00000000        0x8 ./Generated_Code/MainTask.o
@@ -18429,173 +18590,12 @@ Discarded input sections
  .debug_macro   0x00000000       0x1c ./Generated_Code/MainTask.o
  .debug_macro   0x00000000       0x1c ./Generated_Code/MainTask.o
  .debug_macro   0x00000000       0x40 ./Generated_Code/MainTask.o
- .debug_line    0x00000000      0xb92 ./Generated_Code/MainTask.o
- .debug_str     0x00000000   0x1a6ac5 ./Generated_Code/MainTask.o
+ .debug_line    0x00000000      0xb8f ./Generated_Code/MainTask.o
+ .debug_str     0x00000000   0x1a6ab3 ./Generated_Code/MainTask.o
  .comment       0x00000000       0x71 ./Generated_Code/MainTask.o
  .ARM.attributes
                 0x00000000       0x39 ./Generated_Code/MainTask.o
  .debug_frame   0x00000000       0x30 ./Generated_Code/MainTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .group         0x00000000        0x8 ./Generated_Code/SerialTask.o
- .text          0x00000000        0x0 ./Generated_Code/SerialTask.o
- .data          0x00000000        0x0 ./Generated_Code/SerialTask.o
- .bss           0x00000000        0x0 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0x862 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x11 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x44 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0x209 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x56 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x3b ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x34 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x26 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0xd1d ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0xd9 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000    0x1773b ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x58 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x35 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0xa3 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0x10e ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x7f ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x52 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x43 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0x180 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x22 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000    0x16273 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000     0x1182 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x22 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x10 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x11 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x1c ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x10 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x34 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x6a ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0xe4 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x2e ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0x19a ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x88 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x34 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x10 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x22 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0xbd ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x70 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x1c ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x40 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x1c ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0xa12 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0xd5 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0x110 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x20 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0x2a6 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x10 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x35 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0x13f ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x1c ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0xb3 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0xfb ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x58 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x43 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x70 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x22 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x35 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x19 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x10 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x22 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x1c ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x16 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x1c ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x1c ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000      0x117 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x40 ./Generated_Code/SerialTask.o
- .debug_macro   0x00000000       0x2e ./Generated_Code/SerialTask.o
  .group         0x00000000        0x8 ./Generated_Code/UserTask.o
  .group         0x00000000        0x8 ./Generated_Code/UserTask.o
  .group         0x00000000        0x8 ./Generated_Code/UserTask.o
@@ -19079,7 +19079,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x35 ./Generated_Code/clockMan1.o
  .debug_macro   0x00000000       0x19 ./Generated_Code/clockMan1.o
  .debug_line    0x00000000      0xa55 ./Generated_Code/clockMan1.o
- .debug_str     0x00000000   0x1a6ed1 ./Generated_Code/clockMan1.o
+ .debug_str     0x00000000   0x1a6ece ./Generated_Code/clockMan1.o
  .comment       0x00000000       0x71 ./Generated_Code/clockMan1.o
  .ARM.attributes
                 0x00000000       0x39 ./Generated_Code/clockMan1.o
@@ -19230,7 +19230,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x19 ./Generated_Code/fsl_hwtimer1.o
  .debug_macro   0x00000000       0x16 ./Generated_Code/fsl_hwtimer1.o
  .debug_line    0x00000000      0xa83 ./Generated_Code/fsl_hwtimer1.o
- .debug_str     0x00000000   0x1a663b ./Generated_Code/fsl_hwtimer1.o
+ .debug_str     0x00000000   0x1a6638 ./Generated_Code/fsl_hwtimer1.o
  .comment       0x00000000       0x71 ./Generated_Code/fsl_hwtimer1.o
  .ARM.attributes
                 0x00000000       0x39 ./Generated_Code/fsl_hwtimer1.o
@@ -19381,7 +19381,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x19 ./Generated_Code/fsl_mpu1.o
  .debug_macro   0x00000000       0x10 ./Generated_Code/fsl_mpu1.o
  .debug_line    0x00000000      0xa62 ./Generated_Code/fsl_mpu1.o
- .debug_str     0x00000000   0x1a65e2 ./Generated_Code/fsl_mpu1.o
+ .debug_str     0x00000000   0x1a65df ./Generated_Code/fsl_mpu1.o
  .comment       0x00000000       0x71 ./Generated_Code/fsl_mpu1.o
  .ARM.attributes
                 0x00000000       0x39 ./Generated_Code/fsl_mpu1.o
@@ -19916,7 +19916,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x22 ./Generated_Code/osa1.o
  .debug_macro   0x00000000       0x35 ./Generated_Code/osa1.o
  .debug_line    0x00000000      0xa41 ./Generated_Code/osa1.o
- .debug_str     0x00000000   0x1a653b ./Generated_Code/osa1.o
+ .debug_str     0x00000000   0x1a6538 ./Generated_Code/osa1.o
  .comment       0x00000000       0x71 ./Generated_Code/osa1.o
  .ARM.attributes
                 0x00000000       0x39 ./Generated_Code/osa1.o
@@ -20144,7 +20144,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x19 ./Generated_Code/uart1.o
  .debug_macro   0x00000000       0x10 ./Generated_Code/uart1.o
  .debug_line    0x00000000      0xa5c ./Generated_Code/uart1.o
- .debug_str     0x00000000   0x1a6734 ./Generated_Code/uart1.o
+ .debug_str     0x00000000   0x1a6731 ./Generated_Code/uart1.o
  .comment       0x00000000       0x71 ./Generated_Code/uart1.o
  .ARM.attributes
                 0x00000000       0x39 ./Generated_Code/uart1.o
@@ -20606,8 +20606,8 @@ LOAD ./SDK/platform/devices/MK64F12/startup/gcc/startup_MK64F12.o
 LOAD ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
 LOAD ./SDK/platform/devices/startup.o
 LOAD ./Generated_Code/Cpu.o
+LOAD ./Generated_Code/Handler.o
 LOAD ./Generated_Code/MainTask.o
-LOAD ./Generated_Code/SerialTask.o
 LOAD ./Generated_Code/UserTask.o
 LOAD ./Generated_Code/UserTask2.o
 LOAD ./Generated_Code/clockMan1.o
@@ -20650,7 +20650,7 @@ END GROUP
  .FlashConfig   0x00000400       0x10 ./SDK/platform/devices/MK64F12/startup/gcc/startup_MK64F12.o
                 0x00000410                . = ALIGN (0x4)
 
-.text           0x00000410     0xf73c
+.text           0x00000410     0xf738
                 0x00000410                . = ALIGN (0x4)
  *(.text)
  .text          0x00000410       0x54 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/core/M4/boot.o
@@ -20839,9 +20839,9 @@ END GROUP
  .text.handleString
                 0x00001448       0x54 ./Sources/os_tasks.o
                 0x00001448                handleString
- .text.serial_task
+ .text.handler_task
                 0x0000149c      0x17c ./Sources/os_tasks.o
-                0x0000149c                serial_task
+                0x0000149c                handler_task
  .text.user_task
                 0x00001618       0x4c ./Sources/os_tasks.o
                 0x00001618                user_task
@@ -21597,9 +21597,9 @@ END GROUP
  .text.Components_Init
                 0x0000b874       0x4c ./Generated_Code/Cpu.o
                 0x0000b874                Components_Init
- .text.SerialTask_Init
-                0x0000b8c0       0x28 ./Generated_Code/SerialTask.o
-                0x0000b8c0                SerialTask_Init
+ .text.Handler_Init
+                0x0000b8c0       0x28 ./Generated_Code/Handler.o
+                0x0000b8c0                Handler_Init
  .text.UserTask_Init
                 0x0000b8e8       0x28 ./Generated_Code/UserTask.o
                 0x0000b8e8                UserTask_Init
@@ -21804,174 +21804,174 @@ END GROUP
  .rodata        0x0000f098      0x1e0 ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
  .rodata        0x0000f278       0x58 ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
  .rodata        0x0000f2d0      0x130 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
- .rodata        0x0000f400       0x40 ./Generated_Code/mqx_ksdk.o
- .rodata        0x0000f440       0x58 ./Generated_Code/pin_init.o
+ .rodata        0x0000f400       0x3c ./Generated_Code/mqx_ksdk.o
+ .rodata        0x0000f43c       0x58 ./Generated_Code/pin_init.o
  *(.rodata*)
  .rodata.upper_hex_string
-                0x0000f498       0x14 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print_prv.o
+                0x0000f494       0x14 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print_prv.o
  .rodata.lower_hex_string
-                0x0000f4ac       0x14 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print_prv.o
+                0x0000f4a8       0x14 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print_prv.o
  .rodata.__func__.8074
-                0x0000f4c0       0x10 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
+                0x0000f4bc       0x10 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
  .rodata.__func__.8079
-                0x0000f4d0       0x10 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
+                0x0000f4cc       0x10 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
  .rodata.__func__.8100
-                0x0000f4e0        0x8 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
+                0x0000f4dc        0x8 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
  .rodata.__func__.8105
-                0x0000f4e8        0xc ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
+                0x0000f4e4        0xc ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
  .rodata.__func__.8184
-                0x0000f4f4       0x14 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
+                0x0000f4f0       0x14 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
  .rodata.nio_tty_dev_fn
-                0x0000f508       0x20 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
-                0x0000f508                nio_tty_dev_fn
+                0x0000f504       0x20 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
+                0x0000f504                nio_tty_dev_fn
  .rodata.__func__.7736
-                0x0000f528       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
+                0x0000f524       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
  .rodata.__func__.7751
-                0x0000f538       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
+                0x0000f534       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
  .rodata.__func__.7768
-                0x0000f548       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
+                0x0000f544       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
  .rodata.__func__.7782
-                0x0000f558       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
+                0x0000f554       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
  .rodata.__func__.7794
-                0x0000f568       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
+                0x0000f564       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
  .rodata.__func__.7803
-                0x0000f578       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
+                0x0000f574       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
  .rodata.nio_serial_dev_fn
-                0x0000f588       0x20 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
-                0x0000f588                nio_serial_dev_fn
+                0x0000f584       0x20 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+                0x0000f584                nio_serial_dev_fn
  .rodata.__func__.8362
-                0x0000f5a8       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+                0x0000f5a4       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
  .rodata.__func__.8384
-                0x0000f5b8       0x14 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+                0x0000f5b4       0x14 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
  .rodata.__func__.8409
-                0x0000f5cc       0x14 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+                0x0000f5c8       0x14 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
  .rodata.__func__.8435
-                0x0000f5e0       0x18 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+                0x0000f5dc       0x18 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
  .rodata.__func__.8446
-                0x0000f5f8       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+                0x0000f5f4       0x10 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
  .rodata.__func__.8474
-                0x0000f608       0x14 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+                0x0000f604       0x14 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
  .rodata.__func__.8479
-                0x0000f61c       0x18 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+                0x0000f618       0x18 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
  .rodata.__func__.8492
-                0x0000f634       0x18 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+                0x0000f630       0x18 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
  .rodata.nio_dummy_dev_fn
-                0x0000f64c       0x20 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_dummy/src/nio_dummy.o
-                0x0000f64c                nio_dummy_dev_fn
+                0x0000f648       0x20 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_dummy/src/nio_dummy.o
+                0x0000f648                nio_dummy_dev_fn
  .rodata.__func__.8052
-                0x0000f66c       0x10 ./SDK/rtos/mqx/mqx/source/kernel/inittask.o
+                0x0000f668       0x10 ./SDK/rtos/mqx/mqx/source/kernel/inittask.o
  .rodata._mqx_version_number
-                0x0000f67c        0x4 ./SDK/rtos/mqx/mqx/source/kernel/mqx.o
-                0x0000f67c                _mqx_version_number
+                0x0000f678        0x4 ./SDK/rtos/mqx/mqx/source/kernel/mqx.o
+                0x0000f678                _mqx_version_number
  .rodata._mqx_vendor
-                0x0000f680        0x4 ./SDK/rtos/mqx/mqx/source/kernel/mqx.o
-                0x0000f680                _mqx_vendor
+                0x0000f67c        0x4 ./SDK/rtos/mqx/mqx/source/kernel/mqx.o
+                0x0000f67c                _mqx_vendor
  .rodata.__func__.7770
-                0x0000f684       0x18 ./SDK/rtos/mqx/mqx/source/kernel/task.o
+                0x0000f680       0x18 ./SDK/rtos/mqx/mqx/source/kernel/task.o
  .rodata.__func__.8058
-                0x0000f69c       0x14 ./SDK/rtos/mqx/mqx/source/kernel/task.o
+                0x0000f698       0x14 ./SDK/rtos/mqx/mqx/source/kernel/task.o
  .rodata.nio_serial_default_init
-                0x0000f6b0       0x20 ./SDK/rtos/mqx/mqx/source/bsp/init_bsp.o
-                0x0000f6b0                nio_serial_default_init
+                0x0000f6ac       0x20 ./SDK/rtos/mqx/mqx/source/bsp/init_bsp.o
+                0x0000f6ac                nio_serial_default_init
  .rodata.__func__.9745
-                0x0000f6d0       0x18 ./SDK/rtos/mqx/mqx/source/bsp/init_bsp.o
+                0x0000f6cc       0x18 ./SDK/rtos/mqx/mqx/source/bsp/init_bsp.o
  .rodata.__func__.7806
-                0x0000f6e8       0x14 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
+                0x0000f6e4       0x14 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
  .rodata.__func__.7811
-                0x0000f6fc       0x14 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
+                0x0000f6f8       0x14 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
  .rodata.__func__.7816
-                0x0000f710       0x18 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
+                0x0000f70c       0x18 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
  .rodata.__func__.7825
-                0x0000f728       0x14 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
+                0x0000f724       0x14 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
  .rodata.__func__.7838
-                0x0000f73c       0x14 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
+                0x0000f738       0x14 ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
  .rodata.kSystickDevif
-                0x0000f750       0x18 ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
-                0x0000f750                kSystickDevif
+                0x0000f74c       0x18 ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
+                0x0000f74c                kSystickDevif
  .rodata.__func__.9285
-                0x0000f768       0x18 ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
+                0x0000f764       0x18 ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
  .rodata.__func__.9290
-                0x0000f780       0x1c ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
+                0x0000f77c       0x1c ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
  .rodata.__func__.9295
-                0x0000f79c       0x1c ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
+                0x0000f798       0x1c ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
  .rodata.__func__.9300
-                0x0000f7b8       0x1c ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
+                0x0000f7b4       0x1c ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
  .rodata.__func__.9304
-                0x0000f7d4       0x18 ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
+                0x0000f7d0       0x18 ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
  .rodata.__func__.9310
-                0x0000f7ec       0x1c ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
+                0x0000f7e8       0x1c ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
  .rodata.uartGateTable
-                0x0000f808        0x8 ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
+                0x0000f804        0x8 ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
  .rodata.__func__.7955
-                0x0000f810       0x1c ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
+                0x0000f80c       0x1c ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
  .rodata.__func__.7959
-                0x0000f82c       0x1c ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
+                0x0000f828       0x1c ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
  .rodata.__func__.7963
-                0x0000f848       0x1c ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
+                0x0000f844       0x1c ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
  .rodata.__func__.7625
-                0x0000f864       0x10 ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
+                0x0000f860       0x10 ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
  .rodata.__func__.7631
-                0x0000f874       0x10 ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
+                0x0000f870       0x10 ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
  .rodata.__func__.7636
-                0x0000f884       0x14 ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
+                0x0000f880       0x14 ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
  .rodata.fllFactorTable.6460
-                0x0000f898       0x10 ./SDK/platform/hal/src/mcg/fsl_mcg_hal.o
+                0x0000f894       0x10 ./SDK/platform/hal/src/mcg/fsl_mcg_hal.o
  .rodata.g_uartBase
-                0x0000f8a8       0x18 ./SDK/platform/drivers/src/uart/fsl_uart_common.o
-                0x0000f8a8                g_uartBase
+                0x0000f8a4       0x18 ./SDK/platform/drivers/src/uart/fsl_uart_common.o
+                0x0000f8a4                g_uartBase
  .rodata.__func__.9737
-                0x0000f8c0       0x10 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f8bc       0x10 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9710
-                0x0000f8d0       0x14 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f8cc       0x14 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9744
-                0x0000f8e4       0x10 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f8e0       0x10 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9714
-                0x0000f8f4       0x14 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f8f0       0x14 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9760
-                0x0000f908       0x1c ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f904       0x1c ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9770
-                0x0000f924       0x1c ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f920       0x1c ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9779
-                0x0000f940       0x1c ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f93c       0x1c ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9794
-                0x0000f95c       0x14 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f958       0x14 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9860
-                0x0000f970       0x1c ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f96c       0x1c ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9868
-                0x0000f98c       0x18 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f988       0x18 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.__func__.9874
-                0x0000f9a4       0x20 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+                0x0000f9a0       0x20 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
  .rodata.g_mpuBase
-                0x0000f9c4        0x4 ./SDK/platform/drivers/src/mpu/fsl_mpu_common.o
-                0x0000f9c4                g_mpuBase
+                0x0000f9c0        0x4 ./SDK/platform/drivers/src/mpu/fsl_mpu_common.o
+                0x0000f9c0                g_mpuBase
  .rodata.MQX_template_list
-                0x0000f9c8       0xa0 ./Generated_Code/mqx_ksdk.o
-                0x0000f9c8                MQX_template_list
+                0x0000f9c4       0xa0 ./Generated_Code/mqx_ksdk.o
+                0x0000f9c4                MQX_template_list
  .rodata.MQX_init_struct
-                0x0000fa68       0x30 ./Generated_Code/mqx_ksdk.o
-                0x0000fa68                MQX_init_struct
+                0x0000fa64       0x30 ./Generated_Code/mqx_ksdk.o
+                0x0000fa64                MQX_init_struct
  .rodata.myUART_InitConfig0
-                0x0000fa98        0x8 ./Generated_Code/myUART.o
-                0x0000fa98                myUART_InitConfig0
+                0x0000fa94        0x8 ./Generated_Code/myUART.o
+                0x0000fa94                myUART_InitConfig0
  .rodata.__func__.6220
-                0x0000faa0       0x14 ./Generated_Code/pin_init.o
+                0x0000fa9c       0x14 ./Generated_Code/pin_init.o
  .rodata.str1.4
-                0x0000fab4       0x3f c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-assert.o)
+                0x0000fab0       0x3f c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-assert.o)
                                  0x44 (size before relaxing)
- *fill*         0x0000faf3        0x1 
+ *fill*         0x0000faef        0x1 
  .rodata.str1.4
-                0x0000faf4        0x2 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-impure.o)
+                0x0000faf0        0x2 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-impure.o)
                                   0x4 (size before relaxing)
- *fill*         0x0000faf6        0x2 
+ *fill*         0x0000faf2        0x2 
  .rodata._global_impure_ptr
-                0x0000faf8        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-impure.o)
-                0x0000faf8                _global_impure_ptr
+                0x0000faf4        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-impure.o)
+                0x0000faf4                _global_impure_ptr
  .rodata.str1.4
-                0x0000fafc       0x30 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-vfiprintf.o)
+                0x0000faf8       0x30 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-vfiprintf.o)
  .rodata.zeroes.6721
-                0x0000fb2c       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-vfiprintf.o)
+                0x0000fb28       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-vfiprintf.o)
  .rodata.blanks.6720
-                0x0000fb3c       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-vfiprintf.o)
+                0x0000fb38       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-vfiprintf.o)
  *(.glue_7)
  .glue_7        0x00000000        0x0 linker stubs
  *(.glue_7t)
@@ -21979,71 +21979,71 @@ END GROUP
  *(.eh_frame)
  *(.init)
  *(.fini)
-                0x0000fb4c                . = ALIGN (0x4)
+                0x0000fb48                . = ALIGN (0x4)
 
-.vfp11_veneer   0x0000fb4c        0x0
+.vfp11_veneer   0x0000fb48        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x0000fb4c        0x0
+.v4_bx          0x0000fb48        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x0000fb4c        0x0
+.iplt           0x0000fb48        0x0
  .iplt          0x00000000        0x0 ./Static_Code/System/PE_low_level_init.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x0000fb4c        0x8
-                0x0000fb4c                __exidx_start = .
+.ARM            0x0000fb48        0x8
+                0x0000fb48                __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x0000fb4c        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu\libgcc.a(_divdi3.o)
- .ARM.exidx     0x0000fb54        0x0 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu\libgcc.a(_udivdi3.o)
+ .ARM.exidx     0x0000fb48        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu\libgcc.a(_divdi3.o)
+ .ARM.exidx     0x0000fb50        0x0 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu\libgcc.a(_udivdi3.o)
                                   0x8 (size before relaxing)
-                0x0000fb54                __exidx_end = .
+                0x0000fb50                __exidx_end = .
 
-.rel.dyn        0x0000fb54        0x0
+.rel.dyn        0x0000fb50        0x0
  .rel.iplt      0x00000000        0x0 ./Static_Code/System/PE_low_level_init.o
 
-.ctors          0x0000fb54        0x0
-                0x0000fb54                __CTOR_LIST__ = .
+.ctors          0x0000fb50        0x0
+                0x0000fb50                __CTOR_LIST__ = .
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
-                0x0000fb54                __CTOR_END__ = .
+                0x0000fb50                __CTOR_END__ = .
 
-.dtors          0x0000fb54        0x0
-                0x0000fb54                __DTOR_LIST__ = .
+.dtors          0x0000fb50        0x0
+                0x0000fb50                __DTOR_LIST__ = .
  *crtbegin.o(.dtors)
  *crtbegin?.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
-                0x0000fb54                __DTOR_END__ = .
+                0x0000fb50                __DTOR_END__ = .
 
-.preinit_array  0x0000fb54        0x0
-                0x0000fb54                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x0000fb50        0x0
+                0x0000fb50                PROVIDE (__preinit_array_start, .)
  *(.preinit_array*)
-                0x0000fb54                PROVIDE (__preinit_array_end, .)
+                0x0000fb50                PROVIDE (__preinit_array_end, .)
 
-.init_array     0x0000fb54        0x4
-                0x0000fb54                PROVIDE (__init_array_start, .)
+.init_array     0x0000fb50        0x4
+                0x0000fb50                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  .init_array.00000
-                0x0000fb54        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-__call_atexit.o)
+                0x0000fb50        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc.a(lib_a-__call_atexit.o)
  *(.init_array*)
-                0x0000fb58                PROVIDE (__init_array_end, .)
+                0x0000fb54                PROVIDE (__init_array_end, .)
 
-.fini_array     0x0000fb58        0x0
-                0x0000fb58                PROVIDE (__fini_array_start, .)
+.fini_array     0x0000fb54        0x0
+                0x0000fb54                PROVIDE (__fini_array_start, .)
  *(SORT(.fini_array.*))
  *(.fini_array*)
-                0x0000fb58                PROVIDE (__fini_array_end, .)
-                0x0000fb58                __etext = .
-                0x0000fb58                __DATA_ROM = .
+                0x0000fb54                PROVIDE (__fini_array_end, .)
+                0x0000fb54                __etext = .
+                0x0000fb54                __DATA_ROM = .
 
-.data           0x1fff0400      0x8ec load address 0x0000fb58
+.data           0x1fff0400      0x8ec load address 0x0000fb54
                 0x1fff0400                . = ALIGN (0x4)
                 0x1fff0400                __DATA_RAM = .
                 0x1fff0400                __data_start__ = .
@@ -22094,9 +22094,9 @@ END GROUP
  *(.jcr*)
                 0x1fff0cec                . = ALIGN (0x4)
                 0x1fff0cec                __data_end__ = .
-                0x00010444                __DATA_END = (__DATA_ROM + (__data_end__ - __data_start__))
+                0x00010440                __DATA_END = (__DATA_ROM + (__data_end__ - __data_start__))
 
-.igot.plt       0x1fff0cec        0x0 load address 0x00010444
+.igot.plt       0x1fff0cec        0x0 load address 0x00010440
  .igot.plt      0x00000000        0x0 ./Static_Code/System/PE_low_level_init.o
 
 .m_interrupts_ram
@@ -22110,9 +22110,9 @@ END GROUP
                 0x1fff0400                . = ALIGN (0x4)
                 0x00000400                __m_interrupts_ram_ROMSize = (__m_interrupts_ram_RAMEnd - __m_interrupts_ram_RAMStart)
                 0x00000400                __RAM_VECTOR_TABLE_SIZE_BYTES = (__m_interrupts_ram_RAMEnd - __m_interrupts_ram_RAMStart)
-                0x00010444                __m_data_2_ROMStart = (__DATA_ROM + SIZEOF (.data))
+                0x00010440                __m_data_2_ROMStart = (__DATA_ROM + SIZEOF (.data))
 
-.m_data_2       0x20000000        0x0 load address 0x00010444
+.m_data_2       0x20000000        0x0 load address 0x00010440
                 0x20000000                . = ALIGN (0x4)
                 0x20000000                __m_data_2_RAMStart = .
  *(.m_data_2)
@@ -22120,7 +22120,7 @@ END GROUP
                 0x20000000                . = ALIGN (0x4)
                 0x00000000                __m_data_2_ROMSize = (__m_data_2_RAMEnd - __m_data_2_RAMStart)
                 0x00100000                text_end = (ORIGIN (m_text) + 0xffbf0)
-                0x00010444                data_init_end = (__m_data_2_ROMStart + SIZEOF (.m_data_2))
+                0x00010440                data_init_end = (__m_data_2_ROMStart + SIZEOF (.m_data_2))
                 0x00000001                ASSERT ((data_init_end <= text_end), region m_text overflowed with text and data)
 
 .bss            0x1fff0cf0      0x68c load address 0x00010448
@@ -22320,7 +22320,7 @@ END GROUP
  .ARM.attributes
                 0x00000c6f       0x39 ./Generated_Code/Cpu.o
  .ARM.attributes
-                0x00000ca8       0x39 ./Generated_Code/SerialTask.o
+                0x00000ca8       0x39 ./Generated_Code/Handler.o
  .ARM.attributes
                 0x00000ce1       0x39 ./Generated_Code/UserTask.o
  .ARM.attributes
@@ -22508,7 +22508,7 @@ OUTPUT(serial_echo.elf elf32-littlearm)
  .debug_info    0x000250a3      0xb18 ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
  .debug_info    0x00025bbb      0x3a7 ./SDK/platform/devices/startup.o
  .debug_info    0x00025f62      0x6cc ./Generated_Code/Cpu.o
- .debug_info    0x0002662e      0x1c1 ./Generated_Code/SerialTask.o
+ .debug_info    0x0002662e      0x1c1 ./Generated_Code/Handler.o
  .debug_info    0x000267ef      0x1c1 ./Generated_Code/UserTask.o
  .debug_info    0x000269b0      0x1c1 ./Generated_Code/UserTask2.o
  .debug_info    0x00026b71      0x45b ./Generated_Code/hardware_init.o
@@ -22575,7 +22575,7 @@ OUTPUT(serial_echo.elf elf32-littlearm)
  .debug_abbrev  0x000052aa      0x141 ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
  .debug_abbrev  0x000053eb       0xfa ./SDK/platform/devices/startup.o
  .debug_abbrev  0x000054e5      0x10a ./Generated_Code/Cpu.o
- .debug_abbrev  0x000055ef       0xc9 ./Generated_Code/SerialTask.o
+ .debug_abbrev  0x000055ef       0xc9 ./Generated_Code/Handler.o
  .debug_abbrev  0x000056b8       0xc9 ./Generated_Code/UserTask.o
  .debug_abbrev  0x00005781       0xc9 ./Generated_Code/UserTask2.o
  .debug_abbrev  0x0000584a      0x11d ./Generated_Code/hardware_init.o
@@ -22701,7 +22701,7 @@ OUTPUT(serial_echo.elf elf32-littlearm)
  .debug_aranges
                 0x000019a0       0x20 ./Generated_Code/Cpu.o
  .debug_aranges
-                0x000019c0       0x20 ./Generated_Code/SerialTask.o
+                0x000019c0       0x20 ./Generated_Code/Handler.o
  .debug_aranges
                 0x000019e0       0x20 ./Generated_Code/UserTask.o
  .debug_aranges
@@ -22768,7 +22768,7 @@ OUTPUT(serial_echo.elf elf32-littlearm)
  .debug_ranges  0x000015b8       0x18 ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
  .debug_ranges  0x000015d0       0x10 ./SDK/platform/devices/startup.o
  .debug_ranges  0x000015e0       0x10 ./Generated_Code/Cpu.o
- .debug_ranges  0x000015f0       0x10 ./Generated_Code/SerialTask.o
+ .debug_ranges  0x000015f0       0x10 ./Generated_Code/Handler.o
  .debug_ranges  0x00001600       0x10 ./Generated_Code/UserTask.o
  .debug_ranges  0x00001610       0x10 ./Generated_Code/UserTask2.o
  .debug_ranges  0x00001620       0x18 ./Generated_Code/hardware_init.o
@@ -22943,7 +22943,7 @@ OUTPUT(serial_echo.elf elf32-littlearm)
  .debug_macro   0x0003e919      0x162 ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
  .debug_macro   0x0003ea7b      0x171 ./SDK/platform/devices/startup.o
  .debug_macro   0x0003ebec      0x549 ./Generated_Code/Cpu.o
- .debug_macro   0x0003f135      0x53c ./Generated_Code/SerialTask.o
+ .debug_macro   0x0003f135      0x53c ./Generated_Code/Handler.o
  .debug_macro   0x0003f671      0x53c ./Generated_Code/UserTask.o
  .debug_macro   0x0003fbad      0x53c ./Generated_Code/UserTask2.o
  .debug_macro   0x000400e9      0x1c7 ./Generated_Code/hardware_init.o
@@ -22952,197 +22952,197 @@ OUTPUT(serial_echo.elf elf32-littlearm)
  .debug_macro   0x00040852      0x503 ./Generated_Code/myUART.o
  .debug_macro   0x00040d55      0x1af ./Generated_Code/pin_init.o
 
-.debug_line     0x00000000    0x25f70
- .debug_line    0x00000000      0xbb2 ./Static_Code/System/PE_low_level_init.o
- .debug_line    0x00000bb2      0xbb4 ./Sources/Events.o
- .debug_line    0x00001766      0xc49 ./Sources/access_functions.o
- .debug_line    0x000023af      0xb8b ./Sources/main.o
- .debug_line    0x00002f3a      0xddc ./Sources/os_tasks.o
- .debug_line    0x00003d16      0xbb1 ./Sources/rtos_main_task.o
- .debug_line    0x000048c7      0x952 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/buf_prv.o
- .debug_line    0x00005219      0x8d4 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/fclose.o
- .debug_line    0x00005aed      0x8ad ./SDK/rtos/mqx/mqx_stdlib/source/stdio/fflush.o
- .debug_line    0x0000639a      0x93d ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print.o
- .debug_line    0x00006cd7      0xc18 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print_prv.o
- .debug_line    0x000078ef      0x905 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/put.o
- .debug_line    0x000081f4      0x87b ./SDK/rtos/mqx/mqx_stdlib/source/stdio/stdio.o
- .debug_line    0x00008a6f       0x82 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/core/M4/boot.o
- .debug_line    0x00008af1      0x173 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/core/M4/dispatch.o
- .debug_line    0x00008c64      0x942 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/compiler/gcc_arm/comp.o
- .debug_line    0x000095a6      0x7a8 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/int_vtab.o
- .debug_line    0x00009d4e      0x794 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_iinit.o
- .debug_line    0x0000a4e2      0x7a2 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_mstiq.o
- .debug_line    0x0000ac84      0x799 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_tiad.o
- .debug_line    0x0000b41d      0x797 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_tinm.o
- .debug_line    0x0000bbb4      0x7ed ./SDK/rtos/mqx/mqx/source/psp/cortex_m/sc_irdyq.o
- .debug_line    0x0000c3a1      0x7a3 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/stack_bu.o
- .debug_line    0x0000cb44      0x791 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/stack_de.o
- .debug_line    0x0000d2d5      0xe13 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
- .debug_line    0x0000e0e8      0x91b ./SDK/rtos/mqx/mqx/source/nio/src/nio_posix.o
- .debug_line    0x0000ea03      0xa06 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
- .debug_line    0x0000f409      0xd19 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
- .debug_line    0x00010122      0x8cf ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_dummy/src/nio_dummy.o
- .debug_line    0x000109f1      0x792 ./SDK/rtos/mqx/mqx/source/kernel/idletask.o
- .debug_line    0x00011183      0x8a7 ./SDK/rtos/mqx/mqx/source/kernel/inittask.o
- .debug_line    0x00011a2a      0x9d5 ./SDK/rtos/mqx/mqx/source/kernel/int.o
- .debug_line    0x000123ff      0xd96 ./SDK/rtos/mqx/mqx/source/kernel/lwmem.o
- .debug_line    0x00013195      0x95c ./SDK/rtos/mqx/mqx/source/kernel/lwsem.o
- .debug_line    0x00013af1      0x9d9 ./SDK/rtos/mqx/mqx/source/kernel/mqx.o
- .debug_line    0x000144ca      0x953 ./SDK/rtos/mqx/mqx/source/kernel/msg.o
- .debug_line    0x00014e1d      0x8e3 ./SDK/rtos/mqx/mqx/source/kernel/msgpool.o
- .debug_line    0x00015700      0xcee ./SDK/rtos/mqx/mqx/source/kernel/msgq.o
- .debug_line    0x000163ee      0xaa9 ./SDK/rtos/mqx/mqx/source/kernel/mutex.o
- .debug_line    0x00016e97      0x881 ./SDK/rtos/mqx/mqx/source/kernel/queue.o
- .debug_line    0x00017718      0x878 ./SDK/rtos/mqx/mqx/source/kernel/sched.o
- .debug_line    0x00017f90      0xebd ./SDK/rtos/mqx/mqx/source/kernel/task.o
- .debug_line    0x00018e4d      0xdf0 ./SDK/rtos/mqx/mqx/source/kernel/time.o
- .debug_line    0x00019c3d      0xd16 ./SDK/rtos/mqx/mqx/source/bsp/init_bsp.o
- .debug_line    0x0001a953      0xc0f ./SDK/platform/utilities/src/fsl_debug_console.o
- .debug_line    0x0001b562      0x72a ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
- .debug_line    0x0001bc8c      0xaae ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
- .debug_line    0x0001c73a      0xc05 ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
- .debug_line    0x0001d33f      0xb41 ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
- .debug_line    0x0001de80      0x90e ./SDK/platform/hal/src/uart/fsl_uart_hal.o
- .debug_line    0x0001e78e      0x78b ./SDK/platform/hal/src/mcg/fsl_mcg_hal.o
- .debug_line    0x0001ef19      0x3d5 ./SDK/platform/drivers/src/uart/fsl_uart_common.o
- .debug_line    0x0001f2ee      0xe38 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
- .debug_line    0x00020126      0x3d3 ./SDK/platform/drivers/src/mpu/fsl_mpu_common.o
- .debug_line    0x000204f9       0x75 ./SDK/platform/devices/MK64F12/startup/gcc/startup_MK64F12.o
- .debug_line    0x0002056e      0x48f ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
- .debug_line    0x000209fd      0x3b4 ./SDK/platform/devices/startup.o
- .debug_line    0x00020db1      0xbdf ./Generated_Code/Cpu.o
- .debug_line    0x00021990      0xbd3 ./Generated_Code/SerialTask.o
- .debug_line    0x00022563      0xbcf ./Generated_Code/UserTask.o
- .debug_line    0x00023132      0xbd1 ./Generated_Code/UserTask2.o
- .debug_line    0x00023d03      0x4e4 ./Generated_Code/hardware_init.o
- .debug_line    0x000241e7      0xc6e ./Generated_Code/mqx_ksdk.o
- .debug_line    0x00024e55      0xb78 ./Generated_Code/myUART.o
- .debug_line    0x000259cd      0x5a3 ./Generated_Code/pin_init.o
+.debug_line     0x00000000    0x25f43
+ .debug_line    0x00000000      0xbaf ./Static_Code/System/PE_low_level_init.o
+ .debug_line    0x00000baf      0xbb1 ./Sources/Events.o
+ .debug_line    0x00001760      0xc46 ./Sources/access_functions.o
+ .debug_line    0x000023a6      0xb88 ./Sources/main.o
+ .debug_line    0x00002f2e      0xdd9 ./Sources/os_tasks.o
+ .debug_line    0x00003d07      0xbae ./Sources/rtos_main_task.o
+ .debug_line    0x000048b5      0x952 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/buf_prv.o
+ .debug_line    0x00005207      0x8d4 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/fclose.o
+ .debug_line    0x00005adb      0x8ad ./SDK/rtos/mqx/mqx_stdlib/source/stdio/fflush.o
+ .debug_line    0x00006388      0x93d ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print.o
+ .debug_line    0x00006cc5      0xc18 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print_prv.o
+ .debug_line    0x000078dd      0x905 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/put.o
+ .debug_line    0x000081e2      0x87b ./SDK/rtos/mqx/mqx_stdlib/source/stdio/stdio.o
+ .debug_line    0x00008a5d       0x82 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/core/M4/boot.o
+ .debug_line    0x00008adf      0x173 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/core/M4/dispatch.o
+ .debug_line    0x00008c52      0x942 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/compiler/gcc_arm/comp.o
+ .debug_line    0x00009594      0x7a8 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/int_vtab.o
+ .debug_line    0x00009d3c      0x794 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_iinit.o
+ .debug_line    0x0000a4d0      0x7a2 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_mstiq.o
+ .debug_line    0x0000ac72      0x799 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_tiad.o
+ .debug_line    0x0000b40b      0x797 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_tinm.o
+ .debug_line    0x0000bba2      0x7ed ./SDK/rtos/mqx/mqx/source/psp/cortex_m/sc_irdyq.o
+ .debug_line    0x0000c38f      0x7a3 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/stack_bu.o
+ .debug_line    0x0000cb32      0x791 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/stack_de.o
+ .debug_line    0x0000d2c3      0xe13 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
+ .debug_line    0x0000e0d6      0x91b ./SDK/rtos/mqx/mqx/source/nio/src/nio_posix.o
+ .debug_line    0x0000e9f1      0xa06 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
+ .debug_line    0x0000f3f7      0xd19 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+ .debug_line    0x00010110      0x8cf ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_dummy/src/nio_dummy.o
+ .debug_line    0x000109df      0x792 ./SDK/rtos/mqx/mqx/source/kernel/idletask.o
+ .debug_line    0x00011171      0x8a7 ./SDK/rtos/mqx/mqx/source/kernel/inittask.o
+ .debug_line    0x00011a18      0x9d5 ./SDK/rtos/mqx/mqx/source/kernel/int.o
+ .debug_line    0x000123ed      0xd96 ./SDK/rtos/mqx/mqx/source/kernel/lwmem.o
+ .debug_line    0x00013183      0x95c ./SDK/rtos/mqx/mqx/source/kernel/lwsem.o
+ .debug_line    0x00013adf      0x9d9 ./SDK/rtos/mqx/mqx/source/kernel/mqx.o
+ .debug_line    0x000144b8      0x953 ./SDK/rtos/mqx/mqx/source/kernel/msg.o
+ .debug_line    0x00014e0b      0x8e3 ./SDK/rtos/mqx/mqx/source/kernel/msgpool.o
+ .debug_line    0x000156ee      0xcee ./SDK/rtos/mqx/mqx/source/kernel/msgq.o
+ .debug_line    0x000163dc      0xaa9 ./SDK/rtos/mqx/mqx/source/kernel/mutex.o
+ .debug_line    0x00016e85      0x881 ./SDK/rtos/mqx/mqx/source/kernel/queue.o
+ .debug_line    0x00017706      0x878 ./SDK/rtos/mqx/mqx/source/kernel/sched.o
+ .debug_line    0x00017f7e      0xebd ./SDK/rtos/mqx/mqx/source/kernel/task.o
+ .debug_line    0x00018e3b      0xdf0 ./SDK/rtos/mqx/mqx/source/kernel/time.o
+ .debug_line    0x00019c2b      0xd16 ./SDK/rtos/mqx/mqx/source/bsp/init_bsp.o
+ .debug_line    0x0001a941      0xc0f ./SDK/platform/utilities/src/fsl_debug_console.o
+ .debug_line    0x0001b550      0x72a ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
+ .debug_line    0x0001bc7a      0xaae ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
+ .debug_line    0x0001c728      0xc05 ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
+ .debug_line    0x0001d32d      0xb41 ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
+ .debug_line    0x0001de6e      0x90e ./SDK/platform/hal/src/uart/fsl_uart_hal.o
+ .debug_line    0x0001e77c      0x78b ./SDK/platform/hal/src/mcg/fsl_mcg_hal.o
+ .debug_line    0x0001ef07      0x3d5 ./SDK/platform/drivers/src/uart/fsl_uart_common.o
+ .debug_line    0x0001f2dc      0xe38 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+ .debug_line    0x00020114      0x3d3 ./SDK/platform/drivers/src/mpu/fsl_mpu_common.o
+ .debug_line    0x000204e7       0x75 ./SDK/platform/devices/MK64F12/startup/gcc/startup_MK64F12.o
+ .debug_line    0x0002055c      0x48f ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
+ .debug_line    0x000209eb      0x3b4 ./SDK/platform/devices/startup.o
+ .debug_line    0x00020d9f      0xbdc ./Generated_Code/Cpu.o
+ .debug_line    0x0002197b      0xbca ./Generated_Code/Handler.o
+ .debug_line    0x00022545      0xbcc ./Generated_Code/UserTask.o
+ .debug_line    0x00023111      0xbce ./Generated_Code/UserTask2.o
+ .debug_line    0x00023cdf      0x4e4 ./Generated_Code/hardware_init.o
+ .debug_line    0x000241c3      0xc68 ./Generated_Code/mqx_ksdk.o
+ .debug_line    0x00024e2b      0xb75 ./Generated_Code/myUART.o
+ .debug_line    0x000259a0      0x5a3 ./Generated_Code/pin_init.o
 
-.debug_str      0x00000000   0x1b5ca5
- .debug_str     0x00000000   0x1a67ae ./Static_Code/System/PE_low_level_init.o
-                             0x1a69b0 (size before relaxing)
- .debug_str     0x001a67ae      0xb57 ./Sources/Events.o
-                             0x1a745f (size before relaxing)
- .debug_str     0x001a7305      0x18e ./Sources/access_functions.o
-                             0x1a75f9 (size before relaxing)
- .debug_str     0x001a7493      0x1fa ./Sources/main.o
-                             0x1a74f2 (size before relaxing)
- .debug_str     0x001a768d      0xa99 ./Sources/os_tasks.o
-                             0x1a808a (size before relaxing)
- .debug_str     0x001a8126       0x76 ./Sources/rtos_main_task.o
-                             0x1a74a2 (size before relaxing)
- .debug_str     0x001a819c      0x420 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/buf_prv.o
+.debug_str      0x00000000   0x1b5c8e
+ .debug_str     0x00000000   0x1a679c ./Static_Code/System/PE_low_level_init.o
+                             0x1a699e (size before relaxing)
+ .debug_str     0x001a679c      0xb57 ./Sources/Events.o
+                             0x1a744d (size before relaxing)
+ .debug_str     0x001a72f3      0x18e ./Sources/access_functions.o
+                             0x1a75e7 (size before relaxing)
+ .debug_str     0x001a7481      0x1fa ./Sources/main.o
+                             0x1a74e0 (size before relaxing)
+ .debug_str     0x001a767b      0xa9a ./Sources/os_tasks.o
+                             0x1a8079 (size before relaxing)
+ .debug_str     0x001a8115       0x76 ./Sources/rtos_main_task.o
+                             0x1a7490 (size before relaxing)
+ .debug_str     0x001a818b      0x420 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/buf_prv.o
                              0x1a67e6 (size before relaxing)
- .debug_str     0x001a85bc       0x55 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/fclose.o
+ .debug_str     0x001a85ab       0x55 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/fclose.o
                              0x1a6778 (size before relaxing)
- .debug_str     0x001a8611       0x38 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/fflush.o
+ .debug_str     0x001a8600       0x38 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/fflush.o
                              0x1a62f9 (size before relaxing)
- .debug_str     0x001a8649      0x16c ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print.o
+ .debug_str     0x001a8638      0x16c ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print.o
                              0x1a645e (size before relaxing)
- .debug_str     0x001a87b5      0x1b2 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print_prv.o
+ .debug_str     0x001a87a4      0x1b2 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/print_prv.o
                              0x1a65f9 (size before relaxing)
- .debug_str     0x001a8967       0x3a ./SDK/rtos/mqx/mqx_stdlib/source/stdio/put.o
+ .debug_str     0x001a8956       0x3a ./SDK/rtos/mqx/mqx_stdlib/source/stdio/put.o
                              0x1a6314 (size before relaxing)
- .debug_str     0x001a89a1       0x47 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/stdio.o
+ .debug_str     0x001a8990       0x47 ./SDK/rtos/mqx/mqx_stdlib/source/stdio/stdio.o
                              0x1a62fd (size before relaxing)
- .debug_str     0x001a89e8       0x9b ./SDK/rtos/mqx/mqx/source/psp/cortex_m/compiler/gcc_arm/comp.o
+ .debug_str     0x001a89d7       0x9b ./SDK/rtos/mqx/mqx/source/psp/cortex_m/compiler/gcc_arm/comp.o
                              0x1a635e (size before relaxing)
- .debug_str     0x001a8a83     0x3020 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/int_vtab.o
+ .debug_str     0x001a8a72     0x3020 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/int_vtab.o
                              0x1a84b8 (size before relaxing)
- .debug_str     0x001abaa3       0x7b ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_iinit.o
+ .debug_str     0x001aba92       0x7b ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_iinit.o
                              0x1a8460 (size before relaxing)
- .debug_str     0x001abb1e      0x879 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_mstiq.o
+ .debug_str     0x001abb0d      0x879 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_mstiq.o
                              0x1a8f27 (size before relaxing)
- .debug_str     0x001ac397       0x6a ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_tiad.o
+ .debug_str     0x001ac386       0x6a ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_tiad.o
                              0x1a8ef7 (size before relaxing)
- .debug_str     0x001ac401       0x48 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_tinm.o
+ .debug_str     0x001ac3f0       0x48 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/psp_tinm.o
                              0x1a8f0a (size before relaxing)
- .debug_str     0x001ac449       0xde ./SDK/rtos/mqx/mqx/source/psp/cortex_m/sc_irdyq.o
+ .debug_str     0x001ac438       0xde ./SDK/rtos/mqx/mqx/source/psp/cortex_m/sc_irdyq.o
                              0x1a8f95 (size before relaxing)
- .debug_str     0x001ac527      0x155 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/stack_bu.o
+ .debug_str     0x001ac516      0x155 ./SDK/rtos/mqx/mqx/source/psp/cortex_m/stack_bu.o
                              0x1a8908 (size before relaxing)
- .debug_str     0x001ac67c       0x4c ./SDK/rtos/mqx/mqx/source/psp/cortex_m/stack_de.o
+ .debug_str     0x001ac66b       0x4c ./SDK/rtos/mqx/mqx/source/psp/cortex_m/stack_de.o
                              0x1a87b0 (size before relaxing)
- .debug_str     0x001ac6c8      0xc33 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
+ .debug_str     0x001ac6b7      0xc33 ./SDK/rtos/mqx/mqx/source/nio/src/nio.o
                              0x1aa640 (size before relaxing)
- .debug_str     0x001ad2fb       0x34 ./SDK/rtos/mqx/mqx/source/nio/src/nio_posix.o
+ .debug_str     0x001ad2ea       0x34 ./SDK/rtos/mqx/mqx/source/nio/src/nio_posix.o
                              0x1a9c32 (size before relaxing)
- .debug_str     0x001ad32f      0x1ba ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
+ .debug_str     0x001ad31e      0x1ba ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_tty/src/nio_tty.o
                              0x1a6ac8 (size before relaxing)
- .debug_str     0x001ad4e9      0xe0d ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
+ .debug_str     0x001ad4d8      0xe0d ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_serial/src/nio_serial.o
                              0x1a7a11 (size before relaxing)
- .debug_str     0x001ae2f6      0x121 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_dummy/src/nio_dummy.o
+ .debug_str     0x001ae2e5      0x121 ./SDK/rtos/mqx/mqx/source/nio/drivers/nio_dummy/src/nio_dummy.o
                              0x1a61fe (size before relaxing)
- .debug_str     0x001ae417       0x3c ./SDK/rtos/mqx/mqx/source/kernel/idletask.o
+ .debug_str     0x001ae406       0x3c ./SDK/rtos/mqx/mqx/source/kernel/idletask.o
                              0x1a8eb8 (size before relaxing)
- .debug_str     0x001ae453       0x5c ./SDK/rtos/mqx/mqx/source/kernel/inittask.o
+ .debug_str     0x001ae442       0x5c ./SDK/rtos/mqx/mqx/source/kernel/inittask.o
                              0x1a99b1 (size before relaxing)
- .debug_str     0x001ae4af      0x1d7 ./SDK/rtos/mqx/mqx/source/kernel/int.o
+ .debug_str     0x001ae49e      0x1d7 ./SDK/rtos/mqx/mqx/source/kernel/int.o
                              0x1a90e8 (size before relaxing)
- .debug_str     0x001ae686      0x3d0 ./SDK/rtos/mqx/mqx/source/kernel/lwmem.o
+ .debug_str     0x001ae675      0x3d0 ./SDK/rtos/mqx/mqx/source/kernel/lwmem.o
                              0x1a9552 (size before relaxing)
- .debug_str     0x001aea56      0x191 ./SDK/rtos/mqx/mqx/source/kernel/lwsem.o
+ .debug_str     0x001aea45      0x191 ./SDK/rtos/mqx/mqx/source/kernel/lwsem.o
                              0x1a90ae (size before relaxing)
- .debug_str     0x001aebe7      0x3c4 ./SDK/rtos/mqx/mqx/source/kernel/mqx.o
+ .debug_str     0x001aebd6      0x3c4 ./SDK/rtos/mqx/mqx/source/kernel/mqx.o
                              0x1a930d (size before relaxing)
- .debug_str     0x001aefab      0x80f ./SDK/rtos/mqx/mqx/source/kernel/msg.o
+ .debug_str     0x001aef9a      0x80f ./SDK/rtos/mqx/mqx/source/kernel/msg.o
                              0x1a9f6f (size before relaxing)
- .debug_str     0x001af7ba      0x10c ./SDK/rtos/mqx/mqx/source/kernel/msgpool.o
+ .debug_str     0x001af7a9      0x10c ./SDK/rtos/mqx/mqx/source/kernel/msgpool.o
                              0x1a9f43 (size before relaxing)
- .debug_str     0x001af8c6      0x46a ./SDK/rtos/mqx/mqx/source/kernel/msgq.o
+ .debug_str     0x001af8b5      0x46a ./SDK/rtos/mqx/mqx/source/kernel/msgq.o
                              0x1aa3d1 (size before relaxing)
- .debug_str     0x001afd30      0x2fc ./SDK/rtos/mqx/mqx/source/kernel/mutex.o
+ .debug_str     0x001afd1f      0x2fc ./SDK/rtos/mqx/mqx/source/kernel/mutex.o
                              0x1a9406 (size before relaxing)
- .debug_str     0x001b002c      0x68a ./SDK/rtos/mqx/mqx/source/kernel/queue.o
+ .debug_str     0x001b001b      0x68a ./SDK/rtos/mqx/mqx/source/kernel/queue.o
                              0x1a88ca (size before relaxing)
- .debug_str     0x001b06b6      0x190 ./SDK/rtos/mqx/mqx/source/kernel/sched.o
+ .debug_str     0x001b06a5      0x190 ./SDK/rtos/mqx/mqx/source/kernel/sched.o
                              0x1a907b (size before relaxing)
- .debug_str     0x001b0846      0x713 ./SDK/rtos/mqx/mqx/source/kernel/task.o
+ .debug_str     0x001b0835      0x713 ./SDK/rtos/mqx/mqx/source/kernel/task.o
                              0x1a9878 (size before relaxing)
- .debug_str     0x001b0f59      0x80f ./SDK/rtos/mqx/mqx/source/kernel/time.o
+ .debug_str     0x001b0f48      0x80f ./SDK/rtos/mqx/mqx/source/kernel/time.o
                              0x1a981c (size before relaxing)
- .debug_str     0x001b1768      0xa94 ./SDK/rtos/mqx/mqx/source/bsp/init_bsp.o
+ .debug_str     0x001b1757      0xa94 ./SDK/rtos/mqx/mqx/source/bsp/init_bsp.o
                              0x1a8218 (size before relaxing)
- .debug_str     0x001b21fc      0x419 ./SDK/platform/utilities/src/fsl_debug_console.o
+ .debug_str     0x001b21eb      0x419 ./SDK/platform/utilities/src/fsl_debug_console.o
                              0x1a6c9f (size before relaxing)
- .debug_str     0x001b2615      0x16b ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
+ .debug_str     0x001b2604      0x16b ./SDK/platform/system/src/hwtimer/fsl_hwtimer.o
                              0x19d137 (size before relaxing)
- .debug_str     0x001b2780      0x187 ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
+ .debug_str     0x001b276f      0x187 ./SDK/platform/system/src/hwtimer/fsl_hwtimer_systick.o
                              0x1a608f (size before relaxing)
- .debug_str     0x001b2907     0x160f ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
+ .debug_str     0x001b28f6     0x160f ./SDK/platform/system/src/clock/MK64F12/fsl_clock_MK64F12.o
                              0x19e44a (size before relaxing)
- .debug_str     0x001b3f16      0x3fa ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
+ .debug_str     0x001b3f05      0x3fa ./SDK/platform/osa/src/fsl_os_abstraction_mqx.o
                              0x1a6132 (size before relaxing)
- .debug_str     0x001b4310      0x967 ./SDK/platform/hal/src/uart/fsl_uart_hal.o
+ .debug_str     0x001b42ff      0x967 ./SDK/platform/hal/src/uart/fsl_uart_hal.o
                              0x19d860 (size before relaxing)
- .debug_str     0x001b4c77      0x79c ./SDK/platform/hal/src/mcg/fsl_mcg_hal.o
+ .debug_str     0x001b4c66      0x79c ./SDK/platform/hal/src/mcg/fsl_mcg_hal.o
                              0x19d580 (size before relaxing)
- .debug_str     0x001b5413       0x4d ./SDK/platform/drivers/src/uart/fsl_uart_common.o
+ .debug_str     0x001b5402       0x4d ./SDK/platform/drivers/src/uart/fsl_uart_common.o
                              0x19d099 (size before relaxing)
- .debug_str     0x001b5460      0x322 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
+ .debug_str     0x001b544f      0x322 ./SDK/platform/drivers/src/uart/fsl_uart_driver.o
                              0x1a6d87 (size before relaxing)
- .debug_str     0x001b5782       0x3c ./SDK/platform/drivers/src/mpu/fsl_mpu_common.o
+ .debug_str     0x001b5771       0x3c ./SDK/platform/drivers/src/mpu/fsl_mpu_common.o
                              0x19d03b (size before relaxing)
- .debug_str     0x001b57be      0x160 ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
+ .debug_str     0x001b57ad      0x160 ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
                              0x19d26d (size before relaxing)
- .debug_str     0x001b591e       0xf7 ./SDK/platform/devices/startup.o
+ .debug_str     0x001b590d       0xf7 ./SDK/platform/devices/startup.o
                              0x19cc27 (size before relaxing)
- .debug_str     0x001b5a15       0x48 ./Generated_Code/Cpu.o
-                             0x1a7ada (size before relaxing)
- .debug_str     0x001b5a5d       0x2f ./Generated_Code/SerialTask.o
-                             0x1a7386 (size before relaxing)
- .debug_str     0x001b5a8c       0x2b ./Generated_Code/UserTask.o
-                             0x1a7382 (size before relaxing)
- .debug_str     0x001b5ab7       0x2d ./Generated_Code/UserTask2.o
-                             0x1a7384 (size before relaxing)
- .debug_str     0x001b5ae4       0x30 ./Generated_Code/hardware_init.o
+ .debug_str     0x001b5a04       0x48 ./Generated_Code/Cpu.o
+                             0x1a7ac8 (size before relaxing)
+ .debug_str     0x001b5a4c       0x29 ./Generated_Code/Handler.o
+                             0x1a736e (size before relaxing)
+ .debug_str     0x001b5a75       0x2b ./Generated_Code/UserTask.o
+                             0x1a7370 (size before relaxing)
+ .debug_str     0x001b5aa0       0x2d ./Generated_Code/UserTask2.o
+                             0x1a7372 (size before relaxing)
+ .debug_str     0x001b5acd       0x30 ./Generated_Code/hardware_init.o
                              0x19d176 (size before relaxing)
- .debug_str     0x001b5b14       0x5c ./Generated_Code/mqx_ksdk.o
-                             0x1a7ae8 (size before relaxing)
- .debug_str     0x001b5b70       0x2d ./Generated_Code/myUART.o
-                             0x1a6be5 (size before relaxing)
- .debug_str     0x001b5b9d      0x108 ./Generated_Code/pin_init.o
+ .debug_str     0x001b5afd       0x5c ./Generated_Code/mqx_ksdk.o
+                             0x1a7ad6 (size before relaxing)
+ .debug_str     0x001b5b59       0x2d ./Generated_Code/myUART.o
+                             0x1a6bd3 (size before relaxing)
+ .debug_str     0x001b5b86      0x108 ./Generated_Code/pin_init.o
                              0x19cdb6 (size before relaxing)
 
 .comment        0x00000000       0x70
@@ -23202,7 +23202,7 @@ OUTPUT(serial_echo.elf elf32-littlearm)
  .comment       0x00000000       0x71 ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
  .comment       0x00000000       0x71 ./SDK/platform/devices/startup.o
  .comment       0x00000000       0x71 ./Generated_Code/Cpu.o
- .comment       0x00000000       0x71 ./Generated_Code/SerialTask.o
+ .comment       0x00000000       0x71 ./Generated_Code/Handler.o
  .comment       0x00000000       0x71 ./Generated_Code/UserTask.o
  .comment       0x00000000       0x71 ./Generated_Code/UserTask2.o
  .comment       0x00000000       0x71 ./Generated_Code/hardware_init.o
@@ -23263,7 +23263,7 @@ OUTPUT(serial_echo.elf elf32-littlearm)
  .debug_frame   0x00005128       0x44 ./SDK/platform/devices/MK64F12/startup/system_MK64F12.o
  .debug_frame   0x0000516c       0x2c ./SDK/platform/devices/startup.o
  .debug_frame   0x00005198       0x30 ./Generated_Code/Cpu.o
- .debug_frame   0x000051c8       0x30 ./Generated_Code/SerialTask.o
+ .debug_frame   0x000051c8       0x30 ./Generated_Code/Handler.o
  .debug_frame   0x000051f8       0x30 ./Generated_Code/UserTask.o
  .debug_frame   0x00005228       0x30 ./Generated_Code/UserTask2.o
  .debug_frame   0x00005258       0x48 ./Generated_Code/hardware_init.o

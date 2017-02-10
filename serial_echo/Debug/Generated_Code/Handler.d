@@ -1,4 +1,4 @@
-Generated_Code/SerialTask.o: ../Generated_Code/SerialTask.c \
+Generated_Code/Handler.o: ../Generated_Code/Handler.c \
  C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/platform/devices/fsl_device_registers.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/platform/devices/MK64F12/include/MK64F12.h \
@@ -72,7 +72,7 @@ Generated_Code/SerialTask.o: ../Generated_Code/SerialTask.c \
  C:/Users/lscholte/CENG455/serial_echo/SDK/platform/system/inc/fsl_hwtimer_systick.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/platform/system/inc/fsl_hwtimer.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/MainTask.h \
- C:/Users/lscholte/CENG455/serial_echo/Generated_Code/SerialTask.h \
+ C:/Users/lscholte/CENG455/serial_echo/Generated_Code/Handler.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/myUART.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask2.h \
@@ -82,7 +82,7 @@ Generated_Code/SerialTask.o: ../Generated_Code/SerialTask.c \
  C:/Users/lscholte/CENG455/serial_echo/Sources/Events.h \
  C:/Users/lscholte/CENG455/serial_echo/Sources/rtos_main_task.h \
  C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h \
- ../Generated_Code/SerialTask.h
+ ../Generated_Code/Handler.h
 
 C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h:
 
@@ -230,7 +230,7 @@ C:/Users/lscholte/CENG455/serial_echo/SDK/platform/system/inc/fsl_hwtimer.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/MainTask.h:
 
-C:/Users/lscholte/CENG455/serial_echo/Generated_Code/SerialTask.h:
+C:/Users/lscholte/CENG455/serial_echo/Generated_Code/Handler.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/myUART.h:
 
@@ -250,4 +250,4 @@ C:/Users/lscholte/CENG455/serial_echo/Sources/rtos_main_task.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Sources/os_tasks.h:
 
-../Generated_Code/SerialTask.h:
+../Generated_Code/Handler.h:

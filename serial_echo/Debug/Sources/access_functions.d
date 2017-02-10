@@ -72,7 +72,7 @@ Sources/access_functions.o: ../Sources/access_functions.c \
  C:/Users/lscholte/CENG455/serial_echo/SDK/platform/system/inc/fsl_hwtimer_systick.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/platform/system/inc/fsl_hwtimer.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/MainTask.h \
- C:/Users/lscholte/CENG455/serial_echo/Generated_Code/SerialTask.h \
+ C:/Users/lscholte/CENG455/serial_echo/Generated_Code/Handler.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/myUART.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask.h \
  C:/Users/lscholte/CENG455/serial_echo/Generated_Code/UserTask2.h \
@@ -230,7 +230,7 @@ C:/Users/lscholte/CENG455/serial_echo/SDK/platform/system/inc/fsl_hwtimer.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/MainTask.h:
 
-C:/Users/lscholte/CENG455/serial_echo/Generated_Code/SerialTask.h:
+C:/Users/lscholte/CENG455/serial_echo/Generated_Code/Handler.h:
 
 C:/Users/lscholte/CENG455/serial_echo/Generated_Code/myUART.h:
 

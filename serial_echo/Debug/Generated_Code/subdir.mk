@@ -5,8 +5,8 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Generated_Code/Cpu.c \
+../Generated_Code/Handler.c \
 ../Generated_Code/MainTask.c \
-../Generated_Code/SerialTask.c \
 ../Generated_Code/UserTask.c \
 ../Generated_Code/UserTask2.c \
 ../Generated_Code/clockMan1.c \
@@ -21,8 +21,8 @@ C_SRCS += \
 
 OBJS += \
 ./Generated_Code/Cpu.o \
+./Generated_Code/Handler.o \
 ./Generated_Code/MainTask.o \
-./Generated_Code/SerialTask.o \
 ./Generated_Code/UserTask.o \
 ./Generated_Code/UserTask2.o \
 ./Generated_Code/clockMan1.o \
@@ -37,8 +37,8 @@ OBJS += \
 
 C_DEPS += \
 ./Generated_Code/Cpu.d \
+./Generated_Code/Handler.d \
 ./Generated_Code/MainTask.d \
-./Generated_Code/SerialTask.d \
 ./Generated_Code/UserTask.d \
 ./Generated_Code/UserTask2.d \
 ./Generated_Code/clockMan1.d \

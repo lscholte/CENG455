@@ -11,7 +11,7 @@
 **         Put your event handler code here.
 **     Settings    :
 **     Contents    :
-**         serial_task - void serial_task(os_task_param_t task_init_data);
+**         handler_task - void handler_task(os_task_param_t task_init_data);
 **
 ** ###################################################################*/
 /*!
@@ -189,17 +189,16 @@ void handleString(char *string, char buffer[]) {
 
 /*
 ** ===================================================================
-**     Callback    : serial_task
+**     Callback    : handler_task
 **     Description : Task function entry.
 **     Parameters  :
 **       task_init_data - OS task parameter
 **     Returns : Nothing
 ** ===================================================================
 */
-void serial_task(os_task_param_t task_init_data)
+void handler_task(os_task_param_t task_init_data)
 {
-	/* Write your local variable definition here */
-	printf("serialTask Created!\n\r");
+	printf("Handler Task Created!\n\r");
 
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
 

@@ -11,7 +11,7 @@
 **         Put your event handler code here.
 **     Settings    :
 **     Contents    :
-**         serial_task - void serial_task(os_task_param_t task_init_data);
+**         handler_task - void handler_task(os_task_param_t task_init_data);
 **
 ** ###################################################################*/
 /*!
@@ -39,7 +39,7 @@
 #include "fsl_mpu1.h"
 #include "fsl_hwtimer1.h"
 #include "MainTask.h"
-#include "SerialTask.h"
+#include "Handler.h"
 #include "myUART.h"
 #include "UserTask.h"
 #include "UserTask2.h"
@@ -76,14 +76,14 @@ extern READ_PRIVILEGE readPrivilege;
 
 /*
 ** ===================================================================
-**     Callback    : serial_task
+**     Callback    : handler_task
 **     Description : Task function entry.
 **     Parameters  :
 **       task_init_data - OS task parameter
 **     Returns : Nothing
 ** ===================================================================
 */
-void serial_task(os_task_param_t task_init_data);
+void handler_task(os_task_param_t task_init_data);
 
 
 /*
