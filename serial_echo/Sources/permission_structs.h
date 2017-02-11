@@ -15,7 +15,7 @@ typedef struct write_privilege {
 
 typedef struct read_privilege {
 	uint32_t task_id;
-	_queue_number stream_no;
+	_queue_id qid;
 } READ_PRIVILEGE, * READ_PRIVILEGE_PTR;
 
 

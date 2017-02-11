@@ -9,6 +9,7 @@
 #include "access_functions.h"
 #include "os_tasks.h"
 #include "message_structs.h"
+#include <stdio.h>
 
 bool OpenR(uint16_t stream_no) {
 
@@ -17,17 +18,15 @@ bool OpenR(uint16_t stream_no) {
 		return false;
 	}
 
-	//TODO: We want to be able to store multiple user tasks with read permissions.
-	//Currently we can only store a single task
-
-
 	_task_id id = _task_get_id();
 	bool hasReadPermission = false;
+
+	//Check if the current task already has read privileges
 	int i;
 	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
 		if(readPrivilege[i].task_id == id) {
 			hasReadPermission = true;
-			stream_no = readPrivilege[i].stream_no;
+			stream_no = readPrivilege[i].qid;
 			break;
 		}
 	}
@@ -39,12 +38,14 @@ bool OpenR(uint16_t stream_no) {
 		return false;
 	}
 
+	//The current task does not already have read privileges,
+	//so give it read privileges
 	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
 		if(readPrivilege[i].task_id == MQX_NULL_TASK_ID) {
 			readPrivilege[i].task_id = id;
-			readPrivilege[i].stream_no = stream_no;
+			readPrivilege[i].qid = stream_no;
 			hasReadPermission = true;
-			stream_no = readPrivilege[i].stream_no;
+			stream_no = readPrivilege[i].qid;
 			_mutex_unlock(&readPrivilegeMutex);
 			return true;
 		}
@@ -62,14 +63,15 @@ bool _getline(char *line) {
 	}
 
 	_task_id id = _task_get_id();
-	//TODO: Read privilege structure needs to be able to handle multiple tasks
 	bool hasReadPermission = false;
-	_queue_number stream_no;
+	_queue_id stream_no;
+
+	//Check if the current task has read privileges
 	int i;
 	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
 		if(readPrivilege[i].task_id == id) {
 			hasReadPermission = true;
-			stream_no = readPrivilege[i].stream_no;
+			stream_no = readPrivilege[i].qid;
 			break;
 		}
 	}
@@ -86,8 +88,6 @@ bool _getline(char *line) {
 	STRING_MESSAGE_PTR msg_ptr = _msgq_receive(stream_no, 0);
 	if(msg_ptr != NULL && msg_ptr->TYPE == STRING_MESSAGE_TYPE) {
 		strcpy(line, msg_ptr->DATA);
-
-		/* free the message */
 		_msg_free(msg_ptr);
 		return true;
 	}
@@ -98,14 +98,16 @@ _queue_id OpenW(void) {
 
 	if(_mutex_lock(&writePrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the write privileges\n");
-		return 0;
+		return MSGQ_NULL_QUEUE_ID;
 	}
 
-	if(writePrivilege.task_id != 0) {
+	if(writePrivilege.task_id != MQX_NULL_TASK_ID) {
 		printf("Only 1 user task at a time can have write permission\n");
 		_mutex_unlock(&writePrivilegeMutex);
-		return 0;
+		return MSGQ_NULL_QUEUE_ID;
 	}
+
+	//No task already has write privilege, so give the current task write privilege
 	writePrivilege.task_id = _task_get_id();
 	_queue_id qid = writePrivilege.qid;
 
@@ -169,12 +171,13 @@ bool Close(void) {
 
 	bool success = false;
 
+	//If the current task has write privilege, then remove that privilege
 	if(writePrivilege.task_id == id) {
 		writePrivilege.task_id = MQX_NULL_TASK_ID;
 		success = true;
 	}
 
-	//TODO: Need to handle case where read privilege has multiple tasks
+	//Find the task id in the read privileges array and clear it if it exists
 	int i;
 	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
 		if(readPrivilege[i].task_id == id) {
@@ -184,11 +187,6 @@ bool Close(void) {
 		}
 
 	}
-
-//	if(readPrivilege.task_id == id) {
-//		readPrivilege.task_id = MQX_NULL_TASK_ID;
-//		success = true;
-//	}
 
 	_mutex_unlock(&writePrivilegeMutex);
 	_mutex_unlock(&readPrivilegeMutex);

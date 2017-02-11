@@ -81,7 +81,11 @@ Sources/access_functions.o: ../Sources/access_functions.c \
  C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/mutex.h \
  ../Sources/os_tasks.h \
  C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h \
- ../Sources/permission_structs.h ../Sources/message_structs.h
+ ../Sources/permission_structs.h ../Sources/message_structs.h \
+ C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx_stdlib/source/include/stdio.h \
+ C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx_stdlib/source/include/std_prv.h \
+ C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/nio/fcntl.h \
+ C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/nio/nio.h
 
 ../Sources/access_functions.h:
 
@@ -252,3 +256,11 @@ C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/message.h:
 ../Sources/permission_structs.h:
 
 ../Sources/message_structs.h:
+
+C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx_stdlib/source/include/stdio.h:
+
+C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx_stdlib/source/include/std_prv.h:
+
+C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/nio/fcntl.h:
+
+C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/nio/nio.h:

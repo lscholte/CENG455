@@ -59,7 +59,7 @@ MUTEX_STRUCT writePrivilegeMutex;
 void main_task(os_task_param_t task_init_data)
 {
   /* Write your local variable definition here */
-	printf("mainTask Created!\n\r");
+	printf("Main Task Created!\n");
 
 	MUTEX_ATTR_STRUCT mutexAttribute;
 	if(_mutatr_init(&mutexAttribute) != MQX_EOK) {

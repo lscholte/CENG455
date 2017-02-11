@@ -113,7 +113,7 @@ bool printCharacterToBuffer(char c, char buffer[]) {
 void handleCharacter(char c, char *buffer) {
 	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the read privileges\n");
-		return 0;
+		return;
 	}
 
 	bool taskWithReadPermission = false;
@@ -154,20 +154,20 @@ void handleCharacter(char c, char *buffer) {
 					msg_ptr = (STRING_MESSAGE_PTR) _msg_alloc(message_pool);
 					if (msg_ptr == NULL){
 						printf("\nCould not allocate a message\n");
-						_task_block();
+						return;
 					}
 
 					//Construct the message
 					msg_ptr->TYPE = STRING_MESSAGE_TYPE;
 					strcpy(msg_ptr->DATA, buffer);
-					msg_ptr->HEADER.TARGET_QID = readPrivilege[i].stream_no;
+					msg_ptr->HEADER.TARGET_QID = readPrivilege[i].qid;
 					msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(char)*BUFFER_LENGTH_WITH_NULL;
 
 					//Send line to the handler
 					bool result = _msgq_send(msg_ptr);
 					if (result != TRUE) {
 						printf("\nCould not send a message\n");
-						_task_block();
+						return;
 					}
 				}
 			}
@@ -207,8 +207,9 @@ void handleString(char *string, char buffer[]) {
 */
 void handler_task(os_task_param_t task_init_data)
 {
-	printf("Handler Task Created!\n\r");
+	printf("Handler Task Created!\n");
 
+	//Open the handler message queue
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
 
 	if(_mutex_lock(&writePrivilegeMutex) != MQX_EOK) {
@@ -216,6 +217,7 @@ void handler_task(os_task_param_t task_init_data)
 		_task_block();
 	}
 
+	//Init the global write privileges struct
 	writePrivilege.qid = handler_qid;
 	writePrivilege.task_id = MQX_NULL_TASK_ID;
 
@@ -226,23 +228,24 @@ void handler_task(os_task_param_t task_init_data)
 		_task_block();
 	}
 
+	//Init the global read privileges struct
 	int i;
 	for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
 		readPrivilege[i].task_id = MQX_NULL_TASK_ID;
-		readPrivilege[i].stream_no = 0;
+		readPrivilege[i].qid = MSGQ_NULL_QUEUE_ID;
 	}
 
 	_mutex_unlock(&readPrivilegeMutex);
 
-	if (handler_qid == 0) {
-		printf("\nCould not open the server message queue\n");
+	if (handler_qid == MSGQ_NULL_QUEUE_ID) {
+		printf("Could not open the server message queue\n");
 		_task_block();
 	}
 
 	message_pool = _msgpool_create(sizeof(STRING_MESSAGE), NUM_CLIENTS, 1, 0);
 
 	if (message_pool == MSGPOOL_NULL_POOL_ID) {
-		printf("\nCount not create a message pool\n");
+		printf("Count not create a message pool\n");
 		_task_block();
 	}
 
@@ -272,9 +275,6 @@ void handler_task(os_task_param_t task_init_data)
 
 		}
 
-//	    OSA_TimeDelay(10);                 /* Example code (for task release) */
-
-
 
 #ifdef PEX_USE_RTOS   
 	}
@@ -292,14 +292,10 @@ void handler_task(os_task_param_t task_init_data)
 */
 void user_task(os_task_param_t task_init_data)
 {
-  /* Write your local variable definition here */
-	printf("userTask Created!\n\r");
-
-
+	printf("User Task 1 Created!\n");
 
 	OpenW();
 	int i = 0;
-
   
 #ifdef PEX_USE_RTOS
   while (1) {
@@ -310,11 +306,8 @@ void user_task(os_task_param_t task_init_data)
     
 	_putline(_msgq_get_id(0, HANDLER_QUEUE), "test");
 
-    
-    OSA_TimeDelay(2000);                 /* Example code (for task release) */
-   
-    ++i;
-    
+	++i;
+    OSA_TimeDelay(2000);
     
 #ifdef PEX_USE_RTOS   
   }
@@ -332,7 +325,7 @@ void user_task(os_task_param_t task_init_data)
 */
 void user_task2(os_task_param_t task_init_data)
 {
-	printf("userTask2 Created!\n\r");
+	printf("User Task2 Created!\n");
 
 	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 	OpenR(user_task_qid);
@@ -374,7 +367,7 @@ void user_task2(os_task_param_t task_init_data)
 */
 void user_task3(os_task_param_t task_init_data)
 {
-	printf("userTask3 Created!\n\r");
+	printf("User Task3 Created!\n");
 
 	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 	OpenR(user_task_qid);
