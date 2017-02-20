@@ -53,9 +53,26 @@ void printBackspaceToBuffer(char buffer[]) {
 	buffer[lastCharPosition] = 0;
 }
 
-//TODO: If there are multiple spaces in a row, this will not work properly
+// returns the index of the first non-space character in the buffer
+int removeTrailingSpacesFromTerminal(char buffer[]) {
+	int charPos = strlen(buffer) - 1;
+	while(charPos >= 0 && buffer[charPos] == ' ') {
+		printBackspaceToTerminal();
+		charPos--;
+	}
+	return charPos;
+}
+
+void removeTrailingSpacesFromBuffer(char buffer[]) {
+	int charPos = strlen(buffer) - 1;
+	while(charPos >= 0 && buffer[charPos] == ' ') {
+		printBackspaceToBuffer(buffer);
+		charPos--;
+	}
+}
+
 void printDeleteWordToTerminal(char buffer[]) {
-	int lastCharPosition = strlen(buffer) - 1;
+	int lastCharPosition = removeTrailingSpacesFromTerminal(buffer);
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
 		if(buffer[i] == ' ') {
@@ -66,8 +83,8 @@ void printDeleteWordToTerminal(char buffer[]) {
 	}
 }
 
-//TODO: If there are multiple spaces in a row, this will not work properly
 void printDeleteWordToBuffer(char buffer[]) {
+	removeTrailingSpacesFromBuffer(buffer);
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
 	for(i = lastCharPosition; i >= 0; --i) {
