@@ -204,7 +204,7 @@ void handleCharacter(char c, char *buffer) {
 
 void handleString(char *string, char buffer[]) {
 	printDeleteLineToTerminal(buffer);
-	UART_DRV_SendDataBlocking(myUART_IDX, string, sizeof(string), 1000);
+	UART_DRV_SendDataBlocking(myUART_IDX, string, strlen(string), 1000);
 	char sequence[2] = { '\n', '\r' };
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 	UART_DRV_SendDataBlocking(myUART_IDX, buffer, BUFFER_LENGTH, 1000);
@@ -309,23 +309,63 @@ void handler_task(os_task_param_t task_init_data)
 */
 void user_task(os_task_param_t task_init_data)
 {
-	printf("User Task 1 Created!\n");
+	printf("Master Task Created!\n");
 
+	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+	OpenR(user_task_qid);
 	OpenW();
-	int i = 0;
+	char line[BUFFER_LENGTH_WITH_NULL];
   
 #ifdef PEX_USE_RTOS
   while (1) {
 #endif
-	  if(i > 5) {
-		  Close();
-	  }
-    
-	_putline(_msgq_get_id(0, HANDLER_QUEUE), "test");
+//	  if(i > 5) {
+//		  Close();
+//	  }
+//
+//	_putline(_msgq_get_id(0, HANDLER_QUEUE), "test");
+//
+//	++i;
+//    OSA_TimeDelay(2000);
 
-	++i;
-    OSA_TimeDelay(2000);
-    
+	  int slaveTaskCount = 1;
+
+	if(_getline(line)) {
+		printf("Master Task Line Received: %s\n", line);
+		if(strlen(line) > 0 ){
+			switch(line[0]){
+				case '~':
+					_task_create(0, SLAVETASK_TASK, (uint32_t)(NULL));
+					break;
+				case '*':
+					if(strlen(line) > 1) {
+						char *pre = "Master Task says: ";
+						int dest_size = strlen(pre) + strlen(&line[1]);
+						char dest[dest_size];
+						strcpy(dest, pre);
+						strcat(dest, &line[1]);
+						if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
+							printf("Master Task Line Sent: %s\n", &line[1]);
+						}
+					}
+					break;
+				case '.':
+					if(Close()) {
+						printf("Master Task Closed\n");
+					}
+					break;
+				case '2':
+					_task_create(0, USERTASK2_TASK, (uint32_t)(NULL));
+					break;
+				case '3':
+					_task_create(0, USERTASK3_TASK, (uint32_t)(NULL));
+					break;
+			}
+		}
+	} else {
+		_task_block();
+	}
+
 #ifdef PEX_USE_RTOS   
   }
 #endif    
@@ -360,11 +400,11 @@ void user_task2(os_task_param_t task_init_data)
 		  Close();
 	  }
     
-		if(_getline(line)) {
-			printf("Task2 Line Received: %s\n", line);
-		} else {
-			_task_block();
-		}
+	if(_getline(line)) {
+		printf("Task2 Line Received: %s\n", line);
+	} else {
+		_task_block();
+	}
     
     ++i;
     
@@ -405,6 +445,74 @@ void user_task3(os_task_param_t task_init_data)
 #ifdef PEX_USE_RTOS   
   }
 #endif
+}
+
+/*
+** ===================================================================
+**     Callback    : slave_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void slave_task(os_task_param_t task_init_data)
+{
+	_task_id id = _task_get_id();
+	printf("Slave Task %d Created!\n", id);
+
+	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+
+	OpenR(user_task_qid);
+	char line[BUFFER_LENGTH_WITH_NULL];
+  
+#ifdef PEX_USE_RTOS
+  while (1) {
+#endif
+
+    if(_getline(line)) {
+		printf("Slave %d Received: %s\n", id, line);
+
+		if(strlen(line) > 0 ) {
+
+			char firstFive[6];
+			strncpy(firstFive, line, 5);
+			firstFive[5]= '\0';
+			char idStr[5];
+			sprintf(idStr, "%d", id);
+
+			if(strcmp(idStr, firstFive) == 0) {
+				if(line[5] =='*') {
+					char pre[20];
+					sprintf(pre, "Slave %d says: ", id);
+					int dest_size = strlen(pre) + strlen(&line[6]);
+					char dest[dest_size];
+					strcpy(dest, pre);
+					strcat(dest, &line[6]);
+					if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
+						printf("Slave %d Line Sent: %s\n", id, &line[6]);
+					}
+				}
+				else if(line[5] =='!') {
+					if(OpenW()) {
+						printf("Slave %d Granted write permission\n", id);
+					}
+				}
+				else if(line[5] =='.') {
+					if(Close()) {
+						printf("Slave %d Closed\n", id);
+					}
+				}
+			}
+		}
+	} else {
+		_task_block();
+	}
+
+    
+#ifdef PEX_USE_RTOS   
+  }
+#endif    
 }
 
 /* END os_tasks */

@@ -17,7 +17,7 @@ S_UPPER_DEPS += \
 SDK/platform/devices/MK64F12/startup/gcc/%.o: ../SDK/platform/devices/MK64F12/startup/gcc/%.S
 	@echo 'Building file: $<'
 	@echo 'Invoking: Cross ARM GNU Assembler'
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g3 -x assembler-with-cpp -D"FSL_RTOS_MQX" -I"C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/psp/cortex_m/core/M4" -I"C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/psp/cortex_m" -I"C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include" -I"C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/config/common" -I"C:/Users/lscholte/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/psp/cortex_m/compiler/gcc_arm" -I"C:/Users/lscholte/CENG455/serial_echo/Generated_Code/SDK/rtos/mqx/config/mcu" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -c -o "$@" "$<"
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g3 -x assembler-with-cpp -D"FSL_RTOS_MQX" -I"C:/Users/sat/ceng455/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/psp/cortex_m/core/M4" -I"C:/Users/sat/ceng455/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/psp/cortex_m" -I"C:/Users/sat/ceng455/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include" -I"C:/Users/sat/ceng455/CENG455/serial_echo/SDK/rtos/mqx/config/common" -I"C:/Users/sat/ceng455/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/psp/cortex_m/compiler/gcc_arm" -I"C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/SDK/rtos/mqx/config/mcu" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

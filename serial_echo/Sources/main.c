@@ -45,6 +45,7 @@
 #include "UserTask.h"
 #include "UserTask2.h"
 #include "UserTask3.h"
+#include "SlaveTask.h"
 #if CPU_INIT_CONFIG
   #include "Init_Config.h"
 #endif

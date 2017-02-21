@@ -44,6 +44,7 @@
 #include "UserTask.h"
 #include "UserTask2.h"
 #include "UserTask3.h"
+#include "SlaveTask.h"
 #include <message.h>
 #include <mutex.h>
 #include "access_functions.h"
@@ -112,6 +113,17 @@ void user_task2(os_task_param_t task_init_data);
 ** ===================================================================
 */
 void user_task3(os_task_param_t task_init_data);
+
+/*
+** ===================================================================
+**     Callback    : slave_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void slave_task(os_task_param_t task_init_data);
 
 /* END os_tasks */
 
