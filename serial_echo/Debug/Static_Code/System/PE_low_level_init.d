@@ -77,8 +77,6 @@ Static_Code/System/PE_low_level_init.o: \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/Handler.h \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/myUART.h \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask.h \
- C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask2.h \
- C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask3.h \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/SlaveTask.h \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/board.h \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/pin_init.h
@@ -236,10 +234,6 @@ C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/Handler.h:
 C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/myUART.h:
 
 C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask.h:
-
-C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask2.h:
-
-C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask3.h:
 
 C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/SlaveTask.h:
 

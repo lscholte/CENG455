@@ -290,12 +290,6 @@ Module "myUART"    (component fsl_uart)
 Module "UserTask"  (component OS_Task)
    - UserTask_Init -Creates and starts a task.
 
-Module "UserTask2" (component OS_Task)
-   - UserTask2_Init -Creates and starts a task.
-
-Module "UserTask3" (component OS_Task)
-   - UserTask3_Init -Creates and starts a task.
-
 Module "SlaveTask" (component OS_Task)
    - SlaveTask_Init -Creates and starts a task.
 

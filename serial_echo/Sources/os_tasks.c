@@ -27,6 +27,7 @@
 */         
 /* MODULE os_tasks */
 
+
 #include "Cpu.h"
 #include "Events.h"
 #include "rtos_main_task.h"
@@ -193,7 +194,7 @@ void handleCharacter(char c, char *buffer) {
 			printDeleteLineToBuffer(buffer);
 			break;
 
-		default: //printable character (this probably is probably a bad assumption to make)
+		default: //printable character
 			if(printCharacterToBuffer(c, buffer)) {
 				printCharacterToTerminal(c);
 			}
@@ -319,16 +320,6 @@ void user_task(os_task_param_t task_init_data)
 #ifdef PEX_USE_RTOS
   while (1) {
 #endif
-//	  if(i > 5) {
-//		  Close();
-//	  }
-//
-//	_putline(_msgq_get_id(0, HANDLER_QUEUE), "test");
-//
-//	++i;
-//    OSA_TimeDelay(2000);
-
-	  int slaveTaskCount = 1;
 
 	if(_getline(line)) {
 		printf("Master Task Line Received: %s\n", line);
@@ -354,12 +345,6 @@ void user_task(os_task_param_t task_init_data)
 						printf("Master Task Closed\n");
 					}
 					break;
-				case '2':
-					_task_create(0, USERTASK2_TASK, (uint32_t)(NULL));
-					break;
-				case '3':
-					_task_create(0, USERTASK3_TASK, (uint32_t)(NULL));
-					break;
 			}
 		}
 	} else {
@@ -369,82 +354,6 @@ void user_task(os_task_param_t task_init_data)
 #ifdef PEX_USE_RTOS   
   }
 #endif    
-}
-
-/*
-** ===================================================================
-**     Callback    : user_task2
-**     Description : Task function entry.
-**     Parameters  :
-**       task_init_data - OS task parameter
-**     Returns : Nothing
-** ===================================================================
-*/
-void user_task2(os_task_param_t task_init_data)
-{
-	printf("User Task2 Created!\n");
-
-	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
-	OpenR(user_task_qid);
-
-	char line[BUFFER_LENGTH_WITH_NULL];
-  
-	int i = 0;
-
-#ifdef PEX_USE_RTOS
-  while (1) {
-#endif
-    /* Write your code here ... */
-
-	  if(i > 5) {
-		  Close();
-	  }
-    
-	if(_getline(line)) {
-		printf("Task2 Line Received: %s\n", line);
-	} else {
-		_task_block();
-	}
-    
-    ++i;
-    
-#ifdef PEX_USE_RTOS   
-  }
-#endif    
-}
-
-/*
-** ===================================================================
-**     Callback    : user_task3
-**     Description : Task function entry.
-**     Parameters  :
-**       task_init_data - OS task parameter
-**     Returns : Nothing
-** ===================================================================
-*/
-void user_task3(os_task_param_t task_init_data)
-{
-	printf("User Task3 Created!\n");
-
-	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
-	OpenR(user_task_qid);
-	OpenW();
-
-	char line[BUFFER_LENGTH_WITH_NULL];
-
-#ifdef PEX_USE_RTOS
-  while (1) {
-#endif
-    /* Write your code here ... */
-    
-		if(_getline(line)) {
-			printf("Task3 Line Received: %s\n", line);
-		}
-    
-    
-#ifdef PEX_USE_RTOS   
-  }
-#endif
 }
 
 /*
@@ -459,7 +368,7 @@ void user_task3(os_task_param_t task_init_data)
 void slave_task(os_task_param_t task_init_data)
 {
 	_task_id id = _task_get_id();
-	printf("Slave Task %d Created!\n", id);
+	printf("Slave Task %u Created!\n", id);
 
 	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 

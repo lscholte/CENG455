@@ -9,8 +9,6 @@ C_SRCS += \
 ../Generated_Code/MainTask.c \
 ../Generated_Code/SlaveTask.c \
 ../Generated_Code/UserTask.c \
-../Generated_Code/UserTask2.c \
-../Generated_Code/UserTask3.c \
 ../Generated_Code/clockMan1.c \
 ../Generated_Code/fsl_hwtimer1.c \
 ../Generated_Code/fsl_mpu1.c \
@@ -27,8 +25,6 @@ OBJS += \
 ./Generated_Code/MainTask.o \
 ./Generated_Code/SlaveTask.o \
 ./Generated_Code/UserTask.o \
-./Generated_Code/UserTask2.o \
-./Generated_Code/UserTask3.o \
 ./Generated_Code/clockMan1.o \
 ./Generated_Code/fsl_hwtimer1.o \
 ./Generated_Code/fsl_mpu1.o \
@@ -45,8 +41,6 @@ C_DEPS += \
 ./Generated_Code/MainTask.d \
 ./Generated_Code/SlaveTask.d \
 ./Generated_Code/UserTask.d \
-./Generated_Code/UserTask2.d \
-./Generated_Code/UserTask3.d \
 ./Generated_Code/clockMan1.d \
 ./Generated_Code/fsl_hwtimer1.d \
 ./Generated_Code/fsl_mpu1.d \

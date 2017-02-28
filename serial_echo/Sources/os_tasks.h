@@ -42,8 +42,6 @@
 #include "Handler.h"
 #include "myUART.h"
 #include "UserTask.h"
-#include "UserTask2.h"
-#include "UserTask3.h"
 #include "SlaveTask.h"
 #include <message.h>
 #include <mutex.h>

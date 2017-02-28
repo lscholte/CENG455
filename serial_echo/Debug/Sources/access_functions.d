@@ -75,8 +75,6 @@ Sources/access_functions.o: ../Sources/access_functions.c \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/Handler.h \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/myUART.h \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask.h \
- C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask2.h \
- C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask3.h \
  C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/SlaveTask.h \
  ../Sources/rtos_main_task.h \
  C:/Users/sat/ceng455/CENG455/serial_echo/SDK/rtos/mqx/mqx/source/include/mutex.h \
@@ -241,10 +239,6 @@ C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/Handler.h:
 C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/myUART.h:
 
 C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask.h:
-
-C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask2.h:
-
-C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/UserTask3.h:
 
 C:/Users/sat/ceng455/CENG455/serial_echo/Generated_Code/SlaveTask.h:
 
