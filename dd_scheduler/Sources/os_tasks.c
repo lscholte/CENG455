@@ -1,30 +1,30 @@
 /* ###################################################################
-**     Filename    : os_tasks.c
-**     Project     : serial_echo
-**     Processor   : MK64FN1M0VLL12
-**     Component   : Events
-**     Version     : Driver 01.00
-**     Compiler    : GNU C Compiler
-**     Date/Time   : 2017-02-05, 13:47, # CodeGen: 1
-**     Abstract    :
-**         This is user's event module.
-**         Put your event handler code here.
-**     Settings    :
-**     Contents    :
-**         handler_task - void handler_task(os_task_param_t task_init_data);
-**
-** ###################################################################*/
+ **     Filename    : os_tasks.c
+ **     Project     : serial_echo
+ **     Processor   : MK64FN1M0VLL12
+ **     Component   : Events
+ **     Version     : Driver 01.00
+ **     Compiler    : GNU C Compiler
+ **     Date/Time   : 2017-02-05, 13:47, # CodeGen: 1
+ **     Abstract    :
+ **         This is user's event module.
+ **         Put your event handler code here.
+ **     Settings    :
+ **     Contents    :
+ **         handler_task - void handler_task(os_task_param_t task_init_data);
+ **
+ ** ###################################################################*/
 /*!
-** @file os_tasks.c
-** @version 01.00
-** @brief
-**         This is user's event module.
-**         Put your event handler code here.
-*/         
+ ** @file os_tasks.c
+ ** @version 01.00
+ ** @brief
+ **         This is user's event module.
+ **         Put your event handler code here.
+ */
 /*!
-**  @addtogroup os_tasks_module os_tasks module documentation
-**  @{
-*/         
+ **  @addtogroup os_tasks_module os_tasks module documentation
+ **  @{
+ */
 /* MODULE os_tasks */
 
 
@@ -152,53 +152,53 @@ void handleCharacter(char c, char *buffer) {
 
 	STRING_MESSAGE_PTR msg_ptr;
 	switch(c) {
-		case 0x08: //backspace
-			printBackspaceToTerminal();
-			printBackspaceToBuffer(buffer);
-			break;
-		case 0x17: //delete word
-			printDeleteWordToTerminal(buffer);
-			printDeleteWordToBuffer(buffer);
-			break;
-		case 0x15: //delete line
-			printDeleteLineToTerminal(buffer);
-			printDeleteLineToBuffer(buffer);
-			break;
-		case '\n':
-		case '\r':
-			//Allocate a string message
-			for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
-				if(readPrivilege[i].task_id != MQX_NULL_TASK_ID) {
-					msg_ptr = (STRING_MESSAGE_PTR) _msg_alloc(message_pool);
-					if (msg_ptr == NULL){
-						printf("\nCould not allocate a message\n");
-						return;
-					}
+	case 0x08: //backspace
+		printBackspaceToTerminal();
+		printBackspaceToBuffer(buffer);
+		break;
+	case 0x17: //delete word
+		printDeleteWordToTerminal(buffer);
+		printDeleteWordToBuffer(buffer);
+		break;
+	case 0x15: //delete line
+		printDeleteLineToTerminal(buffer);
+		printDeleteLineToBuffer(buffer);
+		break;
+	case '\n':
+	case '\r':
+		//Allocate a string message
+		for(i = 0; i < MAX_TASKS_WITH_READ_PERM; ++i) {
+			if(readPrivilege[i].task_id != MQX_NULL_TASK_ID) {
+				msg_ptr = (STRING_MESSAGE_PTR) _msg_alloc(message_pool);
+				if (msg_ptr == NULL){
+					printf("\nCould not allocate a message\n");
+					return;
+				}
 
-					//Construct the message
-					msg_ptr->TYPE = STRING_MESSAGE_TYPE;
-					strcpy(msg_ptr->DATA, buffer);
-					msg_ptr->HEADER.TARGET_QID = readPrivilege[i].qid;
-					msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(char)*BUFFER_LENGTH_WITH_NULL;
+				//Construct the message
+				msg_ptr->TYPE = STRING_MESSAGE_TYPE;
+				strcpy(msg_ptr->DATA, buffer);
+				msg_ptr->HEADER.TARGET_QID = readPrivilege[i].qid;
+				msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(char)*BUFFER_LENGTH_WITH_NULL;
 
-					//Send line to the handler
-					bool result = _msgq_send(msg_ptr);
-					if (result != TRUE) {
-						printf("\nCould not send a message\n");
-						return;
-					}
+				//Send line to the handler
+				bool result = _msgq_send(msg_ptr);
+				if (result != TRUE) {
+					printf("\nCould not send a message\n");
+					return;
 				}
 			}
+		}
 
-			printNewlineToTerminal();
-			printDeleteLineToBuffer(buffer);
-			break;
+		printNewlineToTerminal();
+		printDeleteLineToBuffer(buffer);
+		break;
 
-		default: //printable character
-			if(printCharacterToBuffer(c, buffer)) {
-				printCharacterToTerminal(c);
-			}
-			break;
+	default: //printable character
+		if(printCharacterToBuffer(c, buffer)) {
+			printCharacterToTerminal(c);
+		}
+		break;
 	}
 	_mutex_unlock(&readPrivilegeMutex);
 }
@@ -215,17 +215,21 @@ void handleString(char *string, char buffer[]) {
 /* User includes (#include below this line is not maintained by Processor Expert) */
 
 /*
-** ===================================================================
-**     Callback    : handler_task
-**     Description : Task function entry.
-**     Parameters  :
-**       task_init_data - OS task parameter
-**     Returns : Nothing
-** ===================================================================
-*/
+ ** ===================================================================
+ **     Callback    : handler_task
+ **     Description : Task function entry.
+ **     Parameters  :
+ **       task_init_data - OS task parameter
+ **     Returns : Nothing
+ ** ===================================================================
+ */
 void handler_task(os_task_param_t task_init_data)
 {
 	printf("Handler Task Created!\n");
+
+	//create a task list here
+	//now we have a pointer to that list
+	//dd_return_active_list(list);
 
 	//Open the handler message queue
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
@@ -300,14 +304,14 @@ void handler_task(os_task_param_t task_init_data)
 }
 
 /*
-** ===================================================================
-**     Callback    : user_task
-**     Description : Task function entry.
-**     Parameters  :
-**       task_init_data - OS task parameter
-**     Returns : Nothing
-** ===================================================================
-*/
+ ** ===================================================================
+ **     Callback    : user_task
+ **     Description : Task function entry.
+ **     Parameters  :
+ **       task_init_data - OS task parameter
+ **     Returns : Nothing
+ ** ===================================================================
+ */
 //void user_task(os_task_param_t task_init_data)
 //{
 //	printf("Master Task Created!\n");
@@ -357,14 +361,14 @@ void handler_task(os_task_param_t task_init_data)
 //}
 
 /*
-** ===================================================================
-**     Callback    : slave_task
-**     Description : Task function entry.
-**     Parameters  :
-**       task_init_data - OS task parameter
-**     Returns : Nothing
-** ===================================================================
-*/
+ ** ===================================================================
+ **     Callback    : slave_task
+ **     Description : Task function entry.
+ **     Parameters  :
+ **       task_init_data - OS task parameter
+ **     Returns : Nothing
+ ** ===================================================================
+ */
 void slave_task(os_task_param_t task_init_data)
 {
 	_task_id id = _task_get_id();
@@ -374,115 +378,178 @@ void slave_task(os_task_param_t task_init_data)
 
 	OpenR(user_task_qid);
 	char line[BUFFER_LENGTH_WITH_NULL];
-  
+
 #ifdef PEX_USE_RTOS
-  while (1) {
+	while (1) {
 #endif
 
-    if(_getline(line)) {
-		printf("Slave %d Received: %s\n", id, line);
+		if(_getline(line)) {
+			printf("Slave %d Received: %s\n", id, line);
 
-		if(strlen(line) > 0 ) {
+			if(strlen(line) > 0 ) {
 
-			char firstFive[6];
-			strncpy(firstFive, line, 5);
-			firstFive[5]= '\0';
-			char idStr[5];
-			sprintf(idStr, "%d", id);
+				char firstFive[6];
+				strncpy(firstFive, line, 5);
+				firstFive[5]= '\0';
+				char idStr[5];
+				sprintf(idStr, "%d", id);
 
-			if(strcmp(idStr, firstFive) == 0) {
-				if(line[5] =='*') {
-					char pre[20];
-					sprintf(pre, "Slave %d says: ", id);
-					int dest_size = strlen(pre) + strlen(&line[6]);
-					char dest[dest_size];
-					strcpy(dest, pre);
-					strcat(dest, &line[6]);
-					if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
-						printf("Slave %d Line Sent: %s\n", id, &line[6]);
+				if(strcmp(idStr, firstFive) == 0) {
+					if(line[5] =='*') {
+						char pre[20];
+						sprintf(pre, "Slave %d says: ", id);
+						int dest_size = strlen(pre) + strlen(&line[6]);
+						char dest[dest_size];
+						strcpy(dest, pre);
+						strcat(dest, &line[6]);
+						if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
+							printf("Slave %d Line Sent: %s\n", id, &line[6]);
+						}
 					}
-				}
-				else if(line[5] =='!') {
-					if(OpenW()) {
-						printf("Slave %d Granted write permission\n", id);
+					else if(line[5] =='!') {
+						if(OpenW()) {
+							printf("Slave %d Granted write permission\n", id);
+						}
 					}
-				}
-				else if(line[5] =='.') {
-					if(Close()) {
-						printf("Slave %d Closed\n", id);
+					else if(line[5] =='.') {
+						if(Close()) {
+							printf("Slave %d Closed\n", id);
+						}
 					}
 				}
 			}
+		} else {
+			_task_block();
 		}
-	} else {
-		_task_block();
-	}
 
-    
+
 #ifdef PEX_USE_RTOS   
-  }
+	}
 #endif    
 }
 
 /*
-** ===================================================================
-**     Callback    : dd_scheduler_task
-**     Description : Task function entry.
-**     Parameters  :
-**       task_init_data - OS task parameter
-**     Returns : Nothing
-** ===================================================================
-*/
+ ** ===================================================================
+ **     Callback    : dd_scheduler_task
+ **     Description : Task function entry.
+ **     Parameters  :
+ **       task_init_data - OS task parameter
+ **     Returns : Nothing
+ ** ===================================================================
+ */
 void dd_scheduler_task(os_task_param_t task_init_data)
 {
-  /* Write your local variable definition here */
 
 	//Open the handler message queue
-	_queue_id handler_qid = _msgq_open(DDS_QUEUE, 0);
+	_queue_id scheduler_qid = _msgq_open(SCHEDULER_QUEUE, 0);
 
-	message_pool = _msgpool_create(sizeof(STRING_MESSAGE), NUM_CLIENTS, 1, 0);
+	message_pool = _msgpool_create(sizeof(GENERIC_MESSAGE), NUM_CLIENTS, 1, 0);
 
 	if (message_pool == MSGPOOL_NULL_POOL_ID) {
 		printf("Count not create a message pool\n");
 		_task_block();
 	}
-  
+
 #ifdef PEX_USE_RTOS
-  while (1) {
+	while (1) {
 #endif
-    /* Write your code here ... */
 
-	  //TODO: wait for message. These are the types of messages:
-	  // 1) create_task_message
-	  // 2) delete_task_message
-	  // 3) information_request_message
-	  // 4) overdue_task_message
+		//TODO: wait for message. These are the types of messages:
+		// 5) overdue_task_message???
 
-	  //TODO: Check the type of message received
+		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(scheduler_qid, 0);
+		if(msg_ptr != NULL) {
+			//
+			if(msg_ptr->TYPE == TASK_CREATION_MESSAGE_TYPE) {
+				TASK_CREATION_DATA_PTR data_ptr = (TASK_CREATION_DATA_PTR) msg_ptr->DATA_PTR;
+				TASK_CREATION_DATA data = *data_ptr;
 
-	  //TODO: Handle the message
+				//TODO: Figure out what we need to do with this info we received
+				_task_id tid = data.TASK_ID;
+				uint32_t deadline = data.DEADLINE;
 
-    
-    
-    OSA_TimeDelay(10);                 /* Example code (for task release) */
-   
-    
-    
-    
+
+				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
+				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
+				msg_ptr->DATA_PTR = NULL;
+
+				bool result = _msgq_send(msg_ptr);
+				if (result != TRUE) {
+					printf("\nCould not send a message\n");
+					_task_block();
+				}
+
+			}
+
+			if(msg_ptr->TYPE == TASK_DELETION_MESSAGE_TYPE) {
+				TASK_DELETION_DATA_PTR data_ptr = (TASK_DELETION_DATA_PTR) msg_ptr->DATA_PTR;
+				TASK_DELETION_DATA data = *data_ptr;
+
+				//TODO: Figure out what we need to do with this info we received
+				_task_id tid = data.TASK_ID;
+
+				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
+				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
+				msg_ptr->DATA_PTR = NULL;
+
+				bool result = _msgq_send(msg_ptr);
+				if (result != TRUE) {
+					printf("\nCould not send a message\n");
+					_task_block();
+				}
+			}
+
+			if(msg_ptr->TYPE == ACTIVE_TASK_REQUEST_MESSAGE_TYPE) {
+
+				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
+				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
+
+				//TODO: Set this to a pointer to the active task list
+				msg_ptr->DATA_PTR = NULL;
+
+				bool result = _msgq_send(msg_ptr);
+				if (result != TRUE) {
+					printf("\nCould not send a message\n");
+					_task_block();
+				}
+			}
+
+			if(msg_ptr->TYPE == OVERDUE_TASK_REQUEST_MESSAGE_TYPE) {
+
+				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
+				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
+
+				//TODO: Set this to a pointer to the overdue task list
+				msg_ptr->DATA_PTR = NULL;
+
+				bool result = _msgq_send(msg_ptr);
+				if (result != TRUE) {
+					printf("\nCould not send a message\n");
+					_task_block();
+				}
+			}
+
+		}
+
+		OSA_TimeDelay(10);                 /* Example code (for task release) */
+
+
+
+
 #ifdef PEX_USE_RTOS   
-  }
+	}
 #endif    
 }
 
 /*
-** ===================================================================
-**     Callback    : generator_task
-**     Description : Task function entry.
-**     Parameters  :
-**       task_init_data - OS task parameter
-**     Returns : Nothing
-** ===================================================================
-*/
+ ** ===================================================================
+ **     Callback    : generator_task
+ **     Description : Task function entry.
+ **     Parameters  :
+ **       task_init_data - OS task parameter
+ **     Returns : Nothing
+ ** ===================================================================
+ */
 void generator_task(os_task_param_t task_init_data)
 {
 	printf("Master Task Created!\n");
@@ -491,15 +558,15 @@ void generator_task(os_task_param_t task_init_data)
 	OpenR(user_task_qid);
 	OpenW();
 	char line[BUFFER_LENGTH_WITH_NULL];
-  
+
 #ifdef PEX_USE_RTOS
-  while (1) {
+	while (1) {
 #endif
 
-	if(_getline(line)) {
-		printf("Master Task Line Received: %s\n", line);
-		if(strlen(line) > 0 ){
-			switch(line[0]){
+		if(_getline(line)) {
+			printf("Master Task Line Received: %s\n", line);
+			if(strlen(line) > 0 ){
+				switch(line[0]){
 				case '~':
 					_task_create(0, SLAVETASK_TASK, (uint32_t)(NULL));
 					break;
@@ -520,14 +587,14 @@ void generator_task(os_task_param_t task_init_data)
 						printf("Master Task Closed\n");
 					}
 					break;
+				}
 			}
+		} else {
+			_task_block();
 		}
-	} else {
-		_task_block();
-	}
 
 #ifdef PEX_USE_RTOS   
-  }
+	}
 #endif
 }
 
@@ -538,13 +605,13 @@ void generator_task(os_task_param_t task_init_data)
 #endif 
 
 /*!
-** @}
-*/
+ ** @}
+ */
 /*
-** ###################################################################
-**
-**     This file was created by Processor Expert 10.5 [05.21]
-**     for the Freescale Kinetis series of microcontrollers.
-**
-** ###################################################################
-*/
+ ** ###################################################################
+ **
+ **     This file was created by Processor Expert 10.5 [05.21]
+ **     for the Freescale Kinetis series of microcontrollers.
+ **
+ ** ###################################################################
+ */

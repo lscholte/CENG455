@@ -55,7 +55,7 @@ extern "C" {
 #endif 
 
 #define HANDLER_QUEUE 8
-#define DDS_QUEUE 9
+#define SCHEDULER_QUEUE 9
 //#define PUTLINE_QUEUE 9
 #define GETLINE_QUEUE 10
 #define NUM_CLIENTS 1

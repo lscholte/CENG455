@@ -69,7 +69,7 @@
 */
 osa_status_t UserTask_Init(void)
 {
-  _task_id task_id = _task_create(0, USERTASK_TASK, (uint32_t)(NULL));
+  _task_id task_id = _task_create(0, SLAVETASK_TASK, (uint32_t)(NULL));
   if (task_id == MQX_NULL_TASK_ID) {
     return kStatus_OSA_Error;
   }

@@ -18,18 +18,5 @@ typedef struct read_privilege {
 	_queue_id qid;
 } READ_PRIVILEGE, * READ_PRIVILEGE_PTR;
 
-typedef struct task_node {
-	uint32_t tid;
-	uint32_t deadline;
-	uint32_t task_type;
-	uint32_t creation_time;
-	struct task_node *next_node;
-	struct task_node *previous_node;
-} ACTIVE_TASK_NODE, OVERDUE_TASK_NODE, TASK_NODE;
-
-typedef struct {
-	TASK_NODE *head;
-} ACTIVE_TASK_LIST, OVERDUE_TASK_LIST;
-
 
 #endif /* SOURCES_PERMISSION_STRUCTS_H_ */
