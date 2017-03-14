@@ -66,10 +66,10 @@ uint32_t dd_delete(_task_id tid) {
 		_task_block();
 	}
 
-	if(_task_abort(tid) != MQX_OK) {
-		printf("\nCould not abort task\n");
-		return 1;
-	}
+//	if(_task_abort(tid) != MQX_OK) {
+//		printf("\nCould not abort task\n");
+//		return 1;
+//	}
 
 	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR)_msg_alloc(message_pool);
 	if (msg_ptr == NULL){
@@ -81,10 +81,12 @@ uint32_t dd_delete(_task_id tid) {
 	msg_ptr->HEADER.SOURCE_QID = qid;
 	msg_ptr->HEADER.SIZE = sizeof(GENERIC_MESSAGE_PTR) + sizeof(int) + sizeof(void*);
 
-	TASK_DELETION_DATA data = { tid };
+//	TASK_DELETION_DATA data = { tid };
+	TASK_DELETION_DATA *data_ptr = malloc(sizeof(TASK_DELETION_DATA));
+	data_ptr->TASK_ID = tid;
 
 	msg_ptr->TYPE = TASK_DELETION_MESSAGE_TYPE;
-	msg_ptr->DATA_PTR = &data;
+	msg_ptr->DATA_PTR = data_ptr;
 
 	bool result = _msgq_send(msg_ptr);
 	if (result != TRUE) {
@@ -92,17 +94,17 @@ uint32_t dd_delete(_task_id tid) {
 		return 1;
 	}
 
-	//Wait for a response from scheduler so that we know when it is finished
-	//with the message data pointer we sent it. Without this msgq_receive,
-	//this function will return and the pointer will contain garbage values when
-	//the scheduler tries to access it
-	_msgq_receive(qid, 0);
-	_msg_free(msg_ptr);
-
-	if(!_msgq_close(qid)) {
-		printf("\nCould not close message queue\n");
-		return 1;
-	}
+//	//Wait for a response from scheduler so that we know when it is finished
+//	//with the message data pointer we sent it. Without this msgq_receive,
+//	//this function will return and the pointer will contain garbage values when
+//	//the scheduler tries to access it
+//	_msgq_receive(qid, 0);
+//
+//
+//	if(!_msgq_close(qid)) {
+//		printf("\nCould not close message queue\n");
+//		return 1;
+//	}
 
 	return MQX_OK;
 }

@@ -66,6 +66,14 @@ extern "C" {
 
 #define MAX_TASKS_WITH_READ_PERM 10
 
+#define RUNNING_TASK_PRIORITY 20 //TODO: Figure out a good number for this
+#define IDLE_TASK_PRIORITY 30
+#define WAITING_TASK_PRIORITY 40
+
+
+//TODO: Scheduler should be priority 10
+//TODOL Task generator should be priority 9
+
 extern _pool_id message_pool;
 extern WRITE_PRIVILEGE writePrivilege;
 extern READ_PRIVILEGE readPrivilege[MAX_TASKS_WITH_READ_PERM];

@@ -10,7 +10,7 @@
 
 typedef struct task_node {
 	uint32_t tid;
-	uint32_t deadline;
+	uint32_t absolute_deadline;
 	uint32_t task_type;
 	uint32_t creation_time;
 	struct task_node *next_node;

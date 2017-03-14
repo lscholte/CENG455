@@ -450,6 +450,40 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 		_task_block();
 	}
 
+	//TODO: Setup an Idle task that has priority of IDLE_TASK_PRIORITY.
+	//This task does nothing except sit in a while loop forever. When the running
+	//task finishes executing, then the idle task becomes the task with highest
+	//priority, so it will run until we schedule a new task to run
+
+	//TODO: Figure out what the scheduler's priority should be. I assume
+	//It should be higher priority (ie lower number) than RUNNING_TASK_PRIORITY.
+	//The scheduler only runs for brief periods of time before it blocks itself
+	//by waiting for new messages, so it shouldn't be an issue if it has the highest priority
+
+	//TODO: Init empty active task list. Given that our priority queue is currently
+	//just an unsorted list, the active task list should be identical to the priority queue
+//	ACTIVE_TASK_LIST active_tasks;
+
+	//TODO: Init empty overdue task list
+	OVERDUE_TASK_LIST overdue_tasks;
+
+	//Setup a priority queue of tasks sorted by deadline
+	//Then remove min from the priority queue, which will give us the task
+	//with the soonest deadline. Set this task's priority to RUNNING_TASK_PRIORITY.
+	//The priority queue could be a heap, sorted list, or unsorted list. For now,
+	//we'll use an unsorted list since it is easiest to implement
+	ACTIVE_TASK_LIST active_tasks;
+
+
+	//TODO: We need to figure out how the scheduler will determine
+	//when a task has finished executing or if a task has exceeded its deadline.
+	//In both cases, the task should be removed from the priority queue. Basically we should
+	//just need to call dd_delete(_task_id tid) which will take care of everything for us
+
+	TASK_NODE *running_task_node_ptr = NULL;
+
+	_mqx_uint closestDeadline = 0;
+
 #ifdef PEX_USE_RTOS
 	while (1) {
 #endif
@@ -457,16 +491,77 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 		//TODO: wait for message. These are the types of messages:
 		// 5) overdue_task_message???
 
-		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(scheduler_qid, 0);
+		TASK_NODE *soonest_task_node_ptr = NULL;
+		TASK_NODE *task_node_ptr = NULL;
+		for(task_node_ptr = active_tasks.head;
+				task_node_ptr != NULL;
+				task_node_ptr = task_node_ptr->next_node) {
+			if(soonest_task_node_ptr == NULL ||
+					task_node_ptr->absolute_deadline < soonest_task_node_ptr->absolute_deadline) {
+				soonest_task_node_ptr = task_node_ptr;
+			}
+		}
+
+		TIME_STRUCT time_struct;
+		_time_get(&time_struct);
+
+		uint32_t currentTimeMillis = time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
+		closestDeadline = soonest_task_node_ptr->absolute_deadline - currentTimeMillis;
+
+		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive_ticks(scheduler_qid, closestDeadline);
+
+		_time_get(&time_struct);
+		currentTimeMillis = time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
+
 		if(msg_ptr != NULL) {
-			//
 			if(msg_ptr->TYPE == TASK_CREATION_MESSAGE_TYPE) {
 				TASK_CREATION_DATA_PTR data_ptr = (TASK_CREATION_DATA_PTR) msg_ptr->DATA_PTR;
 				TASK_CREATION_DATA data = *data_ptr;
 
-				//TODO: Figure out what we need to do with this info we received
 				_task_id tid = data.TASK_ID;
-				uint32_t deadline = data.DEADLINE;
+				uint32_t relativeDeadline = data.DEADLINE;
+
+				uint32_t currentTimeMillis = time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
+				uint32_t absoluteDeadline = currentTimeMillis + relativeDeadline;
+
+				//Insert the new task into the priority queue. Since we have an
+				//unsorted list, we're just adding to the front for simplicity
+				TASK_NODE *task_node_ptr = (TASK_NODE *) malloc(sizeof(TASK_NODE));
+				task_node_ptr->creation_time = 0; //TODO: set to current time
+				task_node_ptr->absolute_deadline = absoluteDeadline;
+				task_node_ptr->next_node = priority_queue.head;
+				task_node_ptr->previous_node = NULL;
+				task_node_ptr->task_type = 0; //TODO: set this to something.
+				task_node_ptr->tid = tid;
+
+				priority_queue.head = task_node_ptr;
+
+				//This is simply because _task_set_priority wants us to pass in
+				//a ptr to the old priority. We don't actually care about this,
+				//but I don't think we are allowed to pass NULL
+				_mqx_uint temp;
+
+				//If new task deadline is less than currently running task deadline,
+				//	then set new task deadline to RUNNING_TASK_PRIORITY
+				//	and set old task deadline to WAITING_TASK_PRIORITY
+				if(running_task_node_ptr == NULL ||
+						absoluteDeadline < running_task_node_ptr->absolute_deadline) {
+
+
+
+					//Set the priority of the new task to the highest priority
+					_task_set_priority(tid, RUNNING_TASK_PRIORITY, &temp);
+
+					//Lower the priority of the old task
+					if(running_task_node_ptr != NULL) {
+						_task_set_priority(running_task_node_ptr->tid, WAITING_TASK_PRIORITY, &temp);
+					}
+
+					running_task_node_ptr = task_node_ptr;
+				}
+				else {
+					_task_set_priority(tid, WAITING_TASK_PRIORITY, &temp);
+				}
 
 
 				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
@@ -485,17 +580,69 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				TASK_DELETION_DATA_PTR data_ptr = (TASK_DELETION_DATA_PTR) msg_ptr->DATA_PTR;
 				TASK_DELETION_DATA data = *data_ptr;
 
-				//TODO: Figure out what we need to do with this info we received
 				_task_id tid = data.TASK_ID;
 
-				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
-				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
-				msg_ptr->DATA_PTR = NULL;
+				free(data_ptr);
+				_msg_free(msg_ptr);
 
-				bool result = _msgq_send(msg_ptr);
-				if (result != TRUE) {
-					printf("\nCould not send a message\n");
+				if(_task_abort(tid) != MQX_OK) {
+					printf("\nCould not abort task\n");
 					_task_block();
+				}
+
+				//Find the task to remove in the priority queue
+				TASK_NODE *task_node_ptr = NULL;
+				for(task_node_ptr = priority_queue.head;
+						task_node_ptr != NULL;
+						task_node_ptr = task_node_ptr->next_node) {
+					if(task_node_ptr->tid == tid) {
+						break;
+					}
+				}
+
+				//Now remove the task from the priority queue
+				TASK_NODE *prev_node = task_node_ptr->previous_node;
+				TASK_NODE *next_node = task_node_ptr->next_node;
+				if(prev_node != NULL) {
+					prev_node->next_node = next_node;
+				}
+				if(next_node != NULL) {
+					next_node->previous_node = prev_node;
+				}
+				free(task_node_ptr);
+				task_node_ptr = NULL;
+
+				//If the deleted task is the one currently running,
+				//	then we need to reschedule. Otherwise, the current
+				//	task can just keep running
+				if(running_task_node_ptr->tid == tid) {
+
+					//We need to reschedule by finding
+					//getting the task with the soonest deadline
+					//from the priority queue.
+					TASK_NODE *soonest_task_node_ptr = NULL;
+					task_node_ptr = NULL;
+					for(task_node_ptr = priority_queue.head;
+							task_node_ptr != NULL;
+							task_node_ptr = task_node_ptr->next_node) {
+						if(soonest_task_node_ptr == NULL ||
+								task_node_ptr->absolute_deadline < soonest_task_node_ptr->absolute_deadline) {
+							soonest_task_node_ptr = task_node_ptr;
+						}
+					}
+
+					//Set new active task's priority to RUNNING_TASK_PRIORITY.
+					_mqx_uint temp;
+					_task_set_priority(soonest_task_node_ptr->tid, RUNNING_TASK_PRIORITY, &temp);
+
+
+
+					//At this point task has already been deleted, so I don't think
+					//think we need to adjust the running task's priority. In fact,
+					//it might even be undefined behaviour if we tried to do that
+
+					//Set running_task_node_ptr to that new active task
+					running_task_node_ptr = soonest_task_node_ptr;
 				}
 			}
 
@@ -505,7 +652,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
 
 				//TODO: Set this to a pointer to the active task list
-				msg_ptr->DATA_PTR = NULL;
+				msg_ptr->DATA_PTR = &active_tasks;
 
 				bool result = _msgq_send(msg_ptr);
 				if (result != TRUE) {
@@ -520,7 +667,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
 
 				//TODO: Set this to a pointer to the overdue task list
-				msg_ptr->DATA_PTR = NULL;
+				msg_ptr->DATA_PTR = &overdue_tasks;
 
 				bool result = _msgq_send(msg_ptr);
 				if (result != TRUE) {
@@ -530,11 +677,27 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 			}
 
 		}
+		else {
+			//msgq_receive timed out
 
-		OSA_TimeDelay(10);                 /* Example code (for task release) */
 
+			TASK_NODE *task_node_ptr = NULL;
+			for(task_node_ptr = active_tasks.head;
+					task_node_ptr != NULL;
+					task_node_ptr = task_node_ptr->next_node) {
+				if(task_node_ptr->absolute_deadline <= currentTimeMillis) {
+					dd_delete(task_node_ptr->tid);
 
+					//Add invalid task list
+					TASK_NODE head = overdue_tasks.head;
+					head.previous_node = task_node_ptr;
+					task_node_ptr->next_node = head;
+					task_node_ptr->previous_node = NULL;
+					overdue_tasks.head = task_node_ptr;
+				}
+			}
 
+		}
 
 #ifdef PEX_USE_RTOS   
 	}
