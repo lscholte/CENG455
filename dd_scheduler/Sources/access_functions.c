@@ -11,6 +11,10 @@
 #include "message_structs.h"
 #include <stdio.h>
 
+void exitHandler() {
+	dd_delete(_task_get_id());
+}
+
 _task_id dd_tcreate(uint32_t template_index, uint32_t deadline) {
 
 	_queue_id qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
@@ -54,6 +58,8 @@ _task_id dd_tcreate(uint32_t template_index, uint32_t deadline) {
 		printf("\nCould not close message queue\n");
 		_task_block();
 	}
+
+	_task_set_exit_handler(tid, exitHandler);
 
 	return tid;
 }
@@ -111,7 +117,7 @@ uint32_t dd_delete(_task_id tid) {
 
 uint32_t dd_return_list(TASK_LIST *list, int type) {
 
-	if (type != ACTIVE_TASK_REQUEST_MESSAGE_TYPE || type != OVERDUE_TASK_REQUEST_MESSAGE_TYPE) {
+	if (type != ACTIVE_TASK_REQUEST_MESSAGE_TYPE && type != OVERDUE_TASK_REQUEST_MESSAGE_TYPE) {
 		printf("\nType must be either an active task or overdue task list\n");
 		return 1;
 	}

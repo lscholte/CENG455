@@ -35,6 +35,8 @@
 #include <stdio.h>
 #include "message_structs.h"
 #include "access_functions.h"
+#include <timer.h>
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -464,7 +466,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	//just an unsorted list, the active task list should be identical to the priority queue
 //	ACTIVE_TASK_LIST active_tasks;
 
-	//TODO: Init empty overdue task list
+	//Init empty overdue task list
 	OVERDUE_TASK_LIST overdue_tasks;
 
 	//Setup a priority queue of tasks sorted by deadline
@@ -479,6 +481,10 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	//when a task has finished executing or if a task has exceeded its deadline.
 	//In both cases, the task should be removed from the priority queue. Basically we should
 	//just need to call dd_delete(_task_id tid) which will take care of everything for us
+
+	//TODO: Use _task_set_exit_handler to detect when a task has finished executing
+	//The handler should send a message to the scheduler. The scheduler receives the message
+	//and calls dd_delete
 
 	TASK_NODE *running_task_node_ptr = NULL;
 
@@ -529,12 +535,12 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				TASK_NODE *task_node_ptr = (TASK_NODE *) malloc(sizeof(TASK_NODE));
 				task_node_ptr->creation_time = 0; //TODO: set to current time
 				task_node_ptr->absolute_deadline = absoluteDeadline;
-				task_node_ptr->next_node = priority_queue.head;
+				task_node_ptr->next_node = active_tasks.head;
 				task_node_ptr->previous_node = NULL;
 				task_node_ptr->task_type = 0; //TODO: set this to something.
 				task_node_ptr->tid = tid;
 
-				priority_queue.head = task_node_ptr;
+				active_tasks.head = task_node_ptr;
 
 				//This is simply because _task_set_priority wants us to pass in
 				//a ptr to the old priority. We don't actually care about this,
@@ -586,13 +592,12 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				_msg_free(msg_ptr);
 
 				if(_task_abort(tid) != MQX_OK) {
-					printf("\nCould not abort task\n");
-					_task_block();
+					printf("\nCould not abort task. Maybe task has already finished\n");
 				}
 
 				//Find the task to remove in the priority queue
 				TASK_NODE *task_node_ptr = NULL;
-				for(task_node_ptr = priority_queue.head;
+				for(task_node_ptr = active_tasks.head;
 						task_node_ptr != NULL;
 						task_node_ptr = task_node_ptr->next_node) {
 					if(task_node_ptr->tid == tid) {
@@ -622,7 +627,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 					//from the priority queue.
 					TASK_NODE *soonest_task_node_ptr = NULL;
 					task_node_ptr = NULL;
-					for(task_node_ptr = priority_queue.head;
+					for(task_node_ptr = active_tasks.head;
 							task_node_ptr != NULL;
 							task_node_ptr = task_node_ptr->next_node) {
 						if(soonest_task_node_ptr == NULL ||
@@ -651,7 +656,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
 				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
 
-				//TODO: Set this to a pointer to the active task list
+				//TODO: We really should send a copy of the active task list
 				msg_ptr->DATA_PTR = &active_tasks;
 
 				bool result = _msgq_send(msg_ptr);
@@ -666,7 +671,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
 				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
 
-				//TODO: Set this to a pointer to the overdue task list
+				//TODO: We really should send a copy of the active task list
 				msg_ptr->DATA_PTR = &overdue_tasks;
 
 				bool result = _msgq_send(msg_ptr);
@@ -689,8 +694,8 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 					dd_delete(task_node_ptr->tid);
 
 					//Add invalid task list
-					TASK_NODE head = overdue_tasks.head;
-					head.previous_node = task_node_ptr;
+					TASK_NODE *head = active_tasks.head;
+					head->previous_node = task_node_ptr;
 					task_node_ptr->next_node = head;
 					task_node_ptr->previous_node = NULL;
 					overdue_tasks.head = task_node_ptr;
@@ -704,6 +709,32 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 #endif    
 }
 
+// IS CALLED WHEN TIMER EXPIRES
+void timer_callback(_timer_id t, void* dataptr, unsigned int seconds, unsigned int miliseconds){
+    (*(bool*)dataptr) = false;
+}
+
+// CREATE BUSY-WAIT DELAY FOR A GIVEN DURATION
+void synthetic_compute(unsigned int mseconds){
+    bool flag = true;
+	unsigned int miliseconds = mseconds;
+	_timer_start_oneshot_after(timer_callback, &flag, TIMER_KERNEL_TIME_MODE, miliseconds);
+
+    // busy wait loop
+    while (flag){}
+}
+
+// SAMPLE TASK #1
+// DURATION: 1000 miliseconds
+// task_template_id should be GIVENTEST_SAMPLETASK_1
+void giventest_sampletask_1(os_task_param_t task_init_data)
+{
+    synthetic_compute(1000); // task's actual computation simulated by a busy loop
+    dd_delete (_task_get_id ());
+}
+
+#define GIVENTEST_SAMPLETASK_1 0 // COMMENT THIS IF giventest_sampletask_1 is created by Processor Expert
+
 /*
  ** ===================================================================
  **     Callback    : generator_task
@@ -715,50 +746,89 @@ void dd_scheduler_task(os_task_param_t task_init_data)
  */
 void generator_task(os_task_param_t task_init_data)
 {
-	printf("Master Task Created!\n");
+    ACTIVE_TASK_LIST active_tasks;
+    OVERDUE_TASK_LIST overdue_tasks;
 
-	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
-	OpenR(user_task_qid);
-	OpenW();
-	char line[BUFFER_LENGTH_WITH_NULL];
+    // CREATE SAMPLE TASKS
+    int n_total_tasks = 2;
+    _task_id t1 = dd_tcreate(GIVENTEST_SAMPLETASK_1, 500);
+    _task_id t2 = dd_tcreate(GIVENTEST_SAMPLETASK_1, 3000);
+    printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
 
-#ifdef PEX_USE_RTOS
-	while (1) {
-#endif
+    // WAIT FOR CERTAIN TIME
+    _time_delay(3000);
 
-		if(_getline(line)) {
-			printf("Master Task Line Received: %s\n", line);
-			if(strlen(line) > 0 ){
-				switch(line[0]){
-				case '~':
-					_task_create(0, SLAVETASK_TASK, (uint32_t)(NULL));
-					break;
-				case '*':
-					if(strlen(line) > 1) {
-						char *pre = "Master Task says: ";
-						int dest_size = strlen(pre) + strlen(&line[1]);
-						char dest[dest_size];
-						strcpy(dest, pre);
-						strcat(dest, &line[1]);
-						if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
-							printf("Master Task Line Sent: %s\n", &line[1]);
-						}
-					}
-					break;
-				case '.':
-					if(Close()) {
-						printf("Master Task Closed\n");
-					}
-					break;
-				}
-			}
-		} else {
-			_task_block();
-		}
+    // OBTAIN STATUS FROM SCHEDULER
+    printf("TASK GENERATOR: collecting statistics\n\r");
+    if(!dd_return_active_list(&active_tasks) || !dd_return_overdue_list(&overdue_tasks)){
+        printf("error: failed to obtain the tasks list!\n\r");
+        return;
+    }
 
-#ifdef PEX_USE_RTOS   
-	}
-#endif
+    int n_completed_tasks = 0;
+    int n_failed_tasks = 0;
+    int n_running_tasks = 0;
+
+    TASK_NODE *temp_at_ptr = active_tasks.head;
+    while(temp_at_ptr){
+        n_running_tasks++;
+        temp_at_ptr = temp_at_ptr->next_node;
+    }
+
+    TASK_NODE *temp_ot_ptr = overdue_tasks.head;
+    while(temp_ot_ptr){
+        n_running_tasks++;
+        temp_ot_ptr = temp_ot_ptr->next_node;
+    }
+
+    n_completed_tasks = n_total_tasks-(n_failed_tasks+n_running_tasks);
+    printf("TASK GENERATOR: %d failed, %d completed, %d still running.\n\r", n_failed_tasks, n_completed_tasks, n_running_tasks);
+
+    return;
+//	printf("Master Task Created!\n");
+//
+//	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+//	OpenR(user_task_qid);
+//	OpenW();
+//	char line[BUFFER_LENGTH_WITH_NULL];
+//
+//#ifdef PEX_USE_RTOS
+//	while (1) {
+//#endif
+//
+//		if(_getline(line)) {
+//			printf("Master Task Line Received: %s\n", line);
+//			if(strlen(line) > 0 ){
+//				switch(line[0]){
+//				case '~':
+//					_task_create(0, SLAVETASK_TASK, (uint32_t)(NULL));
+//					break;
+//				case '*':
+//					if(strlen(line) > 1) {
+//						char *pre = "Master Task says: ";
+//						int dest_size = strlen(pre) + strlen(&line[1]);
+//						char dest[dest_size];
+//						strcpy(dest, pre);
+//						strcat(dest, &line[1]);
+//						if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
+//							printf("Master Task Line Sent: %s\n", &line[1]);
+//						}
+//					}
+//					break;
+//				case '.':
+//					if(Close()) {
+//						printf("Master Task Closed\n");
+//					}
+//					break;
+//				}
+//			}
+//		} else {
+//			_task_block();
+//		}
+//
+//#ifdef PEX_USE_RTOS
+//	}
+//#endif
 }
 
 /* END os_tasks */

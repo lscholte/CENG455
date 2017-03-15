@@ -89,7 +89,8 @@ Sources/os_tasks.o: ../Sources/os_tasks.c \
  C:/Users/lscholte/CENG455/dd_scheduler/SDK/rtos/mqx/mqx_stdlib/source/include/std_prv.h \
  C:/Users/lscholte/CENG455/dd_scheduler/SDK/rtos/mqx/mqx/source/nio/fcntl.h \
  C:/Users/lscholte/CENG455/dd_scheduler/SDK/rtos/mqx/mqx/source/nio/nio.h \
- ../Sources/message_structs.h
+ ../Sources/message_structs.h \
+ C:/Users/lscholte/CENG455/dd_scheduler/SDK/rtos/mqx/mqx/source/include/timer.h
 
 C:/Users/lscholte/CENG455/dd_scheduler/Generated_Code/Cpu.h:
 
@@ -274,3 +275,5 @@ C:/Users/lscholte/CENG455/dd_scheduler/SDK/rtos/mqx/mqx/source/nio/fcntl.h:
 C:/Users/lscholte/CENG455/dd_scheduler/SDK/rtos/mqx/mqx/source/nio/nio.h:
 
 ../Sources/message_structs.h:
+
+C:/Users/lscholte/CENG455/dd_scheduler/SDK/rtos/mqx/mqx/source/include/timer.h:
