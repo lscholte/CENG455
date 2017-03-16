@@ -66,7 +66,7 @@ extern "C" {
 
 #define MAX_TASKS_WITH_READ_PERM 10
 
-#define RUNNING_TASK_PRIORITY 20 //TODO: Figure out a good number for this
+#define RUNNING_TASK_PRIORITY 20
 #define IDLE_TASK_PRIORITY 30
 #define WAITING_TASK_PRIORITY 40
 

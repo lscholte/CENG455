@@ -31,6 +31,7 @@
 #include "Events.h"
 #include "rtos_main_task.h"
 #include "os_tasks.h"
+#include "message_structs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -76,6 +77,15 @@ void main_task(os_task_param_t task_init_data)
 		printf("Failed to initialize read privileges mutex\n");
 		_task_block();
 	}
+
+//	_queue_id scheduler_qid = _msgq_open(SCHEDULER_QUEUE, 0);
+//
+//	message_pool = _msgpool_create(sizeof(GENERIC_MESSAGE), NUM_CLIENTS, 1, 0);
+//
+//	if (message_pool == MSGPOOL_NULL_POOL_ID) {
+//		printf("Count not create a message pool\n");
+//		_task_block();
+//	}
   
   /* Initialization of Processor Expert components (when some RTOS is active). DON'T REMOVE THIS CODE!!! */
 #ifdef MainTask_PEX_RTOS_COMPONENTS_INIT

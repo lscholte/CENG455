@@ -84,7 +84,7 @@ Sources/rtos_main_task.o: ../Sources/rtos_main_task.c \
  ../Sources/os_tasks.h \
  C:/Users/lscholte/CENG455/dd_scheduler/SDK/rtos/mqx/mqx/source/include/message.h \
  ../Sources/access_functions.h ../Sources/permission_structs.h \
- ../Sources/task_list.h
+ ../Sources/task_list.h ../Sources/message_structs.h
 
 C:/Users/lscholte/CENG455/dd_scheduler/Generated_Code/Cpu.h:
 
@@ -259,3 +259,5 @@ C:/Users/lscholte/CENG455/dd_scheduler/SDK/rtos/mqx/mqx/source/include/message.h
 ../Sources/permission_structs.h:
 
 ../Sources/task_list.h:
+
+../Sources/message_structs.h:

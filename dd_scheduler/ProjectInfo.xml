@@ -118,6 +118,7 @@
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\Handler.c</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\MainTask.c</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\SlaveTask.c</PathName>
+      <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\UserTask.c</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\clockMan1.c</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\fsl_hwtimer1.c</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\fsl_mpu1.c</PathName>
@@ -273,6 +274,7 @@
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\SDK\rtos\mqx\config\board\user_config.h</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\SDK\rtos\mqx\config\mcu\mqx_sdk_config.h</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\SlaveTask.h</PathName>
+      <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\UserTask.h</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\board.h</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\clockMan1.h</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Generated_Code\fsl_hwtimer1.h</PathName>
@@ -414,6 +416,7 @@
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Sources\os_tasks.h</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Sources\permission_structs.h</PathName>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Sources\rtos_main_task.h</PathName>
+      <PathName>C:\Users\lscholte\CENG455\dd_scheduler\Sources\task_list.h</PathName>
     </GeneratedHs>
     <GeneratedASMs>
       <PathName>C:\Users\lscholte\CENG455\dd_scheduler\SDK\platform\devices\MK64F12\startup\gcc\startup_MK64F12.S</PathName>

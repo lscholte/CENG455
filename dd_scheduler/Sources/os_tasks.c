@@ -441,8 +441,10 @@ void slave_task(os_task_param_t task_init_data)
  */
 void dd_scheduler_task(os_task_param_t task_init_data)
 {
+	printf("DD Scheduler task created\n");
 
 	//Open the handler message queue
+//	_queue_id scheduler_qid = _msgq_get_id(0, SCHEDULER_QUEUE);
 	_queue_id scheduler_qid = _msgq_open(SCHEDULER_QUEUE, 0);
 
 	message_pool = _msgpool_create(sizeof(GENERIC_MESSAGE), NUM_CLIENTS, 1, 0);
@@ -468,6 +470,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 	//Init empty overdue task list
 	OVERDUE_TASK_LIST overdue_tasks;
+	overdue_tasks.head = NULL;
 
 	//Setup a priority queue of tasks sorted by deadline
 	//Then remove min from the priority queue, which will give us the task
@@ -475,6 +478,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	//The priority queue could be a heap, sorted list, or unsorted list. For now,
 	//we'll use an unsorted list since it is easiest to implement
 	ACTIVE_TASK_LIST active_tasks;
+	active_tasks.head = NULL;
 
 
 	//TODO: We need to figure out how the scheduler will determine
@@ -487,8 +491,6 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	//and calls dd_delete
 
 	TASK_NODE *running_task_node_ptr = NULL;
-
-	_mqx_uint closestDeadline = 0;
 
 #ifdef PEX_USE_RTOS
 	while (1) {
@@ -512,9 +514,12 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 		_time_get(&time_struct);
 
 		uint32_t currentTimeMillis = time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
-		closestDeadline = soonest_task_node_ptr->absolute_deadline - currentTimeMillis;
+		_mqx_uint closestDeadline = 0;
+		if(soonest_task_node_ptr != NULL) {
+			closestDeadline = soonest_task_node_ptr->absolute_deadline - currentTimeMillis;
+		}
 
-		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive_ticks(scheduler_qid, closestDeadline);
+		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(scheduler_qid, closestDeadline);
 
 		_time_get(&time_struct);
 		currentTimeMillis = time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
@@ -730,7 +735,7 @@ void synthetic_compute(unsigned int mseconds){
 void giventest_sampletask_1(os_task_param_t task_init_data)
 {
     synthetic_compute(1000); // task's actual computation simulated by a busy loop
-    dd_delete (_task_get_id ());
+//    dd_delete (_task_get_id ());
 }
 
 #define GIVENTEST_SAMPLETASK_1 0 // COMMENT THIS IF giventest_sampletask_1 is created by Processor Expert
@@ -746,6 +751,7 @@ void giventest_sampletask_1(os_task_param_t task_init_data)
  */
 void generator_task(os_task_param_t task_init_data)
 {
+	printf("Generator Task created\n");
     ACTIVE_TASK_LIST active_tasks;
     OVERDUE_TASK_LIST overdue_tasks;
 

@@ -12,6 +12,7 @@
 #include <stdio.h>
 
 void exitHandler() {
+	printf("Task Complete\n");
 	dd_delete(_task_get_id());
 }
 
@@ -20,7 +21,7 @@ _task_id dd_tcreate(uint32_t template_index, uint32_t deadline) {
 	_queue_id qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 	if(qid == MSGQ_NULL_QUEUE_ID) {
 		printf("\nCould not create message queue\n");
-		_task_block();
+		return 0;
 	}
 
 	_task_id tid = _task_create(0, template_index, (uint32_t)(NULL));
@@ -33,7 +34,7 @@ _task_id dd_tcreate(uint32_t template_index, uint32_t deadline) {
 
 	msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, SCHEDULER_QUEUE);
 	msg_ptr->HEADER.SOURCE_QID = qid;
-	msg_ptr->HEADER.SIZE = sizeof(GENERIC_MESSAGE_PTR) + sizeof(int) + sizeof(void*);
+	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(int) + sizeof(void*);
 
 	TASK_CREATION_DATA data = { tid, deadline };
 
@@ -43,7 +44,7 @@ _task_id dd_tcreate(uint32_t template_index, uint32_t deadline) {
 	bool result = _msgq_send(msg_ptr);
 	if (result != TRUE) {
 		printf("\nCould not send a message\n");
-		_task_block();
+		return 0;
 	}
 
 
@@ -56,7 +57,7 @@ _task_id dd_tcreate(uint32_t template_index, uint32_t deadline) {
 
 	if(!_msgq_close(qid)) {
 		printf("\nCould not close message queue\n");
-		_task_block();
+		return 0;
 	}
 
 	_task_set_exit_handler(tid, exitHandler);
@@ -69,7 +70,7 @@ uint32_t dd_delete(_task_id tid) {
 	_queue_id qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 	if(qid == MSGQ_NULL_QUEUE_ID) {
 		printf("\nCould not create message queue\n");
-		_task_block();
+		return 1;
 	}
 
 //	if(_task_abort(tid) != MQX_OK) {
@@ -80,12 +81,12 @@ uint32_t dd_delete(_task_id tid) {
 	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR)_msg_alloc(message_pool);
 	if (msg_ptr == NULL){
 		printf("\nCould not allocate a message\n");
-		_task_block();
+		return 1;
 	}
 
 	msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, SCHEDULER_QUEUE);
 	msg_ptr->HEADER.SOURCE_QID = qid;
-	msg_ptr->HEADER.SIZE = sizeof(GENERIC_MESSAGE_PTR) + sizeof(int) + sizeof(void*);
+	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(int) + sizeof(void*);
 
 //	TASK_DELETION_DATA data = { tid };
 	TASK_DELETION_DATA *data_ptr = malloc(sizeof(TASK_DELETION_DATA));
@@ -131,12 +132,12 @@ uint32_t dd_return_list(TASK_LIST *list, int type) {
 	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR)_msg_alloc(message_pool);
 	if (msg_ptr == NULL){
 		printf("\nCould not allocate a message\n");
-		_task_block();
+		return 1;
 	}
 
 	msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, SCHEDULER_QUEUE);
 	msg_ptr->HEADER.SOURCE_QID = qid;
-	msg_ptr->HEADER.SIZE = sizeof(GENERIC_MESSAGE_PTR) + sizeof(int) + sizeof(void*);
+	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(int) + sizeof(void*);
 
 	msg_ptr->TYPE = type;
 	msg_ptr->DATA_PTR = NULL;
