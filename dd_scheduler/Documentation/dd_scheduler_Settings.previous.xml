@@ -207,19 +207,6 @@
       <EmptySection_DummyValue />
     </Events>
   </Bean>
-  <Bean name="DDSchedulerTask" type="OS_Task">
-    <Enabled v="Y" />
-    <Properties>
-      <Name v="DDSchedulerTask" />
-      <Component_version v="1.3.0" />
-    </Properties>
-    <Methods>
-      <EmptySection_DummyValue />
-    </Methods>
-    <Events>
-      <EmptySection_DummyValue />
-    </Events>
-  </Bean>
   <Bean name="GeneratorTask" type="OS_Task">
     <Enabled v="Y" />
     <Properties>
@@ -237,6 +224,19 @@
     <Enabled v="Y" />
     <Properties>
       <Name v="SlaveTask" />
+      <Component_version v="1.3.0" />
+    </Properties>
+    <Methods>
+      <EmptySection_DummyValue />
+    </Methods>
+    <Events>
+      <EmptySection_DummyValue />
+    </Events>
+  </Bean>
+  <Bean name="DDSchedulerTask" type="OS_Task">
+    <Enabled v="Y" />
+    <Properties>
+      <Name v="DDSchedulerTask" />
       <Component_version v="1.3.0" />
     </Properties>
     <Methods>

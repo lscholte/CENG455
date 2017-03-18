@@ -66,9 +66,9 @@ extern "C" {
 
 #define MAX_TASKS_WITH_READ_PERM 10
 
-#define RUNNING_TASK_PRIORITY 20
-#define IDLE_TASK_PRIORITY 30
-#define WAITING_TASK_PRIORITY 40
+#define RUNNING_TASK_PRIORITY 19
+#define IDLE_TASK_PRIORITY 20
+#define WAITING_TASK_PRIORITY 21
 
 
 //TODO: Scheduler should be priority 10

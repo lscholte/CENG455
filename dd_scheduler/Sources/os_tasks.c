@@ -373,61 +373,65 @@ void handler_task(os_task_param_t task_init_data)
  */
 void slave_task(os_task_param_t task_init_data)
 {
-	_task_id id = _task_get_id();
-	printf("Slave Task %u Created!\n", id);
 
-	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+    synthetic_compute(1000); // task's actual computation simulated by a busy loop
+//    dd_delete (_task_get_id ());
 
-	OpenR(user_task_qid);
-	char line[BUFFER_LENGTH_WITH_NULL];
-
-#ifdef PEX_USE_RTOS
-	while (1) {
-#endif
-
-		if(_getline(line)) {
-			printf("Slave %d Received: %s\n", id, line);
-
-			if(strlen(line) > 0 ) {
-
-				char firstFive[6];
-				strncpy(firstFive, line, 5);
-				firstFive[5]= '\0';
-				char idStr[5];
-				sprintf(idStr, "%d", id);
-
-				if(strcmp(idStr, firstFive) == 0) {
-					if(line[5] =='*') {
-						char pre[20];
-						sprintf(pre, "Slave %d says: ", id);
-						int dest_size = strlen(pre) + strlen(&line[6]);
-						char dest[dest_size];
-						strcpy(dest, pre);
-						strcat(dest, &line[6]);
-						if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
-							printf("Slave %d Line Sent: %s\n", id, &line[6]);
-						}
-					}
-					else if(line[5] =='!') {
-						if(OpenW()) {
-							printf("Slave %d Granted write permission\n", id);
-						}
-					}
-					else if(line[5] =='.') {
-						if(Close()) {
-							printf("Slave %d Closed\n", id);
-						}
-					}
-				}
-			}
-		} else {
-			_task_block();
-		}
-
-
-#ifdef PEX_USE_RTOS   
-	}
-#endif    
+//	_task_id id = _task_get_id();
+//	printf("Slave Task %u Created!\n", id);
+//
+//	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+//
+//	OpenR(user_task_qid);
+//	char line[BUFFER_LENGTH_WITH_NULL];
+//
+//#ifdef PEX_USE_RTOS
+//	while (1) {
+//#endif
+//
+//		if(_getline(line)) {
+//			printf("Slave %d Received: %s\n", id, line);
+//
+//			if(strlen(line) > 0 ) {
+//
+//				char firstFive[6];
+//				strncpy(firstFive, line, 5);
+//				firstFive[5]= '\0';
+//				char idStr[5];
+//				sprintf(idStr, "%d", id);
+//
+//				if(strcmp(idStr, firstFive) == 0) {
+//					if(line[5] =='*') {
+//						char pre[20];
+//						sprintf(pre, "Slave %d says: ", id);
+//						int dest_size = strlen(pre) + strlen(&line[6]);
+//						char dest[dest_size];
+//						strcpy(dest, pre);
+//						strcat(dest, &line[6]);
+//						if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
+//							printf("Slave %d Line Sent: %s\n", id, &line[6]);
+//						}
+//					}
+//					else if(line[5] =='!') {
+//						if(OpenW()) {
+//							printf("Slave %d Granted write permission\n", id);
+//						}
+//					}
+//					else if(line[5] =='.') {
+//						if(Close()) {
+//							printf("Slave %d Closed\n", id);
+//						}
+//					}
+//				}
+//			}
+//		} else {
+//			_task_block();
+//		}
+//
+//
+//#ifdef PEX_USE_RTOS
+//	}
+//#endif
 }
 
 /*
@@ -453,6 +457,14 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 		printf("Count not create a message pool\n");
 		_task_block();
 	}
+
+	_mqx_uint temp;
+	_mqx_uint newPriority = PRIORITY_OSA_TO_RTOS(GENERATORTASK_TASK_PRIORITY + 1U);
+	_task_get_priority(_task_get_id(), &temp);
+	printf("Priority before: %u\n", temp);
+	_task_set_priority(_task_get_id(), newPriority, &temp);
+	_task_get_priority(_task_get_id(), &temp);
+	printf("Priority after: %u\n", temp);
 
 	//TODO: Setup an Idle task that has priority of IDLE_TASK_PRIORITY.
 	//This task does nothing except sit in a while loop forever. When the running
@@ -544,6 +556,10 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				task_node_ptr->previous_node = NULL;
 				task_node_ptr->task_type = 0; //TODO: set this to something.
 				task_node_ptr->tid = tid;
+
+				if(active_tasks.head != NULL) {
+					active_tasks.head->previous_node = task_node_ptr;
+				}
 
 				active_tasks.head = task_node_ptr;
 
@@ -696,14 +712,25 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 					task_node_ptr != NULL;
 					task_node_ptr = task_node_ptr->next_node) {
 				if(task_node_ptr->absolute_deadline <= currentTimeMillis) {
+
+					TASK_NODE *overdue_task_node_ptr = (TASK_NODE *) malloc(sizeof(TASK_NODE));
+					overdue_task_node_ptr->creation_time = task_node_ptr->creation_time;
+					overdue_task_node_ptr->absolute_deadline = task_node_ptr->absolute_deadline;
+					overdue_task_node_ptr->next_node = task_node_ptr->next_node;
+					overdue_task_node_ptr->previous_node = task_node_ptr->previous_node;
+					overdue_task_node_ptr->task_type = task_node_ptr->task_type;
+					overdue_task_node_ptr->tid = task_node_ptr->tid;
+
 					dd_delete(task_node_ptr->tid);
 
 					//Add invalid task list
-					TASK_NODE *head = active_tasks.head;
-					head->previous_node = task_node_ptr;
-					task_node_ptr->next_node = head;
-					task_node_ptr->previous_node = NULL;
-					overdue_tasks.head = task_node_ptr;
+					TASK_NODE *head = overdue_tasks.head;
+					head->previous_node = overdue_task_node_ptr;
+					overdue_task_node_ptr->next_node = head;
+					overdue_task_node_ptr->previous_node = NULL;
+					overdue_tasks.head = overdue_task_node_ptr;
+
+
 				}
 			}
 
@@ -729,16 +756,16 @@ void synthetic_compute(unsigned int mseconds){
     while (flag){}
 }
 
-// SAMPLE TASK #1
-// DURATION: 1000 miliseconds
-// task_template_id should be GIVENTEST_SAMPLETASK_1
-void giventest_sampletask_1(os_task_param_t task_init_data)
-{
-    synthetic_compute(1000); // task's actual computation simulated by a busy loop
-//    dd_delete (_task_get_id ());
-}
-
-#define GIVENTEST_SAMPLETASK_1 0 // COMMENT THIS IF giventest_sampletask_1 is created by Processor Expert
+//// SAMPLE TASK #1
+//// DURATION: 1000 miliseconds
+//// task_template_id should be GIVENTEST_SAMPLETASK_1
+//void giventest_sampletask_1(os_task_param_t task_init_data)
+//{
+//    synthetic_compute(1000); // task's actual computation simulated by a busy loop
+////    dd_delete (_task_get_id ());
+//}
+//
+//#define GIVENTEST_SAMPLETASK_1 0 // COMMENT THIS IF giventest_sampletask_1 is created by Processor Expert
 
 /*
  ** ===================================================================
@@ -755,10 +782,15 @@ void generator_task(os_task_param_t task_init_data)
     ACTIVE_TASK_LIST active_tasks;
     OVERDUE_TASK_LIST overdue_tasks;
 
+	_mqx_uint temp;
+	_task_get_priority(_task_get_id(), &temp);
+	printf("Generator Priority: %u\n", temp);
+
+
     // CREATE SAMPLE TASKS
     int n_total_tasks = 2;
-    _task_id t1 = dd_tcreate(GIVENTEST_SAMPLETASK_1, 500);
-    _task_id t2 = dd_tcreate(GIVENTEST_SAMPLETASK_1, 3000);
+    _task_id t1 = dd_tcreate(SLAVETASK_TASK, 500);
+    _task_id t2 = dd_tcreate(SLAVETASK_TASK, 3000);
     printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
 
     // WAIT FOR CERTAIN TIME

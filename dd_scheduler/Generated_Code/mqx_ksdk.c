@@ -7,7 +7,7 @@
 **     Version     : Component 1.2.0, Driver 01.00, CPU db: 3.00.000
 **     Repository  : KSDK 1.3.0
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2017-02-27, 17:46, # CodeGen: 0
+**     Date/Time   : 2017-03-17, 21:35, # CodeGen: 14
 **
 **     Copyright : 1997 - 2015 Freescale Semiconductor, Inc. 
 **     All Rights Reserved.
@@ -59,9 +59,9 @@
 #include "os_tasks.h"
 #include "MainTask.h"
 #include "Handler.h"
+#include "DDSchedulerTask.h"
 #include "GeneratorTask.h"
 #include "SlaveTask.h"
-#include "DDSchedulerTask.h"
 extern void * kernel_data_prv;
 #if MQXCFG_PREALLOCATED_SYSTEM_STACKS
 extern uint8_t mqx_interrupt_stack[];
@@ -96,6 +96,17 @@ const TASK_TEMPLATE_STRUCT MQX_template_list[] =
     /* Task parameter                 */  (uint32_t)(NULL),
     /* Task time slice                */  (uint32_t)(0U)
   },       
+  /* Task: DDSchedulerTask */
+  {
+    /* Task number                    */  DDSCHEDULERTASK_TASK,
+    /* Entry point                    */  (TASK_FPTR)dd_scheduler_task,
+    /* Stack size                     */  DDSCHEDULERTASK_TASK_STACK_SIZE,
+    /* Task priority                  */  (PRIORITY_OSA_TO_RTOS(DDSCHEDULERTASK_TASK_PRIORITY)),
+    /* Task name                      */  DDSCHEDULERTASK_TASK_NAME,
+    /* Task attributes                */  (0),
+    /* Task parameter                 */  (uint32_t)(NULL),
+    /* Task time slice                */  (uint32_t)(0U)
+  },       
   /* Task: GeneratorTask */
   {
     /* Task number                    */  GENERATORTASK_TASK,
@@ -114,17 +125,6 @@ const TASK_TEMPLATE_STRUCT MQX_template_list[] =
     /* Stack size                     */  SLAVETASK_TASK_STACK_SIZE,
     /* Task priority                  */  (PRIORITY_OSA_TO_RTOS(SLAVETASK_TASK_PRIORITY)),
     /* Task name                      */  SLAVETASK_TASK_NAME,
-    /* Task attributes                */  (0),
-    /* Task parameter                 */  (uint32_t)(NULL),
-    /* Task time slice                */  (uint32_t)(0U)
-  },       
-  /* Task: DDSchedulerTask */
-  {
-    /* Task number                    */  DDSCHEDULERTASK_TASK,
-    /* Entry point                    */  (TASK_FPTR)dd_scheduler_task,
-    /* Stack size                     */  DDSCHEDULERTASK_TASK_STACK_SIZE,
-    /* Task priority                  */  (PRIORITY_OSA_TO_RTOS(DDSCHEDULERTASK_TASK_PRIORITY)),
-    /* Task name                      */  DDSCHEDULERTASK_TASK_NAME,
     /* Task attributes                */  (0),
     /* Task parameter                 */  (uint32_t)(NULL),
     /* Task time slice                */  (uint32_t)(0U)

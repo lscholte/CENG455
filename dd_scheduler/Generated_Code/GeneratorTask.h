@@ -7,7 +7,7 @@
 **     Version     : Component 1.3.0, Driver 01.00, CPU db: 3.00.000
 **     Repository  : KSDK 1.3.0
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2017-03-16, 15:08, # CodeGen: 11
+**     Date/Time   : 2017-03-17, 21:20, # CodeGen: 13
 **     Contents    :
 **         Init - osa_status_t GeneratorTask_Init(void);
 **
@@ -66,7 +66,7 @@
 /* GeneratorTask task stack size */  
 #define GENERATORTASK_TASK_STACK_SIZE  1024U
 /* GeneratorTask task priority value */  
-#define GENERATORTASK_TASK_PRIORITY    17U
+#define GENERATORTASK_TASK_PRIORITY    11U
 /*
 ** ===================================================================
 **     Method      :  Init (component OS_Task)
