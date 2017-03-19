@@ -42,8 +42,9 @@
 #include "Handler.h"
 #include "myUART.h"
 #include "GeneratorTask.h"
-#include "UserTask.h"
+#include "GeneratorTask.h"
 #include "SlaveTask.h"
+#include "IdleTask.h"
 #include "DDSchedulerTask.h"
 #include <message.h>
 #include <mutex.h>
@@ -155,6 +156,17 @@ void dd_scheduler_task(os_task_param_t task_init_data);
 ** ===================================================================
 */
 void generator_task(os_task_param_t task_init_data);
+
+/*
+** ===================================================================
+**     Callback    : idle_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void idle_task(os_task_param_t task_init_data);
 
 /* END os_tasks */
 

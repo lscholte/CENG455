@@ -43,8 +43,9 @@
 #include "Handler.h"
 #include "myUART.h"
 #include "GeneratorTask.h"
-#include "UserTask.h"
+#include "GeneratorTask.h"
 #include "SlaveTask.h"
+#include "IdleTask.h"
 #include "DDSchedulerTask.h"
 #if CPU_INIT_CONFIG
   #include "Init_Config.h"

@@ -12,11 +12,11 @@
 #include <stdio.h>
 
 void exitHandler() {
-	printf("Task Complete\n");
+//	printf("Task Complete: %u\n", _task_get_id());
 	dd_delete(_task_get_id());
 }
 
-_task_id dd_tcreate(uint32_t template_index, uint32_t deadline) {
+_task_id dd_tcreate(uint32_t template_index, uint32_t deadline, uint32_t runtime) {
 
 	_queue_id qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 	if(qid == MSGQ_NULL_QUEUE_ID) {
@@ -24,7 +24,7 @@ _task_id dd_tcreate(uint32_t template_index, uint32_t deadline) {
 		return 0;
 	}
 
-	_task_id tid = _task_create(0, template_index, (uint32_t)(NULL));
+	_task_id tid = _task_create(0, template_index, runtime);
 
 	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR)_msg_alloc(message_pool);
 	if (msg_ptr == NULL){
@@ -72,11 +72,6 @@ uint32_t dd_delete(_task_id tid) {
 		printf("\nCould not create message queue\n");
 		return 1;
 	}
-
-//	if(_task_abort(tid) != MQX_OK) {
-//		printf("\nCould not abort task\n");
-//		return 1;
-//	}
 
 	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR)_msg_alloc(message_pool);
 	if (msg_ptr == NULL){
@@ -138,6 +133,7 @@ uint32_t dd_return_list(TASK_LIST *list, int type) {
 	msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, SCHEDULER_QUEUE);
 	msg_ptr->HEADER.SOURCE_QID = qid;
 	msg_ptr->HEADER.SIZE = sizeof(MESSAGE_HEADER_STRUCT) + sizeof(int) + sizeof(void*);
+//	msg_ptr->HEADER.SIZE = sizeof(GENERIC_MESSAGE);
 
 	msg_ptr->TYPE = type;
 	msg_ptr->DATA_PTR = NULL;

@@ -213,6 +213,64 @@ void handleString(char *string, char buffer[]) {
 	UART_DRV_SendDataBlocking(myUART_IDX, buffer, BUFFER_LENGTH, 1000);
 }
 
+uint32_t getCurrentTime() {
+	TIME_STRUCT time_struct;
+	_time_get(&time_struct);
+	return time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
+}
+
+void doDelete(_task_id tid, ACTIVE_TASK_LIST *active_tasks, TASK_NODE **running_task_node_ptr) {
+	if(_task_destroy(tid) != MQX_OK) {
+//		printf("\nCould not destroy task. Maybe task has already finished\n");
+	}
+
+	//Find the task to remove in the priority queue
+	TASK_NODE *task_node_ptr = NULL;
+	for(task_node_ptr = active_tasks->head;
+			task_node_ptr != NULL;
+			task_node_ptr = task_node_ptr->next_node) {
+		if(task_node_ptr->tid == tid) {
+			break;
+		}
+	}
+
+	remove(active_tasks, task_node_ptr);
+	task_node_ptr = NULL;
+
+	//If the deleted task is the one currently running,
+	//	then we need to reschedule. Otherwise, the current
+	//	task can just keep running
+	if((*running_task_node_ptr)->tid == tid) {
+
+		//We need to reschedule by finding
+		//getting the task with the soonest deadline
+		//from the priority queue.
+		TASK_NODE *soonest_task_node_ptr = NULL;
+		task_node_ptr = NULL;
+		for(task_node_ptr = active_tasks->head;
+				task_node_ptr != NULL;
+				task_node_ptr = task_node_ptr->next_node) {
+			if(soonest_task_node_ptr == NULL ||
+					task_node_ptr->absolute_deadline < soonest_task_node_ptr->absolute_deadline) {
+				soonest_task_node_ptr = task_node_ptr;
+			}
+		}
+
+		//Set new active task's priority to RUNNING_TASK_PRIORITY.
+		_mqx_uint temp;
+		_task_set_priority(soonest_task_node_ptr->tid, RUNNING_TASK_PRIORITY, &temp);
+
+
+		//At this point task has already been deleted, so I don't think
+		//think we need to adjust the running task's priority. In fact,
+		//it might even be undefined behaviour if we tried to do that
+
+		//Set running_task_node_ptr to that new active task
+		*running_task_node_ptr = soonest_task_node_ptr;
+	}
+}
+
+
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
 
@@ -307,19 +365,19 @@ void handler_task(os_task_param_t task_init_data)
 
 /*
  ** ===================================================================
- **     Callback    : user_task
+ **     Callback    : generator_task
  **     Description : Task function entry.
  **     Parameters  :
  **       task_init_data - OS task parameter
  **     Returns : Nothing
  ** ===================================================================
  */
-//void user_task(os_task_param_t task_init_data)
+//void generator_task(os_task_param_t task_init_data)
 //{
 //	printf("Master Task Created!\n");
 //
-//	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
-//	OpenR(user_task_qid);
+//	_queue_id generator_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+//	OpenR(generator_task_qid);
 //	OpenW();
 //	char line[BUFFER_LENGTH_WITH_NULL];
 //
@@ -373,16 +431,16 @@ void handler_task(os_task_param_t task_init_data)
  */
 void slave_task(os_task_param_t task_init_data)
 {
-
-    synthetic_compute(1000); // task's actual computation simulated by a busy loop
+	printf("Slave task created with runtime %u\n", task_init_data);
+    synthetic_compute(task_init_data); // task's actual computation simulated by a busy loop
 //    dd_delete (_task_get_id ());
 
 //	_task_id id = _task_get_id();
 //	printf("Slave Task %u Created!\n", id);
 //
-//	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+//	_queue_id generator_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
 //
-//	OpenR(user_task_qid);
+//	OpenR(generator_task_qid);
 //	char line[BUFFER_LENGTH_WITH_NULL];
 //
 //#ifdef PEX_USE_RTOS
@@ -448,7 +506,6 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	printf("DD Scheduler task created\n");
 
 	//Open the handler message queue
-//	_queue_id scheduler_qid = _msgq_get_id(0, SCHEDULER_QUEUE);
 	_queue_id scheduler_qid = _msgq_open(SCHEDULER_QUEUE, 0);
 
 	message_pool = _msgpool_create(sizeof(GENERIC_MESSAGE), NUM_CLIENTS, 1, 0);
@@ -459,26 +516,18 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	}
 
 	_mqx_uint temp;
+
+//	_task_id idle_tid = _task_create(0, IDLETASK_TASK, (uint32_t)(NULL));
+//	_task_set_priority(idle_tid, IDLE_TASK_PRIORITY, &temp);
+
 	_mqx_uint newPriority = PRIORITY_OSA_TO_RTOS(GENERATORTASK_TASK_PRIORITY + 1U);
-	_task_get_priority(_task_get_id(), &temp);
-	printf("Priority before: %u\n", temp);
 	_task_set_priority(_task_get_id(), newPriority, &temp);
-	_task_get_priority(_task_get_id(), &temp);
-	printf("Priority after: %u\n", temp);
+
 
 	//TODO: Setup an Idle task that has priority of IDLE_TASK_PRIORITY.
 	//This task does nothing except sit in a while loop forever. When the running
 	//task finishes executing, then the idle task becomes the task with highest
 	//priority, so it will run until we schedule a new task to run
-
-	//TODO: Figure out what the scheduler's priority should be. I assume
-	//It should be higher priority (ie lower number) than RUNNING_TASK_PRIORITY.
-	//The scheduler only runs for brief periods of time before it blocks itself
-	//by waiting for new messages, so it shouldn't be an issue if it has the highest priority
-
-	//TODO: Init empty active task list. Given that our priority queue is currently
-	//just an unsorted list, the active task list should be identical to the priority queue
-//	ACTIVE_TASK_LIST active_tasks;
 
 	//Init empty overdue task list
 	OVERDUE_TASK_LIST overdue_tasks;
@@ -493,26 +542,16 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	active_tasks.head = NULL;
 
 
-	//TODO: We need to figure out how the scheduler will determine
-	//when a task has finished executing or if a task has exceeded its deadline.
-	//In both cases, the task should be removed from the priority queue. Basically we should
-	//just need to call dd_delete(_task_id tid) which will take care of everything for us
-
-	//TODO: Use _task_set_exit_handler to detect when a task has finished executing
-	//The handler should send a message to the scheduler. The scheduler receives the message
-	//and calls dd_delete
-
 	TASK_NODE *running_task_node_ptr = NULL;
+	TASK_NODE *soonest_task_node_ptr = NULL;
+	TASK_NODE *task_node_ptr = NULL;
 
 #ifdef PEX_USE_RTOS
 	while (1) {
 #endif
 
-		//TODO: wait for message. These are the types of messages:
-		// 5) overdue_task_message???
-
-		TASK_NODE *soonest_task_node_ptr = NULL;
-		TASK_NODE *task_node_ptr = NULL;
+		soonest_task_node_ptr = NULL;
+		task_node_ptr = NULL;
 		for(task_node_ptr = active_tasks.head;
 				task_node_ptr != NULL;
 				task_node_ptr = task_node_ptr->next_node) {
@@ -522,19 +561,21 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 			}
 		}
 
-		TIME_STRUCT time_struct;
-		_time_get(&time_struct);
+		uint32_t currentTimeMillis = getCurrentTime();
+		_mqx_uint shortestRelativeDeadline = 0;
 
-		uint32_t currentTimeMillis = time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
-		_mqx_uint closestDeadline = 0;
+		GENERIC_MESSAGE_PTR msg_ptr = NULL;
 		if(soonest_task_node_ptr != NULL) {
-			closestDeadline = soonest_task_node_ptr->absolute_deadline - currentTimeMillis;
+			if(currentTimeMillis < soonest_task_node_ptr->absolute_deadline) {
+				shortestRelativeDeadline = soonest_task_node_ptr->absolute_deadline - currentTimeMillis;
+				msg_ptr = _msgq_receive(scheduler_qid, shortestRelativeDeadline);
+			}
+		}
+		else {
+			msg_ptr = _msgq_receive(scheduler_qid, 0);
 		}
 
-		GENERIC_MESSAGE_PTR msg_ptr = _msgq_receive(scheduler_qid, closestDeadline);
-
-		_time_get(&time_struct);
-		currentTimeMillis = time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
+		currentTimeMillis = getCurrentTime();
 
 		if(msg_ptr != NULL) {
 			if(msg_ptr->TYPE == TASK_CREATION_MESSAGE_TYPE) {
@@ -544,7 +585,6 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				_task_id tid = data.TASK_ID;
 				uint32_t relativeDeadline = data.DEADLINE;
 
-				uint32_t currentTimeMillis = time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
 				uint32_t absoluteDeadline = currentTimeMillis + relativeDeadline;
 
 				//Insert the new task into the priority queue. Since we have an
@@ -557,11 +597,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				task_node_ptr->task_type = 0; //TODO: set this to something.
 				task_node_ptr->tid = tid;
 
-				if(active_tasks.head != NULL) {
-					active_tasks.head->previous_node = task_node_ptr;
-				}
-
-				active_tasks.head = task_node_ptr;
+				addToFront(&active_tasks, task_node_ptr);
 
 				//This is simply because _task_set_priority wants us to pass in
 				//a ptr to the old priority. We don't actually care about this,
@@ -573,7 +609,6 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				//	and set old task deadline to WAITING_TASK_PRIORITY
 				if(running_task_node_ptr == NULL ||
 						absoluteDeadline < running_task_node_ptr->absolute_deadline) {
-
 
 
 					//Set the priority of the new task to the highest priority
@@ -612,64 +647,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				free(data_ptr);
 				_msg_free(msg_ptr);
 
-				if(_task_abort(tid) != MQX_OK) {
-					printf("\nCould not abort task. Maybe task has already finished\n");
-				}
-
-				//Find the task to remove in the priority queue
-				TASK_NODE *task_node_ptr = NULL;
-				for(task_node_ptr = active_tasks.head;
-						task_node_ptr != NULL;
-						task_node_ptr = task_node_ptr->next_node) {
-					if(task_node_ptr->tid == tid) {
-						break;
-					}
-				}
-
-				//Now remove the task from the priority queue
-				TASK_NODE *prev_node = task_node_ptr->previous_node;
-				TASK_NODE *next_node = task_node_ptr->next_node;
-				if(prev_node != NULL) {
-					prev_node->next_node = next_node;
-				}
-				if(next_node != NULL) {
-					next_node->previous_node = prev_node;
-				}
-				free(task_node_ptr);
-				task_node_ptr = NULL;
-
-				//If the deleted task is the one currently running,
-				//	then we need to reschedule. Otherwise, the current
-				//	task can just keep running
-				if(running_task_node_ptr->tid == tid) {
-
-					//We need to reschedule by finding
-					//getting the task with the soonest deadline
-					//from the priority queue.
-					TASK_NODE *soonest_task_node_ptr = NULL;
-					task_node_ptr = NULL;
-					for(task_node_ptr = active_tasks.head;
-							task_node_ptr != NULL;
-							task_node_ptr = task_node_ptr->next_node) {
-						if(soonest_task_node_ptr == NULL ||
-								task_node_ptr->absolute_deadline < soonest_task_node_ptr->absolute_deadline) {
-							soonest_task_node_ptr = task_node_ptr;
-						}
-					}
-
-					//Set new active task's priority to RUNNING_TASK_PRIORITY.
-					_mqx_uint temp;
-					_task_set_priority(soonest_task_node_ptr->tid, RUNNING_TASK_PRIORITY, &temp);
-
-
-
-					//At this point task has already been deleted, so I don't think
-					//think we need to adjust the running task's priority. In fact,
-					//it might even be undefined behaviour if we tried to do that
-
-					//Set running_task_node_ptr to that new active task
-					running_task_node_ptr = soonest_task_node_ptr;
-				}
+				doDelete(tid, &active_tasks, &running_task_node_ptr);
 			}
 
 			if(msg_ptr->TYPE == ACTIVE_TASK_REQUEST_MESSAGE_TYPE) {
@@ -682,7 +660,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 				bool result = _msgq_send(msg_ptr);
 				if (result != TRUE) {
-					printf("\nCould not send a message\n");
+					printf("\nCould not send active task response message\n");
 					_task_block();
 				}
 			}
@@ -697,7 +675,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 				bool result = _msgq_send(msg_ptr);
 				if (result != TRUE) {
-					printf("\nCould not send a message\n");
+					printf("\nCould not send overdue task response message\n");
 					_task_block();
 				}
 			}
@@ -706,13 +684,16 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 		else {
 			//msgq_receive timed out
 
-
+			//Find all tasks in the active task list that have gone past their deadline
 			TASK_NODE *task_node_ptr = NULL;
 			for(task_node_ptr = active_tasks.head;
 					task_node_ptr != NULL;
 					task_node_ptr = task_node_ptr->next_node) {
 				if(task_node_ptr->absolute_deadline <= currentTimeMillis) {
 
+//					printf("Found overdue task: %u\n", task_node_ptr->tid);
+
+					//Create copy of the active task node to be inserted in the overdue task list
 					TASK_NODE *overdue_task_node_ptr = (TASK_NODE *) malloc(sizeof(TASK_NODE));
 					overdue_task_node_ptr->creation_time = task_node_ptr->creation_time;
 					overdue_task_node_ptr->absolute_deadline = task_node_ptr->absolute_deadline;
@@ -721,19 +702,14 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 					overdue_task_node_ptr->task_type = task_node_ptr->task_type;
 					overdue_task_node_ptr->tid = task_node_ptr->tid;
 
-					dd_delete(task_node_ptr->tid);
+					//Task is overdue, so delete the task from the scheduler
+					doDelete(task_node_ptr->tid, &active_tasks, &running_task_node_ptr);
 
-					//Add invalid task list
-					TASK_NODE *head = overdue_tasks.head;
-					head->previous_node = overdue_task_node_ptr;
-					overdue_task_node_ptr->next_node = head;
-					overdue_task_node_ptr->previous_node = NULL;
-					overdue_tasks.head = overdue_task_node_ptr;
-
+					//Add task to overdue task list
+					addToFront(&overdue_tasks, overdue_task_node_ptr);
 
 				}
 			}
-
 		}
 
 #ifdef PEX_USE_RTOS   
@@ -756,17 +732,6 @@ void synthetic_compute(unsigned int mseconds){
     while (flag){}
 }
 
-//// SAMPLE TASK #1
-//// DURATION: 1000 miliseconds
-//// task_template_id should be GIVENTEST_SAMPLETASK_1
-//void giventest_sampletask_1(os_task_param_t task_init_data)
-//{
-//    synthetic_compute(1000); // task's actual computation simulated by a busy loop
-////    dd_delete (_task_get_id ());
-//}
-//
-//#define GIVENTEST_SAMPLETASK_1 0 // COMMENT THIS IF giventest_sampletask_1 is created by Processor Expert
-
 /*
  ** ===================================================================
  **     Callback    : generator_task
@@ -778,70 +743,89 @@ void synthetic_compute(unsigned int mseconds){
  */
 void generator_task(os_task_param_t task_init_data)
 {
-	printf("Generator Task created\n");
-    ACTIVE_TASK_LIST active_tasks;
-    OVERDUE_TASK_LIST overdue_tasks;
-
-	_mqx_uint temp;
-	_task_get_priority(_task_get_id(), &temp);
-	printf("Generator Priority: %u\n", temp);
-
-
-    // CREATE SAMPLE TASKS
-    int n_total_tasks = 2;
-    _task_id t1 = dd_tcreate(SLAVETASK_TASK, 500);
-    _task_id t2 = dd_tcreate(SLAVETASK_TASK, 3000);
-    printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
-
-    // WAIT FOR CERTAIN TIME
-    _time_delay(3000);
-
-    // OBTAIN STATUS FROM SCHEDULER
-    printf("TASK GENERATOR: collecting statistics\n\r");
-    if(!dd_return_active_list(&active_tasks) || !dd_return_overdue_list(&overdue_tasks)){
-        printf("error: failed to obtain the tasks list!\n\r");
-        return;
-    }
-
-    int n_completed_tasks = 0;
-    int n_failed_tasks = 0;
-    int n_running_tasks = 0;
-
-    TASK_NODE *temp_at_ptr = active_tasks.head;
-    while(temp_at_ptr){
-        n_running_tasks++;
-        temp_at_ptr = temp_at_ptr->next_node;
-    }
-
-    TASK_NODE *temp_ot_ptr = overdue_tasks.head;
-    while(temp_ot_ptr){
-        n_running_tasks++;
-        temp_ot_ptr = temp_ot_ptr->next_node;
-    }
-
-    n_completed_tasks = n_total_tasks-(n_failed_tasks+n_running_tasks);
-    printf("TASK GENERATOR: %d failed, %d completed, %d still running.\n\r", n_failed_tasks, n_completed_tasks, n_running_tasks);
-
-    return;
-//	printf("Master Task Created!\n");
+//	printf("Generator Task created\n");
+//    ACTIVE_TASK_LIST active_tasks;
+//    OVERDUE_TASK_LIST overdue_tasks;
 //
-//	_queue_id user_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
-//	OpenR(user_task_qid);
-//	OpenW();
-//	char line[BUFFER_LENGTH_WITH_NULL];
+//    // CREATE SAMPLE TASKS
+//    int n_total_tasks = 3;
+//    dd_tcreate(SLAVETASK_TASK, 500);
+//    _time_delay(1000);
+//    dd_tcreate(SLAVETASK_TASK, 1500);
+//    dd_tcreate(SLAVETASK_TASK, 3000);
 //
-//#ifdef PEX_USE_RTOS
-//	while (1) {
-//#endif
+//    printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
 //
-//		if(_getline(line)) {
+//    // WAIT FOR CERTAIN TIME
+//    _time_delay(3000);
+//
+//    // OBTAIN STATUS FROM SCHEDULER
+//    printf("TASK GENERATOR: collecting statistics\n\r");
+//
+//    if(dd_return_overdue_list(&overdue_tasks) != MQX_OK) {
+//        printf("error: failed to obtain the overdue task list!\n\r");
+//        return;
+//    }
+//
+//    if(dd_return_active_list(&active_tasks) != MQX_OK) {
+//        printf("error: failed to obtain the active task list!\n\r");
+//        return;
+//    }
+//
+//    int n_completed_tasks = 0;
+//    int n_failed_tasks = 0;
+//    int n_running_tasks = 0;
+//
+//    TASK_NODE *temp_at_ptr = active_tasks.head;
+//    while(temp_at_ptr){
+//        n_running_tasks++;
+//        temp_at_ptr = temp_at_ptr->next_node;
+//    }
+//
+//    TASK_NODE *temp_ot_ptr = overdue_tasks.head;
+//    while(temp_ot_ptr){
+//        n_failed_tasks++;
+//        temp_ot_ptr = temp_ot_ptr->next_node;
+//    }
+//
+//    n_completed_tasks = n_total_tasks-(n_failed_tasks+n_running_tasks);
+//    printf("TASK GENERATOR: %d failed, %d completed, %d still running.\n\r", n_failed_tasks, n_completed_tasks, n_running_tasks);
+
+//    return;
+
+
+
+	printf("Generator Task Created!\n");
+
+	_queue_id generator_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+	OpenR(generator_task_qid);
+	OpenW();
+	char line[BUFFER_LENGTH_WITH_NULL];
+
+    int n_total_tasks = 0;
+
+#ifdef PEX_USE_RTOS
+	while (1) {
+#endif
+
+		if(_getline(line)) {
 //			printf("Master Task Line Received: %s\n", line);
-//			if(strlen(line) > 0 ){
-//				switch(line[0]){
-//				case '~':
+			if(strlen(line) > 0 ){
+				switch(line[0]){
+				case '~':
 //					_task_create(0, SLAVETASK_TASK, (uint32_t)(NULL));
-//					break;
-//				case '*':
+					if(strlen(line) > 1) {
+						int dest_size = strlen(&line[1]);
+						char dest[dest_size];
+						strcpy(dest, &line[1]);
+						dd_tcreate(SLAVETASK_TASK, atoi(dest), 2000);
+					}
+					else {
+						dd_tcreate(SLAVETASK_TASK, 3000, 1000);
+					}
+					++n_total_tasks;
+					break;
+				case '*':
 //					if(strlen(line) > 1) {
 //						char *pre = "Master Task says: ";
 //						int dest_size = strlen(pre) + strlen(&line[1]);
@@ -852,21 +836,79 @@ void generator_task(os_task_param_t task_init_data)
 //							printf("Master Task Line Sent: %s\n", &line[1]);
 //						}
 //					}
-//					break;
-//				case '.':
-//					if(Close()) {
-//						printf("Master Task Closed\n");
-//					}
-//					break;
-//				}
-//			}
-//		} else {
-//			_task_block();
-//		}
-//
-//#ifdef PEX_USE_RTOS
-//	}
-//#endif
+				    // OBTAIN STATUS FROM SCHEDULER
+				    printf("TASK GENERATOR: collecting statistics\n\r");
+
+				    ACTIVE_TASK_LIST active_tasks;
+				    OVERDUE_TASK_LIST overdue_tasks;
+
+				    if(dd_return_overdue_list(&overdue_tasks) != MQX_OK) {
+				        printf("error: failed to obtain the overdue task list!\n\r");
+				        return;
+				    }
+
+				    if(dd_return_active_list(&active_tasks) != MQX_OK) {
+				        printf("error: failed to obtain the active task list!\n\r");
+				        return;
+				    }
+
+				    int n_completed_tasks = 0;
+				    int n_failed_tasks = 0;
+				    int n_running_tasks = 0;
+
+				    TASK_NODE *temp_at_ptr = active_tasks.head;
+				    while(temp_at_ptr){
+				        n_running_tasks++;
+				        temp_at_ptr = temp_at_ptr->next_node;
+				    }
+
+				    TASK_NODE *temp_ot_ptr = overdue_tasks.head;
+				    while(temp_ot_ptr){
+				        n_failed_tasks++;
+				        temp_ot_ptr = temp_ot_ptr->next_node;
+				    }
+
+				    n_completed_tasks = n_total_tasks-(n_failed_tasks+n_running_tasks);
+				    printf("TASK GENERATOR: %d failed, %d completed, %d still running.\n\r", n_failed_tasks, n_completed_tasks, n_running_tasks);
+
+					break;
+				case '.':
+					if(Close()) {
+						printf("Master Task Closed\n");
+					}
+					break;
+				}
+			}
+		} else {
+			_task_block();
+		}
+
+#ifdef PEX_USE_RTOS
+	}
+#endif
+}
+
+/*
+** ===================================================================
+**     Callback    : idle_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void idle_task(os_task_param_t task_init_data)
+{
+	printf("Idle Task created\n");
+
+#ifdef PEX_USE_RTOS
+  while (1) {
+#endif
+       //Do nothing forever
+    
+#ifdef PEX_USE_RTOS   
+  }
+#endif    
 }
 
 /* END os_tasks */

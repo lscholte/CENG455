@@ -8,6 +8,8 @@
 #ifndef SOURCES_TASK_LIST_H_
 #define SOURCES_TASK_LIST_H_
 
+#include <stdint.h>
+
 typedef struct task_node {
 	uint32_t tid;
 	uint32_t absolute_deadline;
@@ -20,5 +22,9 @@ typedef struct task_node {
 typedef struct {
 	TASK_NODE *head;
 } ACTIVE_TASK_LIST, OVERDUE_TASK_LIST, TASK_LIST;
+
+
+void addToFront(TASK_LIST *task_list, TASK_NODE *node_ptr);
+void remove(TASK_LIST *task_list, TASK_NODE *node_ptr);
 
 #endif /* SOURCES_TASK_LIST_H_ */
