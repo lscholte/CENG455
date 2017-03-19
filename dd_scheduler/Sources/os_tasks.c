@@ -46,17 +46,27 @@ _pool_id message_pool;
 WRITE_PRIVILEGE writePrivilege;
 READ_PRIVILEGE readPrivilege[MAX_TASKS_WITH_READ_PERM];
 
+/*
+ * Prints a backspace character to the terminal
+ */
 void printBackspaceToTerminal() {
 	char sequence[3] = { '\b', ' ', '\b' };
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 }
 
+/*
+ * Removes the last character from the handler output buffer
+ */
 void printBackspaceToBuffer(char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	buffer[lastCharPosition] = 0;
 }
 
-// returns the index of the first non-space character in the buffer
+/*
+ * Removes any space characters from the end of a line in the terminal.
+ *
+ * Returns the index of the first non-space character in the buffer
+ */
 int removeTrailingSpacesFromTerminal(char buffer[]) {
 	int charPos = strlen(buffer) - 1;
 	while(charPos >= 0 && buffer[charPos] == ' ') {
@@ -66,6 +76,9 @@ int removeTrailingSpacesFromTerminal(char buffer[]) {
 	return charPos;
 }
 
+/*
+ * Removes any space characters from the end of the handler output buffer.
+ */
 void removeTrailingSpacesFromBuffer(char buffer[]) {
 	int charPos = strlen(buffer) - 1;
 	while(charPos >= 0 && buffer[charPos] == ' ') {
@@ -74,6 +87,9 @@ void removeTrailingSpacesFromBuffer(char buffer[]) {
 	}
 }
 
+/*
+ * Deletes the last word from the terminal
+ */
 void printDeleteWordToTerminal(char buffer[]) {
 	int lastCharPosition = removeTrailingSpacesFromTerminal(buffer);
 	int i;
@@ -86,6 +102,9 @@ void printDeleteWordToTerminal(char buffer[]) {
 	}
 }
 
+/*
+ * Deletes the last word from the handler output buffer
+ */
 void printDeleteWordToBuffer(char buffer[]) {
 	removeTrailingSpacesFromBuffer(buffer);
 	int lastCharPosition = strlen(buffer) - 1;
@@ -99,6 +118,9 @@ void printDeleteWordToBuffer(char buffer[]) {
 	}
 }
 
+/*
+ * Deletes an entire line from the terminal
+ */
 void printDeleteLineToTerminal(char buffer[]) {
 	int lastCharPosition = strlen(buffer) - 1;
 	int i;
@@ -107,19 +129,32 @@ void printDeleteLineToTerminal(char buffer[]) {
 	}
 }
 
+/*
+ * Empties the handler output buffer
+ */
 void printDeleteLineToBuffer(char buffer[]) {
 	memset(buffer, 0, BUFFER_LENGTH);
 }
 
+/*
+ * Moves to the next line of the terminal
+ */
 void printNewlineToTerminal() {
 	char sequence[2] = { '\n', '\r' };
 	UART_DRV_SendDataBlocking(myUART_IDX, sequence, sizeof(sequence), 1000);
 }
 
+/*
+ * Prints the specified character to the terminal
+ */
 void printCharacterToTerminal(char c) {
 	UART_DRV_SendDataBlocking(myUART_IDX, &c, sizeof(char), 1000);
 }
 
+
+/*
+ * Adds the character to the end of the handler output buffer
+ */
 bool printCharacterToBuffer(char c, char buffer[]) {
 	int newCharPosition = strlen(buffer);
 	if(newCharPosition >= BUFFER_LENGTH) {
@@ -130,6 +165,10 @@ bool printCharacterToBuffer(char c, char buffer[]) {
 	return true;
 }
 
+/*
+ * Check if the character c is a special character or a printable character.
+ * Updates the terminal and the handler output buffer according to the type of the character
+ */
 void handleCharacter(char c, char *buffer) {
 	if(_mutex_lock(&readPrivilegeMutex) != MQX_EOK) {
 		printf("Failed to lock the read privileges\n");
@@ -205,6 +244,10 @@ void handleCharacter(char c, char *buffer) {
 	_mutex_unlock(&readPrivilegeMutex);
 }
 
+/*
+ * Prints a line of text to the terminal. This is used when
+ * a user task wants to print a line of text
+ */
 void handleString(char *string, char buffer[]) {
 	printDeleteLineToTerminal(buffer);
 	UART_DRV_SendDataBlocking(myUART_IDX, string, strlen(string), 1000);
@@ -213,18 +256,24 @@ void handleString(char *string, char buffer[]) {
 	UART_DRV_SendDataBlocking(myUART_IDX, buffer, BUFFER_LENGTH, 1000);
 }
 
+/*
+ * Gets the current time since the RTOS started in milliseconds
+ */
 uint32_t getCurrentTime() {
 	TIME_STRUCT time_struct;
 	_time_get(&time_struct);
 	return time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
 }
 
-void doDelete(_task_id tid, ACTIVE_TASK_LIST *active_tasks, TASK_NODE **running_task_node_ptr) {
-	if(_task_destroy(tid) != MQX_OK) {
-//		printf("\nCould not destroy task. Maybe task has already finished\n");
-	}
+/*
+ * Deletes the task with the given task ID from the active task list
+ */
+void deleteFromActiveTasks(_task_id tid, ACTIVE_TASK_LIST *active_tasks) {
+	//Destroys the task if it has not already been completed.
+	//Does not call the task's exit handler
+	_task_destroy(tid);
 
-	//Find the task to remove in the priority queue
+	//Find the task to remove from the active task list
 	TASK_NODE *task_node_ptr = NULL;
 	for(task_node_ptr = active_tasks->head;
 			task_node_ptr != NULL;
@@ -234,19 +283,26 @@ void doDelete(_task_id tid, ACTIVE_TASK_LIST *active_tasks, TASK_NODE **running_
 		}
 	}
 
+	//Remove the task from the active task list
 	remove(active_tasks, task_node_ptr);
 	task_node_ptr = NULL;
+}
 
-	//If the deleted task is the one currently running,
-	//	then we need to reschedule. Otherwise, the current
-	//	task can just keep running
-	if((*running_task_node_ptr)->tid == tid) {
+/*
+ * Schedules the task with the soonest deadline to run if the deleted task
+ * was the one that was currently running. Otherwise this does nothing because
+ * there is no need to schedule a new task
+ */
+void rescheduleTasks(_task_id deletedTid, ACTIVE_TASK_LIST *active_tasks, TASK_NODE **running_task_node_ptr) {
 
-		//We need to reschedule by finding
-		//getting the task with the soonest deadline
-		//from the priority queue.
+	//If the deleted task is the one currently running
+	if((*running_task_node_ptr)->tid == deletedTid) {
+
+		//We need to schedule a new task to run by finding
+		//the task with the soonest deadline
+		//from the active task list.
 		TASK_NODE *soonest_task_node_ptr = NULL;
-		task_node_ptr = NULL;
+		TASK_NODE *task_node_ptr = NULL;
 		for(task_node_ptr = active_tasks->head;
 				task_node_ptr != NULL;
 				task_node_ptr = task_node_ptr->next_node) {
@@ -260,16 +316,20 @@ void doDelete(_task_id tid, ACTIVE_TASK_LIST *active_tasks, TASK_NODE **running_
 		_mqx_uint temp;
 		_task_set_priority(soonest_task_node_ptr->tid, RUNNING_TASK_PRIORITY, &temp);
 
-
-		//At this point task has already been deleted, so I don't think
-		//think we need to adjust the running task's priority. In fact,
-		//it might even be undefined behaviour if we tried to do that
-
 		//Set running_task_node_ptr to that new active task
 		*running_task_node_ptr = soonest_task_node_ptr;
 	}
 }
 
+bool sendTaskList(TASK_LIST *task_list_ptr, GENERIC_MESSAGE_PTR msg_ptr) {
+	msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
+	msg_ptr->HEADER.SOURCE_QID =  _msgq_get_id(0, SCHEDULER_QUEUE);
+
+	//TODO: We really should send a copy of the active task list
+	msg_ptr->DATA_PTR = task_list_ptr;
+
+	return _msgq_send(msg_ptr);
+}
 
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
@@ -286,10 +346,6 @@ void doDelete(_task_id tid, ACTIVE_TASK_LIST *active_tasks, TASK_NODE **running_
 void handler_task(os_task_param_t task_init_data)
 {
 	printf("Handler Task Created!\n");
-
-	//create a task list here
-	//now we have a pointer to that list
-	//dd_return_active_list(list);
 
 	//Open the handler message queue
 	_queue_id handler_qid = _msgq_open(HANDLER_QUEUE, 0);
@@ -353,72 +409,13 @@ void handler_task(os_task_param_t task_init_data)
 				_msg_free(msg_ptr);
 				handleString(line, buffer);
 			}
-
-
 		}
-
 
 #ifdef PEX_USE_RTOS   
 	}
 #endif    
 }
 
-/*
- ** ===================================================================
- **     Callback    : generator_task
- **     Description : Task function entry.
- **     Parameters  :
- **       task_init_data - OS task parameter
- **     Returns : Nothing
- ** ===================================================================
- */
-//void generator_task(os_task_param_t task_init_data)
-//{
-//	printf("Master Task Created!\n");
-//
-//	_queue_id generator_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
-//	OpenR(generator_task_qid);
-//	OpenW();
-//	char line[BUFFER_LENGTH_WITH_NULL];
-//
-//#ifdef PEX_USE_RTOS
-//  while (1) {
-//#endif
-//
-//	if(_getline(line)) {
-//		printf("Master Task Line Received: %s\n", line);
-//		if(strlen(line) > 0 ){
-//			switch(line[0]){
-//				case '~':
-//					_task_create(0, SLAVETASK_TASK, (uint32_t)(NULL));
-//					break;
-//				case '*':
-//					if(strlen(line) > 1) {
-//						char *pre = "Master Task says: ";
-//						int dest_size = strlen(pre) + strlen(&line[1]);
-//						char dest[dest_size];
-//						strcpy(dest, pre);
-//						strcat(dest, &line[1]);
-//						if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
-//							printf("Master Task Line Sent: %s\n", &line[1]);
-//						}
-//					}
-//					break;
-//				case '.':
-//					if(Close()) {
-//						printf("Master Task Closed\n");
-//					}
-//					break;
-//			}
-//		}
-//	} else {
-//		_task_block();
-//	}
-//
-//#ifdef PEX_USE_RTOS
-//  }
-//#endif
-//}
 
 /*
  ** ===================================================================
@@ -433,63 +430,6 @@ void slave_task(os_task_param_t task_init_data)
 {
 	printf("Slave task created with runtime %u\n", task_init_data);
     synthetic_compute(task_init_data); // task's actual computation simulated by a busy loop
-//    dd_delete (_task_get_id ());
-
-//	_task_id id = _task_get_id();
-//	printf("Slave Task %u Created!\n", id);
-//
-//	_queue_id generator_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
-//
-//	OpenR(generator_task_qid);
-//	char line[BUFFER_LENGTH_WITH_NULL];
-//
-//#ifdef PEX_USE_RTOS
-//	while (1) {
-//#endif
-//
-//		if(_getline(line)) {
-//			printf("Slave %d Received: %s\n", id, line);
-//
-//			if(strlen(line) > 0 ) {
-//
-//				char firstFive[6];
-//				strncpy(firstFive, line, 5);
-//				firstFive[5]= '\0';
-//				char idStr[5];
-//				sprintf(idStr, "%d", id);
-//
-//				if(strcmp(idStr, firstFive) == 0) {
-//					if(line[5] =='*') {
-//						char pre[20];
-//						sprintf(pre, "Slave %d says: ", id);
-//						int dest_size = strlen(pre) + strlen(&line[6]);
-//						char dest[dest_size];
-//						strcpy(dest, pre);
-//						strcat(dest, &line[6]);
-//						if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
-//							printf("Slave %d Line Sent: %s\n", id, &line[6]);
-//						}
-//					}
-//					else if(line[5] =='!') {
-//						if(OpenW()) {
-//							printf("Slave %d Granted write permission\n", id);
-//						}
-//					}
-//					else if(line[5] =='.') {
-//						if(Close()) {
-//							printf("Slave %d Closed\n", id);
-//						}
-//					}
-//				}
-//			}
-//		} else {
-//			_task_block();
-//		}
-//
-//
-//#ifdef PEX_USE_RTOS
-//	}
-//#endif
 }
 
 /*
@@ -517,19 +457,18 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 	_mqx_uint temp;
 
+	//TODO: Setup an Idle task that has priority of IDLE_TASK_PRIORITY.
+	//This task does nothing except sit in a while loop forever. When the running
+	//task finishes executing, then the idle task becomes the task with highest
+	//priority, so it will run until we schedule a new task to run
+
 //	_task_id idle_tid = _task_create(0, IDLETASK_TASK, (uint32_t)(NULL));
 //	_task_set_priority(idle_tid, IDLE_TASK_PRIORITY, &temp);
 
 	_mqx_uint newPriority = PRIORITY_OSA_TO_RTOS(GENERATORTASK_TASK_PRIORITY + 1U);
 	_task_set_priority(_task_get_id(), newPriority, &temp);
 
-
-	//TODO: Setup an Idle task that has priority of IDLE_TASK_PRIORITY.
-	//This task does nothing except sit in a while loop forever. When the running
-	//task finishes executing, then the idle task becomes the task with highest
-	//priority, so it will run until we schedule a new task to run
-
-	//Init empty overdue task list
+	//The list of tasks that have exceeded their deadlines.
 	OVERDUE_TASK_LIST overdue_tasks;
 	overdue_tasks.head = NULL;
 
@@ -538,20 +477,24 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	//with the soonest deadline. Set this task's priority to RUNNING_TASK_PRIORITY.
 	//The priority queue could be a heap, sorted list, or unsorted list. For now,
 	//we'll use an unsorted list since it is easiest to implement
+
+	//Active tasks is a list of tasks that have not exceeded their deadlines.
+	//The list is not sorted according to their deadlines
 	ACTIVE_TASK_LIST active_tasks;
 	active_tasks.head = NULL;
 
-
+	//Keeps track of the item in the active task list
+	//corresponding to the task that is currently running
 	TASK_NODE *running_task_node_ptr = NULL;
-	TASK_NODE *soonest_task_node_ptr = NULL;
-	TASK_NODE *task_node_ptr = NULL;
 
 #ifdef PEX_USE_RTOS
 	while (1) {
 #endif
 
-		soonest_task_node_ptr = NULL;
-		task_node_ptr = NULL;
+		TASK_NODE *soonest_task_node_ptr = NULL;
+		TASK_NODE *task_node_ptr = NULL;
+
+		//Find the task that has the nearest deadline
 		for(task_node_ptr = active_tasks.head;
 				task_node_ptr != NULL;
 				task_node_ptr = task_node_ptr->next_node) {
@@ -562,19 +505,27 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 		}
 
 		uint32_t currentTimeMillis = getCurrentTime();
+
+
 		_mqx_uint shortestRelativeDeadline = 0;
 
+
+
 		GENERIC_MESSAGE_PTR msg_ptr = NULL;
-		if(soonest_task_node_ptr != NULL) {
-			if(currentTimeMillis < soonest_task_node_ptr->absolute_deadline) {
-				shortestRelativeDeadline = soonest_task_node_ptr->absolute_deadline - currentTimeMillis;
-				msg_ptr = _msgq_receive(scheduler_qid, shortestRelativeDeadline);
-			}
-		}
-		else {
+		if(soonest_task_node_ptr == NULL) {
+			//There are no active tasks, so wait for a message indefinitely
 			msg_ptr = _msgq_receive(scheduler_qid, 0);
 		}
+		else if(currentTimeMillis < soonest_task_node_ptr->absolute_deadline) {
+			//The current time has not yet passed the soonest task's deadline.
+			//Wait for a message to be received or until the deadline occurs
+			shortestRelativeDeadline = soonest_task_node_ptr->absolute_deadline - currentTimeMillis;
+			msg_ptr = _msgq_receive(scheduler_qid, shortestRelativeDeadline);
+		}
 
+
+		//Recalculate the current time because some time may have passed
+		//since it was last obtained
 		currentTimeMillis = getCurrentTime();
 
 		if(msg_ptr != NULL) {
@@ -585,28 +536,25 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				_task_id tid = data.TASK_ID;
 				uint32_t relativeDeadline = data.DEADLINE;
 
+				free(data_ptr);
+				_msg_free(msg_ptr);
+
 				uint32_t absoluteDeadline = currentTimeMillis + relativeDeadline;
 
-				//Insert the new task into the priority queue. Since we have an
-				//unsorted list, we're just adding to the front for simplicity
+				//Allocate and initialize a new task node
 				TASK_NODE *task_node_ptr = (TASK_NODE *) malloc(sizeof(TASK_NODE));
-				task_node_ptr->creation_time = 0; //TODO: set to current time
+				task_node_ptr->creation_time = currentTimeMillis;
 				task_node_ptr->absolute_deadline = absoluteDeadline;
 				task_node_ptr->next_node = active_tasks.head;
 				task_node_ptr->previous_node = NULL;
-				task_node_ptr->task_type = 0; //TODO: set this to something.
 				task_node_ptr->tid = tid;
 
+				//Add the task node to the front of the active task list
 				addToFront(&active_tasks, task_node_ptr);
 
-				//This is simply because _task_set_priority wants us to pass in
-				//a ptr to the old priority. We don't actually care about this,
-				//but I don't think we are allowed to pass NULL
 				_mqx_uint temp;
 
-				//If new task deadline is less than currently running task deadline,
-				//	then set new task deadline to RUNNING_TASK_PRIORITY
-				//	and set old task deadline to WAITING_TASK_PRIORITY
+				//If new task deadline is sooner than currently running task deadline
 				if(running_task_node_ptr == NULL ||
 						absoluteDeadline < running_task_node_ptr->absolute_deadline) {
 
@@ -622,18 +570,9 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 					running_task_node_ptr = task_node_ptr;
 				}
 				else {
+					//This task has a later deadline than the running task,
+					//so give this task a lower priority
 					_task_set_priority(tid, WAITING_TASK_PRIORITY, &temp);
-				}
-
-
-				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
-				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
-				msg_ptr->DATA_PTR = NULL;
-
-				bool result = _msgq_send(msg_ptr);
-				if (result != TRUE) {
-					printf("\nCould not send a message\n");
-					_task_block();
 				}
 
 			}
@@ -647,19 +586,13 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				free(data_ptr);
 				_msg_free(msg_ptr);
 
-				doDelete(tid, &active_tasks, &running_task_node_ptr);
+				deleteFromActiveTasks(tid, &active_tasks);
+				rescheduleTasks(tid, &active_tasks, &running_task_node_ptr);
 			}
 
 			if(msg_ptr->TYPE == ACTIVE_TASK_REQUEST_MESSAGE_TYPE) {
 
-				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
-				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
-
-				//TODO: We really should send a copy of the active task list
-				msg_ptr->DATA_PTR = &active_tasks;
-
-				bool result = _msgq_send(msg_ptr);
-				if (result != TRUE) {
+				if(!sendTaskList(&active_tasks, msg_ptr)) {
 					printf("\nCould not send active task response message\n");
 					_task_block();
 				}
@@ -667,14 +600,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 			if(msg_ptr->TYPE == OVERDUE_TASK_REQUEST_MESSAGE_TYPE) {
 
-				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
-				msg_ptr->HEADER.SOURCE_QID = scheduler_qid;
-
-				//TODO: We really should send a copy of the active task list
-				msg_ptr->DATA_PTR = &overdue_tasks;
-
-				bool result = _msgq_send(msg_ptr);
-				if (result != TRUE) {
+				if(!sendTaskList(&overdue_tasks, msg_ptr)) {
 					printf("\nCould not send overdue task response message\n");
 					_task_block();
 				}
@@ -682,7 +608,6 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 		}
 		else {
-			//msgq_receive timed out
 
 			//Find all tasks in the active task list that have gone past their deadline
 			TASK_NODE *task_node_ptr = NULL;
@@ -691,19 +616,17 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 					task_node_ptr = task_node_ptr->next_node) {
 				if(task_node_ptr->absolute_deadline <= currentTimeMillis) {
 
-//					printf("Found overdue task: %u\n", task_node_ptr->tid);
-
 					//Create copy of the active task node to be inserted in the overdue task list
 					TASK_NODE *overdue_task_node_ptr = (TASK_NODE *) malloc(sizeof(TASK_NODE));
 					overdue_task_node_ptr->creation_time = task_node_ptr->creation_time;
 					overdue_task_node_ptr->absolute_deadline = task_node_ptr->absolute_deadline;
 					overdue_task_node_ptr->next_node = task_node_ptr->next_node;
 					overdue_task_node_ptr->previous_node = task_node_ptr->previous_node;
-					overdue_task_node_ptr->task_type = task_node_ptr->task_type;
 					overdue_task_node_ptr->tid = task_node_ptr->tid;
 
 					//Task is overdue, so delete the task from the scheduler
-					doDelete(task_node_ptr->tid, &active_tasks, &running_task_node_ptr);
+					deleteFromActiveTasks(task_node_ptr->tid, &active_tasks);
+					rescheduleTasks(task_node_ptr->tid, &active_tasks, &running_task_node_ptr);
 
 					//Add task to overdue task list
 					addToFront(&overdue_tasks, overdue_task_node_ptr);
@@ -809,16 +732,20 @@ void generator_task(os_task_param_t task_init_data)
 #endif
 
 		if(_getline(line)) {
-//			printf("Master Task Line Received: %s\n", line);
 			if(strlen(line) > 0 ){
 				switch(line[0]){
 				case '~':
-//					_task_create(0, SLAVETASK_TASK, (uint32_t)(NULL));
 					if(strlen(line) > 1) {
 						int dest_size = strlen(&line[1]);
 						char dest[dest_size];
 						strcpy(dest, &line[1]);
-						dd_tcreate(SLAVETASK_TASK, atoi(dest), 2000);
+
+						int numbers[] = {
+								atoi(strtok(dest, " ,")),
+								atoi(strtok(NULL, " ,"))
+						};
+
+						dd_tcreate(SLAVETASK_TASK, numbers[0], numbers[1]);
 					}
 					else {
 						dd_tcreate(SLAVETASK_TASK, 3000, 1000);
@@ -826,16 +753,7 @@ void generator_task(os_task_param_t task_init_data)
 					++n_total_tasks;
 					break;
 				case '*':
-//					if(strlen(line) > 1) {
-//						char *pre = "Master Task says: ";
-//						int dest_size = strlen(pre) + strlen(&line[1]);
-//						char dest[dest_size];
-//						strcpy(dest, pre);
-//						strcat(dest, &line[1]);
-//						if(_putline(_msgq_get_id(0, HANDLER_QUEUE), dest)) {
-//							printf("Master Task Line Sent: %s\n", &line[1]);
-//						}
-//					}
+
 				    // OBTAIN STATUS FROM SCHEDULER
 				    printf("TASK GENERATOR: collecting statistics\n\r");
 
@@ -871,11 +789,6 @@ void generator_task(os_task_param_t task_init_data)
 				    n_completed_tasks = n_total_tasks-(n_failed_tasks+n_running_tasks);
 				    printf("TASK GENERATOR: %d failed, %d completed, %d still running.\n\r", n_failed_tasks, n_completed_tasks, n_running_tasks);
 
-					break;
-				case '.':
-					if(Close()) {
-						printf("Master Task Closed\n");
-					}
 					break;
 				}
 			}

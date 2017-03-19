@@ -9,6 +9,7 @@ C_SRCS += \
 ../Sources/main.c \
 ../Sources/os_tasks.c \
 ../Sources/rtos_main_task.c \
+../Sources/scheduler_access.c \
 ../Sources/task_list.c 
 
 OBJS += \
@@ -17,6 +18,7 @@ OBJS += \
 ./Sources/main.o \
 ./Sources/os_tasks.o \
 ./Sources/rtos_main_task.o \
+./Sources/scheduler_access.o \
 ./Sources/task_list.o 
 
 C_DEPS += \
@@ -25,6 +27,7 @@ C_DEPS += \
 ./Sources/main.d \
 ./Sources/os_tasks.d \
 ./Sources/rtos_main_task.d \
+./Sources/scheduler_access.d \
 ./Sources/task_list.d 
 
 

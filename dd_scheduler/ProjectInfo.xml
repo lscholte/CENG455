@@ -261,6 +261,7 @@
       <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\main.c</PathName>
       <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\os_tasks.c</PathName>
       <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\rtos_main_task.c</PathName>
+      <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\scheduler_access.c</PathName>
       <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\task_list.c</PathName>
       <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Static_Code\System\PE_low_level_init.c</PathName>
     </GeneratedCs>
@@ -417,6 +418,7 @@
       <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\os_tasks.h</PathName>
       <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\permission_structs.h</PathName>
       <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\rtos_main_task.h</PathName>
+      <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\scheduler_access.h</PathName>
       <PathName>C:\Users\sat\CENG455\CENG455\dd_scheduler\Sources\task_list.h</PathName>
     </GeneratedHs>
     <GeneratedASMs>
