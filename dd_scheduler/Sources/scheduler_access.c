@@ -104,7 +104,7 @@ uint32_t dd_return_list(TASK_LIST *list, int type) {
 	msg_ptr->HEADER.SIZE = sizeof(GENERIC_MESSAGE);
 
 	msg_ptr->TYPE = type;
-	msg_ptr->DATA_PTR = NULL;
+	msg_ptr->DATA_PTR = list;
 
 
 	bool result = _msgq_send(msg_ptr);
@@ -115,8 +115,8 @@ uint32_t dd_return_list(TASK_LIST *list, int type) {
 
 	msg_ptr = _msgq_receive(qid, 0);
 	if(msg_ptr != NULL) {
-		TASK_LIST_DATA_PTR task_list_ptr = (TASK_LIST_DATA_PTR) msg_ptr->DATA_PTR;
-		*list = task_list_ptr->TASK_LIST;
+//		TASK_LIST_DATA_PTR task_list_ptr = (TASK_LIST_DATA_PTR) msg_ptr->DATA_PTR;
+//		*list = task_list_ptr->TASK_LIST;
 		_msg_free(msg_ptr);
 	}
 	else {
@@ -137,4 +137,49 @@ uint32_t dd_return_active_list(ACTIVE_TASK_LIST *list) {
 
 uint32_t dd_return_overdue_list(OVERDUE_TASK_LIST *list) {
 	return dd_return_list(list, OVERDUE_TASK_REQUEST_MESSAGE_TYPE);
+}
+
+uint32_t dd_return_idle_time() {
+
+	_queue_id qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+	if(qid == MSGQ_NULL_QUEUE_ID) {
+		printf("\nCould not create message queue\n");
+		return 0;
+	}
+
+	GENERIC_MESSAGE_PTR msg_ptr = (GENERIC_MESSAGE_PTR)_msg_alloc(message_pool);
+	if (msg_ptr == NULL){
+		printf("\nCould not allocate a message\n");
+		return 0;
+	}
+
+	msg_ptr->HEADER.TARGET_QID = _msgq_get_id(0, SCHEDULER_QUEUE);
+	msg_ptr->HEADER.SOURCE_QID = qid;
+	msg_ptr->HEADER.SIZE = sizeof(GENERIC_MESSAGE);
+
+	uint32_t idle_time;
+
+	msg_ptr->TYPE = IDLE_TIME_REQUEST_MESSAGE_TYPE;
+	msg_ptr->DATA_PTR = &idle_time;
+
+	bool result = _msgq_send(msg_ptr);
+	if (result != TRUE) {
+		printf("\nCould not send a message\n");
+		return 0;
+	}
+
+	msg_ptr = _msgq_receive(qid, 0);
+	if(msg_ptr != NULL) {
+		_msg_free(msg_ptr);
+	}
+	else {
+		return 0;
+	}
+
+	if(!_msgq_close(qid)) {
+		printf("\nCould not close message queue\n");
+		return 0;
+	}
+
+	return idle_time;
 }

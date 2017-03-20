@@ -45,6 +45,7 @@
 #include "GeneratorTask.h"
 #include "SlaveTask.h"
 #include "IdleTask.h"
+#include "PeriodicGeneratorTask.h"
 #include "DDSchedulerTask.h"
 #include <message.h>
 #include <mutex.h>
@@ -67,13 +68,15 @@ extern "C" {
 
 #define MAX_TASKS_WITH_READ_PERM 10
 
-#define RUNNING_TASK_PRIORITY 19
-#define IDLE_TASK_PRIORITY 20
-#define WAITING_TASK_PRIORITY 21
+#define RUNNING_TASK_PRIORITY 20
+#define IDLE_TASK_PRIORITY 21
+#define WAITING_TASK_PRIORITY 22
 
 
-//TODO: Scheduler should be priority 10
-//TODOL Task generator should be priority 9
+typedef struct {
+	uint32_t PERIOD;
+	uint32_t EXECUTION_TIME;
+} PERIODIC_TASK_PARAMETERS;
 
 extern _pool_id message_pool;
 extern WRITE_PRIVILEGE writePrivilege;
@@ -167,6 +170,17 @@ void generator_task(os_task_param_t task_init_data);
 ** ===================================================================
 */
 void idle_task(os_task_param_t task_init_data);
+
+/*
+** ===================================================================
+**     Callback    : periodic_generator_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void periodic_generator_task(os_task_param_t task_init_data);
 
 /* END os_tasks */
 

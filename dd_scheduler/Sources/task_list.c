@@ -6,6 +6,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "task_list.h"
 
 
@@ -44,6 +45,35 @@ void remove(TASK_LIST *task_list, TASK_NODE *node_ptr) {
 		}
 		free(node_ptr);
 	}
+}
+
+void copy(TASK_LIST *original_list, TASK_LIST *copied_list) {
+
+	//TODO: This copies the list in reverse order.
+	//We don't necessarily need to fix this for our purposes
+	//but this isn't exactly copying the list
+	copied_list->head = NULL;
+
+	TASK_NODE *task_node_ptr;
+	for(task_node_ptr = original_list->head;
+			task_node_ptr != NULL;
+			task_node_ptr = task_node_ptr->next_node) {
+
+		TASK_NODE *copied_node_ptr = (TASK_NODE *) malloc(sizeof(TASK_NODE));
+		memcpy(copied_node_ptr, task_node_ptr, sizeof(TASK_NODE));
+
+		addToFront(copied_list, copied_node_ptr);
+	}
+}
+
+void destroyList(TASK_LIST *list) {
+	TASK_NODE *current_node = list->head;
+	while(current_node != NULL) {
+		TASK_NODE *node_to_delete = current_node;
+		current_node = current_node->next_node;
+		free(node_to_delete);
+	}
+	list->head = NULL;
 }
 
 

@@ -45,6 +45,7 @@
 #include "GeneratorTask.h"
 #include "SlaveTask.h"
 #include "IdleTask.h"
+#include "PeriodicGeneratorTask.h"
 #include "DDSchedulerTask.h"
 #include <mutex.h>
 

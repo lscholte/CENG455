@@ -35,7 +35,9 @@
 #include <stdio.h>
 #include "message_structs.h"
 #include "access_functions.h"
+#include "scheduler_access.h"
 #include <timer.h>
+#include <math.h>
 
 
 #ifdef __cplusplus
@@ -266,6 +268,15 @@ uint32_t getCurrentTime() {
 }
 
 /*
+ * Gets the current time since the Application started in milliseconds
+ */
+uint32_t getApplicationTime() {
+	TIME_STRUCT time_struct;
+	_time_get_elapsed(&time_struct);
+	return time_struct.MILLISECONDS + time_struct.SECONDS * 1000;
+}
+
+/*
  * Deletes the task with the given task ID from the active task list
  */
 void deleteFromActiveTasks(_task_id tid, ACTIVE_TASK_LIST *active_tasks) {
@@ -487,6 +498,8 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	//corresponding to the task that is currently running
 	TASK_NODE *running_task_node_ptr = NULL;
 
+	uint32_t idle_time = 0;
+
 #ifdef PEX_USE_RTOS
 	while (1) {
 #endif
@@ -506,15 +519,16 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 		uint32_t currentTimeMillis = getCurrentTime();
 
-
 		_mqx_uint shortestRelativeDeadline = 0;
-
-
 
 		GENERIC_MESSAGE_PTR msg_ptr = NULL;
 		if(soonest_task_node_ptr == NULL) {
 			//There are no active tasks, so wait for a message indefinitely
+
+			uint32_t initial_time = getCurrentTime();
 			msg_ptr = _msgq_receive(scheduler_qid, 0);
+			uint32_t final_time = getCurrentTime();
+			idle_time += final_time - initial_time;
 		}
 		else if(currentTimeMillis < soonest_task_node_ptr->absolute_deadline) {
 			//The current time has not yet passed the soonest task's deadline.
@@ -592,7 +606,11 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 			if(msg_ptr->TYPE == ACTIVE_TASK_REQUEST_MESSAGE_TYPE) {
 
-				if(!sendTaskList(&active_tasks, msg_ptr)) {
+				TASK_LIST *data_ptr = (TASK_LIST *) msg_ptr->DATA_PTR;
+
+				copy(&active_tasks, data_ptr);
+
+				if(!sendTaskList(data_ptr, msg_ptr)) {
 					printf("\nCould not send active task response message\n");
 					_task_block();
 				}
@@ -600,10 +618,29 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 			if(msg_ptr->TYPE == OVERDUE_TASK_REQUEST_MESSAGE_TYPE) {
 
-				if(!sendTaskList(&overdue_tasks, msg_ptr)) {
+				TASK_LIST *data_ptr = (TASK_LIST *) msg_ptr->DATA_PTR;
+
+				copy(&overdue_tasks, data_ptr);
+
+				if(!sendTaskList(data_ptr, msg_ptr)) {
 					printf("\nCould not send overdue task response message\n");
 					_task_block();
 				}
+			}
+
+			if(msg_ptr->TYPE == IDLE_TIME_REQUEST_MESSAGE_TYPE) {
+				uint32_t *data_ptr = (uint32_t *) msg_ptr->DATA_PTR;
+				*data_ptr = idle_time;
+
+				msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
+				msg_ptr->HEADER.SOURCE_QID =  _msgq_get_id(0, SCHEDULER_QUEUE);
+
+				bool result = _msgq_send(msg_ptr);
+				if (result != TRUE) {
+					printf("\nCould not send a message\n");
+					_task_block();
+				}
+
 			}
 
 		}
@@ -672,10 +709,10 @@ void generator_task(os_task_param_t task_init_data)
 //
 //    // CREATE SAMPLE TASKS
 //    int n_total_tasks = 3;
-//    dd_tcreate(SLAVETASK_TASK, 500);
+//    dd_tcreate(SLAVETASK_TASK, 500, 1000);
 //    _time_delay(1000);
-//    dd_tcreate(SLAVETASK_TASK, 1500);
-//    dd_tcreate(SLAVETASK_TASK, 3000);
+//    dd_tcreate(SLAVETASK_TASK, 1500, 1000);
+//    dd_tcreate(SLAVETASK_TASK, 3000, 1000);
 //
 //    printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
 //
@@ -713,7 +750,7 @@ void generator_task(os_task_param_t task_init_data)
 //
 //    n_completed_tasks = n_total_tasks-(n_failed_tasks+n_running_tasks);
 //    printf("TASK GENERATOR: %d failed, %d completed, %d still running.\n\r", n_failed_tasks, n_completed_tasks, n_running_tasks);
-
+//
 //    return;
 
 
@@ -725,71 +762,111 @@ void generator_task(os_task_param_t task_init_data)
 	OpenW();
 	char line[BUFFER_LENGTH_WITH_NULL];
 
-    int n_total_tasks = 0;
+//	uint32_t temp;
+//	_task_id idle_tid = _task_create(0, IDLETASK_TASK, (uint32_t)(NULL));
+//	_task_set_priority(idle_tid, IDLE_TASK_PRIORITY, &temp);
 
 #ifdef PEX_USE_RTOS
 	while (1) {
 #endif
 
 		if(_getline(line)) {
-			if(strlen(line) > 0 ){
-				switch(line[0]){
-				case '~':
-					if(strlen(line) > 1) {
-						int dest_size = strlen(&line[1]);
-						char dest[dest_size];
-						strcpy(dest, &line[1]);
+			if(strlen(line) > 0 ) {
+				switch(line[0]) {
+					case '~': {
+						//Syntax: ~deadline,runtime
+						//or ~ for default deadline and runtime
+						if(strlen(line) > 1) {
+							int dest_size = strlen(&line[1]);
+							char dest[dest_size];
+							strcpy(dest, &line[1]);
 
-						int numbers[] = {
-								atoi(strtok(dest, " ,")),
-								atoi(strtok(NULL, " ,"))
-						};
+							int numbers[] = {
+									atoi(strtok(dest, " ,")),
+									atoi(strtok(NULL, " ,"))
+							};
 
-						dd_tcreate(SLAVETASK_TASK, numbers[0], numbers[1]);
+							dd_tcreate(SLAVETASK_TASK, numbers[0], numbers[1]);
+						}
+						else {
+							dd_tcreate(SLAVETASK_TASK, 3000, 1000);
+						}
+						break;
 					}
-					else {
-						dd_tcreate(SLAVETASK_TASK, 3000, 1000);
+
+					case '!': {
+						//Syntax: !period,runtime
+						//or ! for default period and runtime
+						if(strlen(line) > 1) {
+							int dest_size = strlen(&line[1]);
+							char dest[dest_size];
+							strcpy(dest, &line[1]);
+
+							int numbers[] = {
+									atoi(strtok(dest, " ,")),
+									atoi(strtok(NULL, " ,"))
+							};
+							PERIODIC_TASK_PARAMETERS *parameters = (PERIODIC_TASK_PARAMETERS *) malloc(sizeof(PERIODIC_TASK_PARAMETERS));
+							parameters->PERIOD = numbers[0];
+							parameters->EXECUTION_TIME = numbers[1];
+							_task_create(0, PERIODICGENERATORTASK_TASK, parameters);
+						}
+						else {
+							PERIODIC_TASK_PARAMETERS *parameters = (PERIODIC_TASK_PARAMETERS *) malloc(sizeof(PERIODIC_TASK_PARAMETERS));
+							parameters->PERIOD = 3000;
+							parameters->EXECUTION_TIME = 1000;
+							_task_create(0, PERIODICGENERATORTASK_TASK, parameters);
+						}
+						break;
 					}
-					++n_total_tasks;
-					break;
-				case '*':
 
-				    // OBTAIN STATUS FROM SCHEDULER
-				    printf("TASK GENERATOR: collecting statistics\n\r");
+					case '*': {
 
-				    ACTIVE_TASK_LIST active_tasks;
-				    OVERDUE_TASK_LIST overdue_tasks;
+						ACTIVE_TASK_LIST active_tasks;
+						OVERDUE_TASK_LIST overdue_tasks;
 
-				    if(dd_return_overdue_list(&overdue_tasks) != MQX_OK) {
-				        printf("error: failed to obtain the overdue task list!\n\r");
-				        return;
-				    }
+						if(dd_return_overdue_list(&overdue_tasks) != MQX_OK) {
+							printf("error: failed to obtain the overdue task list!\n\r");
+							_task_block();
+						}
 
-				    if(dd_return_active_list(&active_tasks) != MQX_OK) {
-				        printf("error: failed to obtain the active task list!\n\r");
-				        return;
-				    }
+						if(dd_return_active_list(&active_tasks) != MQX_OK) {
+							printf("error: failed to obtain the active task list!\n\r");
+							_task_block();
+						}
 
-				    int n_completed_tasks = 0;
-				    int n_failed_tasks = 0;
-				    int n_running_tasks = 0;
+						int n_failed_tasks = 0;
+						int n_running_tasks = 0;
 
-				    TASK_NODE *temp_at_ptr = active_tasks.head;
-				    while(temp_at_ptr){
-				        n_running_tasks++;
-				        temp_at_ptr = temp_at_ptr->next_node;
-				    }
+						TASK_NODE *temp_at_ptr = active_tasks.head;
+						while(temp_at_ptr){
+							n_running_tasks++;
+							temp_at_ptr = temp_at_ptr->next_node;
+						}
 
-				    TASK_NODE *temp_ot_ptr = overdue_tasks.head;
-				    while(temp_ot_ptr){
-				        n_failed_tasks++;
-				        temp_ot_ptr = temp_ot_ptr->next_node;
-				    }
+						TASK_NODE *temp_ot_ptr = overdue_tasks.head;
+						while(temp_ot_ptr){
+							n_failed_tasks++;
+							temp_ot_ptr = temp_ot_ptr->next_node;
+						}
 
-				    n_completed_tasks = n_total_tasks-(n_failed_tasks+n_running_tasks);
-				    printf("TASK GENERATOR: %d failed, %d completed, %d still running.\n\r", n_failed_tasks, n_completed_tasks, n_running_tasks);
+						printf("TASK GENERATOR: %d failed, %d still running.\n\r", n_failed_tasks, n_running_tasks);
 
-					break;
+						destroyList(&active_tasks);
+						destroyList(&overdue_tasks);
+
+						break;
+					}
+
+					case '@': {
+						uint32_t idle_time = dd_return_idle_time();
+						uint32_t app_time = getApplicationTime();
+						int percent_idle = round(((float) idle_time / app_time) * 100);
+
+						printf("IDLE TIME: %u APP TIME: %u IDLE PERCENT: %d%%\n", idle_time, app_time, percent_idle);
+						break;
+					}
+
 				}
 			}
 		} else {
@@ -813,12 +890,45 @@ void generator_task(os_task_param_t task_init_data)
 void idle_task(os_task_param_t task_init_data)
 {
 	printf("Idle Task created\n");
+	TIME_STRUCT time_struct;
 
+	uint32_t counter = 0;
 #ifdef PEX_USE_RTOS
   while (1) {
 #endif
-       //Do nothing forever
+	  //Do absolutely nothing
     
+#ifdef PEX_USE_RTOS   
+  }
+#endif    
+}
+
+/*
+** ===================================================================
+**     Callback    : periodic_generator_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void periodic_generator_task(os_task_param_t task_init_data)
+{
+	PERIODIC_TASK_PARAMETERS *parameters = (PERIODIC_TASK_PARAMETERS *) task_init_data;
+	uint32_t execution_time = parameters->EXECUTION_TIME;
+	uint32_t period = parameters->PERIOD;
+
+	free(parameters);
+	parameters = NULL;
+
+  
+#ifdef PEX_USE_RTOS
+  while (1) {
+#endif
+    
+	dd_tcreate(SLAVETASK_TASK, period, execution_time);
+    OSA_TimeDelay(period);
+
 #ifdef PEX_USE_RTOS   
   }
 #endif    

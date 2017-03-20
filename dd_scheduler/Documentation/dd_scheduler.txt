@@ -270,9 +270,6 @@ Module "osa1"      (component fsl_os_abstraction)
    - osa1_OSA_Init -Initializes the RTOS services.
    - osa1_OSA_Start -Starts the RTOS.
 
-Module "Handler"   (component OS_Task)
-   - Handler_Init -Creates and starts a task.
-
 Module "myUART"    (component fsl_uart)
    - myUART_UART_DRV_Init -Initializes an UART instance for operation.
    - myUART_UART_DRV_Deinit -Shuts down the UART by disabling interrupts and the transmitter/receiver.
@@ -290,11 +287,20 @@ Module "myUART"    (component fsl_uart)
 Module "DDSchedulerTask" (component OS_Task)
    - DDSchedulerTask_Init -Creates and starts a task.
 
+Module "Handler"   (component OS_Task)
+   - Handler_Init -Creates and starts a task.
+
 Module "GeneratorTask" (component OS_Task)
    - GeneratorTask_Init -Creates and starts a task.
 
 Module "SlaveTask" (component OS_Task)
    - SlaveTask_Init -Creates and starts a task.
+
+Module "IdleTask"  (component OS_Task)
+   - IdleTask_Init -Creates and starts a task.
+
+Module "PeriodicGeneratorTask" (component OS_Task)
+   - PeriodicGeneratorTask_Init -Creates and starts a task.
 
 Module "Cpu"       (component MK64FN1M0LL12_4SDK)
    - Cpu_SystemInit -This method configures the oscillator (PLL) that is part of the microcontroller device. SystemInit is 
