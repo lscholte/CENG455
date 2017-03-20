@@ -439,7 +439,7 @@ void handler_task(os_task_param_t task_init_data)
  */
 void slave_task(os_task_param_t task_init_data)
 {
-	printf("Slave task created with runtime %u\n", task_init_data);
+//	printf("Slave task created with runtime %u\n", task_init_data);
     synthetic_compute(task_init_data); // task's actual computation simulated by a busy loop
 }
 
@@ -678,6 +678,43 @@ void synthetic_compute(unsigned int mseconds){
     while (flag){}
 }
 
+void report_statistics(int test_id, int n_total_tasks){
+    TASK_LIST active_tasks;
+    TASK_LIST overdue_tasks;
+
+    if(dd_return_overdue_list(&overdue_tasks) != MQX_OK) {
+        printf("error: failed to obtain the overdue task list!\n\r");
+        return;
+    }
+
+    if(dd_return_active_list(&active_tasks) != MQX_OK) {
+        printf("error: failed to obtain the active task list!\n\r");
+        return;
+    }
+
+    int n_completed_tasks = 0;
+    int n_failed_tasks = 0;
+    int n_running_tasks = 0;
+
+    TASK_NODE *temp_at_ptr = active_tasks.head;
+    while(temp_at_ptr){
+        n_running_tasks++;
+        temp_at_ptr = temp_at_ptr->next_node;
+    }
+
+    TASK_NODE *temp_ot_ptr = overdue_tasks.head;
+    while(temp_ot_ptr){
+        n_failed_tasks++;
+        temp_ot_ptr = temp_ot_ptr->next_node;
+    }
+
+    n_completed_tasks = n_total_tasks-(n_failed_tasks+n_running_tasks);
+    printf("TASK GENERATOR: %d failed, %d completed, %d still running.\n\r", n_failed_tasks, n_completed_tasks, n_running_tasks);
+
+    destroyList(&active_tasks);
+    destroyList(&overdue_tasks);
+}
+
 /*
  ** ===================================================================
  **     Callback    : generator_task
@@ -741,127 +778,289 @@ void generator_task(os_task_param_t task_init_data)
 
 
 
-	printf("Generator Task Created!\n");
+//	printf("Generator Task Created!\n");
+//
+//	_queue_id generator_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
+//	OpenR(generator_task_qid);
+//	OpenW();
+//	char line[BUFFER_LENGTH_WITH_NULL];
+//
+////	uint32_t temp;
+////	_task_id idle_tid = _task_create(0, IDLETASK_TASK, (uint32_t)(NULL));
+////	_task_set_priority(idle_tid, IDLE_TASK_PRIORITY, &temp);
+//
+//#ifdef PEX_USE_RTOS
+//	while (1) {
+//#endif
+//
+//		if(_getline(line)) {
+//			if(strlen(line) > 0 ) {
+//				switch(line[0]) {
+//					case '~': {
+//						//Syntax: ~deadline,runtime
+//						//or ~ for default deadline and runtime
+//						if(strlen(line) > 1) {
+//							int dest_size = strlen(&line[1]);
+//							char dest[dest_size];
+//							strcpy(dest, &line[1]);
+//
+//							int numbers[] = {
+//									atoi(strtok(dest, " ,")),
+//									atoi(strtok(NULL, " ,"))
+//							};
+//
+//							dd_tcreate(SLAVETASK_TASK, numbers[0], numbers[1]);
+//						}
+//						else {
+//							dd_tcreate(SLAVETASK_TASK, 3000, 1000);
+//						}
+//						break;
+//					}
+//
+//					case '!': {
+//						//Syntax: !period,runtime
+//						//or ! for default period and runtime
+//						if(strlen(line) > 1) {
+//							int dest_size = strlen(&line[1]);
+//							char dest[dest_size];
+//							strcpy(dest, &line[1]);
+//
+//							int numbers[] = {
+//									atoi(strtok(dest, " ,")),
+//									atoi(strtok(NULL, " ,"))
+//							};
+//							PERIODIC_TASK_PARAMETERS *parameters = (PERIODIC_TASK_PARAMETERS *) malloc(sizeof(PERIODIC_TASK_PARAMETERS));
+//							parameters->PERIOD = numbers[0];
+//							parameters->EXECUTION_TIME = numbers[1];
+//							_task_create(0, PERIODICGENERATORTASK_TASK, parameters);
+//						}
+//						else {
+//							PERIODIC_TASK_PARAMETERS *parameters = (PERIODIC_TASK_PARAMETERS *) malloc(sizeof(PERIODIC_TASK_PARAMETERS));
+//							parameters->PERIOD = 3000;
+//							parameters->EXECUTION_TIME = 1000;
+//							_task_create(0, PERIODICGENERATORTASK_TASK, parameters);
+//						}
+//						break;
+//					}
+//
+//					case '*': {
+//
+//						ACTIVE_TASK_LIST active_tasks;
+//						OVERDUE_TASK_LIST overdue_tasks;
+//
+//						if(dd_return_overdue_list(&overdue_tasks) != MQX_OK) {
+//							printf("error: failed to obtain the overdue task list!\n\r");
+//							_task_block();
+//						}
+//
+//						if(dd_return_active_list(&active_tasks) != MQX_OK) {
+//							printf("error: failed to obtain the active task list!\n\r");
+//							_task_block();
+//						}
+//
+//						int n_failed_tasks = 0;
+//						int n_running_tasks = 0;
+//
+//						TASK_NODE *temp_at_ptr = active_tasks.head;
+//						while(temp_at_ptr){
+//							n_running_tasks++;
+//							temp_at_ptr = temp_at_ptr->next_node;
+//						}
+//
+//						TASK_NODE *temp_ot_ptr = overdue_tasks.head;
+//						while(temp_ot_ptr){
+//							n_failed_tasks++;
+//							temp_ot_ptr = temp_ot_ptr->next_node;
+//						}
+//
+//						printf("TASK GENERATOR: %d failed, %d still running.\n\r", n_failed_tasks, n_running_tasks);
+//
+//						destroyList(&active_tasks);
+//						destroyList(&overdue_tasks);
+//
+//						break;
+//					}
+//
+//					case '@': {
+//						uint32_t idle_time = dd_return_idle_time();
+//						uint32_t app_time = getApplicationTime();
+//						int percent_idle = round(((float) idle_time / app_time) * 100);
+//
+//						printf("IDLE TIME: %u APP TIME: %u IDLE PERCENT: %d%%\n", idle_time, app_time, percent_idle);
+//						break;
+//					}
+//
+//				}
+//			}
+//		} else {
+//			_task_block();
+//		}
+//
+//#ifdef PEX_USE_RTOS
+//	}
+//#endif
 
-	_queue_id generator_task_qid = _msgq_open(MSGQ_FREE_QUEUE, 0);
-	OpenR(generator_task_qid);
-	OpenW();
-	char line[BUFFER_LENGTH_WITH_NULL];
 
-//	uint32_t temp;
-//	_task_id idle_tid = _task_create(0, IDLETASK_TASK, (uint32_t)(NULL));
-//	_task_set_priority(idle_tid, IDLE_TASK_PRIORITY, &temp);
+    {
+        // TEST BEGINS: feasible
+        int test_id = 1;
+        printf("\n\nRUNNING TEST %d\n", test_id);
+        // CREATE SAMPLE TASKS
+        int n_total_tasks = 4;
+        _task_id t1 = dd_tcreate(SLAVETASK_TASK, 5000, 1000);
+        _task_id t2 = dd_tcreate(SLAVETASK_TASK, 5000, 1000);
+        _task_id t3 = dd_tcreate(SLAVETASK_TASK, 5000, 1000);
+        _task_id t4 = dd_tcreate(SLAVETASK_TASK, 5000, 1000);
+        printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
+        // WAIT FOR CERTAIN TIME
+        _time_delay(5000);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 0, 4, 0);
+        // REPORT STATISTICS
+        report_statistics(test_id, n_total_tasks);
+        // TEST ENDS
+    }
+    // FLUSH SCHEDULER: feasible, collect in middle and end
+    _time_delay(5000);
+    {
+        // TEST BEGINS:
+        int test_id = 2;
+        printf("\n\nRUNNING TEST %d\n", test_id);
+        // CREATE SAMPLE TASKS
+        int n_total_tasks = 4;
+        _task_id t1 = dd_tcreate(SLAVETASK_TASK, 5000, 1000);
+        _task_id t2 = dd_tcreate(SLAVETASK_TASK, 5000, 1000);
+        _task_id t3 = dd_tcreate(SLAVETASK_TASK, 5000, 1000);
+        _task_id t4 = dd_tcreate(SLAVETASK_TASK, 5000, 1000);
+        printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
+        // WAIT FOR CERTAIN TIME
+        _time_delay(2500);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 0, 2, 2);
+        // REPORT STATISTICS
+        report_statistics(test_id, n_total_tasks);
+        // WAIT FOR CERTAIN TIME
+        _time_delay(2500);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 0, 4, 0);
+        // REPORT STATISTICS
+        report_statistics(test_id, n_total_tasks);
+        // TEST ENDS
+    }
+    // FLUSH SCHEDULER: not feasible
+    _time_delay(5000);
+    {
+        // TEST BEGINS:
+        int test_id = 3;
+        printf("\n\nRUNNING TEST %d\n", test_id);
+        // CREATE SAMPLE TASKS
+        int n_total_tasks = 4;
+        _task_id t1 = dd_tcreate(SLAVETASK_TASK, 1500, 1000);
+        _task_id t2 = dd_tcreate(SLAVETASK_TASK, 2500, 1000);
+        _task_id t3 = dd_tcreate(SLAVETASK_TASK, 3500, 1000);
+        _task_id t4 = dd_tcreate(SLAVETASK_TASK, 3500, 1000);
+        printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
+        // WAIT FOR CERTAIN TIME
+        _time_delay(4500);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 1, 3, 0);
+        // REPORT STATISTICS
+        report_statistics(test_id, n_total_tasks);
+        // TEST ENDS
+    }
+    // FLUSH SCHEDULER: higher priority comes in, all complete
+    _time_delay(5000);
+    {
+        // TEST BEGINS:
+        int test_id = 4;
+        printf("\n\nRUNNING TEST %d\n", test_id);
+        // CREATE SAMPLE TASKS
+        int n_total_tasks = 4;
+        _task_id t1 = dd_tcreate(SLAVETASK_TASK, 4500, 2000);
+        _task_id t2 = dd_tcreate(SLAVETASK_TASK, 4500, 1000);
+        _time_delay(1000);
+        _task_id t3 = dd_tcreate(SLAVETASK_TASK, 1000, 1000);
+        _task_id t4 = dd_tcreate(SLAVETASK_TASK, 4500, 1000);
+        printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
+        // WAIT FOR CERTAIN TIME
+        _time_delay(5000);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 0, 4, 0);
+        // REPORT STATISTICS
+        report_statistics(test_id, n_total_tasks);
+        // TEST ENDS
+    }
+    // FLUSH SCHEDULER: higher priority comes in, one fails
+    _time_delay(5000);
+    {
+        // TEST BEGINS:
+        int test_id = 5;
+        printf("\n\nRUNNING TEST %d\n", test_id);
+        // CREATE SAMPLE TASKS
+        int n_total_tasks = 4;
+        _task_id t1 = dd_tcreate(SLAVETASK_TASK, 2500, 2000);
+        _task_id t2 = dd_tcreate(SLAVETASK_TASK, 3000, 1000); // this should fail
+        _time_delay(2000);
+        _task_id t3 = dd_tcreate(SLAVETASK_TASK, 1000, 1000);
+        _task_id t4 = dd_tcreate(SLAVETASK_TASK, 4000, 1000);
+        printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
+        // WAIT FOR CERTAIN TIME
+        _time_delay(5000);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 1, 3, 0);
+        // REPORT STATISTICS
+        report_statistics(test_id, n_total_tasks);
+        // TEST ENDS
+    }
+    // FLUSH SCHEDULER: preempt on overdue
+    _time_delay(5000);
+    {
+        // TEST BEGINS:
+        int test_id = 6;
+        printf("\n\nRUNNING TEST %d\n", test_id);
+        // CREATE SAMPLE TASKS
+        int n_total_tasks = 3;
+        _task_id t1 = dd_tcreate(SLAVETASK_TASK, 3000, 2000);
+        _task_id t2 = dd_tcreate(SLAVETASK_TASK, 3000, 2000);
+        _task_id t3 = dd_tcreate(SLAVETASK_TASK, 5000, 1000);
+        printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
+        // WAIT FOR CERTAIN TIME
+        _time_delay(5000);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 1, 2, 0);
+        // REPORT STATISTICS
+        report_statistics(test_id, n_total_tasks);
+        // TEST ENDS
+    }
+    // FLUSH SCHEDULER: Overall Performance
+    _time_delay(5000);
+    {
+        // TEST BEGINS:
+        int test_id = 7;
+        printf("\n\nRUNNING TEST %d\n", test_id);
+        // CREATE SAMPLE TASKS
+        int n_total_tasks = 80;
+        int i;
+        for(i=0; i<50; ++i){
+            _task_id t1 = dd_tcreate(SLAVETASK_TASK, 3000, 100);
+        }
+        _time_delay(1000);
+        for(i=0; i<30; ++i){
+            _task_id t1 = dd_tcreate(SLAVETASK_TASK, 2000, 200);
+        }
+        printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
+        // WAIT FOR CERTAIN TIME
+        _time_delay(2000);
 
-#ifdef PEX_USE_RTOS
-	while (1) {
-#endif
+        //IMPORTANT!!! I think this test is wrong. Our scheduler implementation will remove ALL
+        //tasks that have passed their deadline any time it detects that a single task has gone overtime.
+        //I think our TA is assuming that we only invalidate the currently running task and leave all
+        //others as active tasks even though they may be unable to complete in time
 
-		if(_getline(line)) {
-			if(strlen(line) > 0 ) {
-				switch(line[0]) {
-					case '~': {
-						//Syntax: ~deadline,runtime
-						//or ~ for default deadline and runtime
-						if(strlen(line) > 1) {
-							int dest_size = strlen(&line[1]);
-							char dest[dest_size];
-							strcpy(dest, &line[1]);
-
-							int numbers[] = {
-									atoi(strtok(dest, " ,")),
-									atoi(strtok(NULL, " ,"))
-							};
-
-							dd_tcreate(SLAVETASK_TASK, numbers[0], numbers[1]);
-						}
-						else {
-							dd_tcreate(SLAVETASK_TASK, 3000, 1000);
-						}
-						break;
-					}
-
-					case '!': {
-						//Syntax: !period,runtime
-						//or ! for default period and runtime
-						if(strlen(line) > 1) {
-							int dest_size = strlen(&line[1]);
-							char dest[dest_size];
-							strcpy(dest, &line[1]);
-
-							int numbers[] = {
-									atoi(strtok(dest, " ,")),
-									atoi(strtok(NULL, " ,"))
-							};
-							PERIODIC_TASK_PARAMETERS *parameters = (PERIODIC_TASK_PARAMETERS *) malloc(sizeof(PERIODIC_TASK_PARAMETERS));
-							parameters->PERIOD = numbers[0];
-							parameters->EXECUTION_TIME = numbers[1];
-							_task_create(0, PERIODICGENERATORTASK_TASK, parameters);
-						}
-						else {
-							PERIODIC_TASK_PARAMETERS *parameters = (PERIODIC_TASK_PARAMETERS *) malloc(sizeof(PERIODIC_TASK_PARAMETERS));
-							parameters->PERIOD = 3000;
-							parameters->EXECUTION_TIME = 1000;
-							_task_create(0, PERIODICGENERATORTASK_TASK, parameters);
-						}
-						break;
-					}
-
-					case '*': {
-
-						ACTIVE_TASK_LIST active_tasks;
-						OVERDUE_TASK_LIST overdue_tasks;
-
-						if(dd_return_overdue_list(&overdue_tasks) != MQX_OK) {
-							printf("error: failed to obtain the overdue task list!\n\r");
-							_task_block();
-						}
-
-						if(dd_return_active_list(&active_tasks) != MQX_OK) {
-							printf("error: failed to obtain the active task list!\n\r");
-							_task_block();
-						}
-
-						int n_failed_tasks = 0;
-						int n_running_tasks = 0;
-
-						TASK_NODE *temp_at_ptr = active_tasks.head;
-						while(temp_at_ptr){
-							n_running_tasks++;
-							temp_at_ptr = temp_at_ptr->next_node;
-						}
-
-						TASK_NODE *temp_ot_ptr = overdue_tasks.head;
-						while(temp_ot_ptr){
-							n_failed_tasks++;
-							temp_ot_ptr = temp_ot_ptr->next_node;
-						}
-
-						printf("TASK GENERATOR: %d failed, %d still running.\n\r", n_failed_tasks, n_running_tasks);
-
-						destroyList(&active_tasks);
-						destroyList(&overdue_tasks);
-
-						break;
-					}
-
-					case '@': {
-						uint32_t idle_time = dd_return_idle_time();
-						uint32_t app_time = getApplicationTime();
-						int percent_idle = round(((float) idle_time / app_time) * 100);
-
-						printf("IDLE TIME: %u APP TIME: %u IDLE PERCENT: %d%%\n", idle_time, app_time, percent_idle);
-						break;
-					}
-
-				}
-			}
-		} else {
-			_task_block();
-		}
-
-#ifdef PEX_USE_RTOS
-	}
-#endif
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 0+0, 10+10, 40+20);
+        // REPORT STATISTICS
+        report_statistics(test_id, n_total_tasks);
+        // WAIT FOR CERTAIN TIME
+        _time_delay(5000);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 40+20, 10+10, 0);
+        // REPORT STATISTICS
+        report_statistics(test_id, n_total_tasks);
+        // TEST ENDS
+    }
+    return;
 }
 
 /*
@@ -876,9 +1075,7 @@ void generator_task(os_task_param_t task_init_data)
 void idle_task(os_task_param_t task_init_data)
 {
 	printf("Idle Task created\n");
-	TIME_STRUCT time_struct;
 
-	uint32_t counter = 0;
 #ifdef PEX_USE_RTOS
   while (1) {
 #endif

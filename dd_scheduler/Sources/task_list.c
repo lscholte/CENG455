@@ -40,8 +40,12 @@ void remove(TASK_LIST *task_list, TASK_NODE *node_ptr) {
 		if(next_node != NULL) {
 			next_node->previous_node = prev_node;
 		}
+
 		if(prev_node == NULL && next_node == NULL) {
 			task_list->head = NULL;
+		}
+		if(node_ptr == task_list->head) {
+			task_list->head = next_node;
 		}
 		free(node_ptr);
 	}
