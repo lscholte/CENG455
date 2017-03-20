@@ -468,26 +468,12 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 
 	_mqx_uint temp;
 
-	//TODO: Setup an Idle task that has priority of IDLE_TASK_PRIORITY.
-	//This task does nothing except sit in a while loop forever. When the running
-	//task finishes executing, then the idle task becomes the task with highest
-	//priority, so it will run until we schedule a new task to run
-
-//	_task_id idle_tid = _task_create(0, IDLETASK_TASK, (uint32_t)(NULL));
-//	_task_set_priority(idle_tid, IDLE_TASK_PRIORITY, &temp);
-
 	_mqx_uint newPriority = PRIORITY_OSA_TO_RTOS(GENERATORTASK_TASK_PRIORITY + 1U);
 	_task_set_priority(_task_get_id(), newPriority, &temp);
 
 	//The list of tasks that have exceeded their deadlines.
 	OVERDUE_TASK_LIST overdue_tasks;
 	overdue_tasks.head = NULL;
-
-	//Setup a priority queue of tasks sorted by deadline
-	//Then remove min from the priority queue, which will give us the task
-	//with the soonest deadline. Set this task's priority to RUNNING_TASK_PRIORITY.
-	//The priority queue could be a heap, sorted list, or unsorted list. For now,
-	//we'll use an unsorted list since it is easiest to implement
 
 	//Active tasks is a list of tasks that have not exceeded their deadlines.
 	//The list is not sorted according to their deadlines
