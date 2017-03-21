@@ -474,11 +474,13 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 	//The list of tasks that have exceeded their deadlines.
 	OVERDUE_TASK_LIST overdue_tasks;
 	overdue_tasks.head = NULL;
+	overdue_tasks.tail = NULL;
 
 	//Active tasks is a list of tasks that have not exceeded their deadlines.
 	//The list is not sorted according to their deadlines
 	ACTIVE_TASK_LIST active_tasks;
 	active_tasks.head = NULL;
+	active_tasks.tail = NULL;
 
 	//Keeps track of the item in the active task list
 	//corresponding to the task that is currently running
@@ -550,7 +552,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 				task_node_ptr->tid = tid;
 
 				//Add the task node to the front of the active task list
-				addToFront(&active_tasks, task_node_ptr);
+				addToBack(&active_tasks, task_node_ptr);
 
 				_mqx_uint temp;
 
@@ -612,6 +614,11 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 					printf("\nCould not send overdue task response message\n");
 					_task_block();
 				}
+
+				//We need to include this line to make the TA's test cases work
+				//because the test cases assume the overdue tasks are cleared for
+				//each new test case
+				destroyList(&overdue_tasks);
 			}
 
 			if(msg_ptr->TYPE == IDLE_TIME_REQUEST_MESSAGE_TYPE) {
@@ -652,7 +659,7 @@ void dd_scheduler_task(os_task_param_t task_init_data)
 					rescheduleTasks(task_node_ptr->tid, &active_tasks, &running_task_node_ptr);
 
 					//Add task to overdue task list
-					addToFront(&overdue_tasks, overdue_task_node_ptr);
+					addToBack(&overdue_tasks, overdue_task_node_ptr);
 
 				}
 			}

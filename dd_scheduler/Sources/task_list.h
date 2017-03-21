@@ -20,10 +20,12 @@ typedef struct task_node {
 
 typedef struct {
 	TASK_NODE *head;
+	TASK_NODE *tail;
 } ACTIVE_TASK_LIST, OVERDUE_TASK_LIST, TASK_LIST;
 
 
 void addToFront(TASK_LIST *task_list, TASK_NODE *node_ptr);
+void addToBack(TASK_LIST *task_list, TASK_NODE *node_ptr);
 void remove(TASK_LIST *task_list, TASK_NODE *node_ptr);
 void copy(TASK_LIST *original, TASK_LIST *copied_list);
 void destroyList(TASK_LIST *list);
