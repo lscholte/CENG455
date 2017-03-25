@@ -1057,12 +1057,12 @@ void generator_task(os_task_param_t task_init_data)
         //I think our TA is assuming that we only invalidate the currently running task and leave all
         //others as active tasks even though they may be unable to complete in time
 
-        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 0+0, 10+10, 40+20);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 50, 30, 0);
         // REPORT STATISTICS
         report_statistics(test_id, n_total_tasks);
         // WAIT FOR CERTAIN TIME
         _time_delay(5000);
-        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 40+20, 10+10, 0);
+        printf("TASK GENERATOR TEST %d EXPECTED: %d failed, %d completed, %d running\n", test_id, 50, 30, 0);
         // REPORT STATISTICS
         report_statistics(test_id, n_total_tasks);
         // TEST ENDS
