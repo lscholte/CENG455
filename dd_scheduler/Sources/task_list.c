@@ -81,23 +81,6 @@ void remove(TASK_LIST *task_list, TASK_NODE *node_ptr) {
 			prev_node->next_node = next_node;
 			next_node->previous_node = prev_node;
 		}
-//		else if(prev_node != NULL) {
-//			prev_node->next_node = next_node;
-//		}
-//		else if(next_node != NULL) {
-//			next_node->previous_node = prev_node;
-//		}
-//
-//		else if(prev_node == NULL && next_node == NULL) {
-//			task_list->head = NULL;
-//			task_list->tail = NULL;
-//		}
-//		if(node_ptr == task_list->head) {
-//			task_list->head = next_node;
-//		}
-//		if(node_ptr == task_list->tail) {
-//			task_list->tail = prev_node;
-//		}
 		free(node_ptr);
 	}
 }
