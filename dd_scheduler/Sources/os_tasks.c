@@ -733,57 +733,6 @@ void report_statistics(int test_id, int n_total_tasks){
  */
 void generator_task(os_task_param_t task_init_data)
 {
-//	printf("Generator Task created\n");
-//    ACTIVE_TASK_LIST active_tasks;
-//    OVERDUE_TASK_LIST overdue_tasks;
-//
-//    // CREATE SAMPLE TASKS
-//    int n_total_tasks = 3;
-//    dd_tcreate(SLAVETASK_TASK, 500, 1000);
-//    _time_delay(1000);
-//    dd_tcreate(SLAVETASK_TASK, 1500, 1000);
-//    dd_tcreate(SLAVETASK_TASK, 3000, 1000);
-//
-//    printf("TASK GENERATOR: %d tasks created.\n\r", n_total_tasks);
-//
-//    // WAIT FOR CERTAIN TIME
-//    _time_delay(3000);
-//
-//    // OBTAIN STATUS FROM SCHEDULER
-//    printf("TASK GENERATOR: collecting statistics\n\r");
-//
-//    if(dd_return_overdue_list(&overdue_tasks) != MQX_OK) {
-//        printf("error: failed to obtain the overdue task list!\n\r");
-//        return;
-//    }
-//
-//    if(dd_return_active_list(&active_tasks) != MQX_OK) {
-//        printf("error: failed to obtain the active task list!\n\r");
-//        return;
-//    }
-//
-//    int n_completed_tasks = 0;
-//    int n_failed_tasks = 0;
-//    int n_running_tasks = 0;
-//
-//    TASK_NODE *temp_at_ptr = active_tasks.head;
-//    while(temp_at_ptr){
-//        n_running_tasks++;
-//        temp_at_ptr = temp_at_ptr->next_node;
-//    }
-//
-//    TASK_NODE *temp_ot_ptr = overdue_tasks.head;
-//    while(temp_ot_ptr){
-//        n_failed_tasks++;
-//        temp_ot_ptr = temp_ot_ptr->next_node;
-//    }
-//
-//    n_completed_tasks = n_total_tasks-(n_failed_tasks+n_running_tasks);
-//    printf("TASK GENERATOR: %d failed, %d completed, %d still running.\n\r", n_failed_tasks, n_completed_tasks, n_running_tasks);
-//
-//    return;
-
-
 
 //	printf("Generator Task Created!\n");
 //
